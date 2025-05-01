@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -27,10 +28,13 @@ public class MainWindow extends Application {
         MainController baseController = baseLoader.getController();
         baseController.init(primaryStage);
 
-        primaryStage.setTitle("SENG201 Example App");
-        Scene scene = new Scene(root, 600, 400);
-        primaryStage.setScene(scene);
-        primaryStage.show();
+//        Image icon = new Image("");
+//        primaryStage.getIcons().add(icon);
+        primaryStage.setTitle("RomanRacing"); // sets the title of the stage
+        Scene scene = new Scene(root, 600, 400); // creates a scene with the root node and dimensions
+        primaryStage.setScene(scene); // add the scene to the stage
+        primaryStage.setFullScreen(true); // makes it full screen
+        primaryStage.show(); // To show the stage
     }
 
     /**

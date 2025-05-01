@@ -27,6 +27,11 @@ dependencies {
     // https://mvnrepository.com/artifact/org.openjfx/javafx-fxml
     implementation "org.openjfx:javafx-fxml:${javafxVersion}"
 
+    implementation 'org.fxyz3d:fxyz3d-core:0.6.0'
+    implementation 'org.fxyz3d:fxyz3d-importers:0.6.0'
+
+
+
     // https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.2'
 
