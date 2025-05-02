@@ -20,15 +20,14 @@ import java.util.Set;
 
 public class GameController {
     // Example fix for line 22:
-    private ObjImporter importer = new ObjImporter(); // Proper declaration// New class name
-    importer = new ObjImporter(); // New constructor
-    private Group modelGroup;
+
 
     private final Group root3D = new Group(); // This holds the 3D objects
     private final Set<KeyCode> pressedKeys = new HashSet<>(); // A set that keeps track of which keys are pressed
     private PerspectiveCamera camera; // A perspective camera that shows that viewpoint
     private Box car; // The car
     private double carAngle = 0;
+    private Box box;
 
     // Camera position
     private double camX = 0;
@@ -37,8 +36,12 @@ public class GameController {
 
     @FXML
     public void setupGameScene(Stage stage) {
+
         // Load and add the track
-        load3DModel(); // Call the method to load the model
+        box = new Box(100,0.5,100);
+        box.setMaterial(new PhongMaterial(Color.GRAY));
+        box.setTranslateY(1.5);
+        root3D.getChildren().add(box);
 
         // Create the car
         car = new Box(2, 1, 4);
@@ -93,20 +96,7 @@ public class GameController {
         stage.show(); // Display
     }
 
-    // Method to load the 3D model
-    private void load3DModel() {
-        importer = new ObjImporter();
-        // Load the OBJ file (no need to call .read() explicitly)
-        importer.load(getClass().getResource("/assets/models/racetrack.obj"));
 
-        // Get the loaded MeshViews
-        MeshView[] meshViews = importer.getRoot().getChildren().stream()
-                .filter(node -> node instanceof MeshView)
-                .toArray(MeshView[]::new);
-
-        modelGroup = new Group(meshViews);
-        root3D.getChildren().add(modelGroup);
-    }
 
     // Adds keys to the pressedKeys
     private void handleKeyPressed(KeyEvent event) {
