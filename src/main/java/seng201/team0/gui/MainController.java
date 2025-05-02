@@ -3,7 +3,9 @@ package seng201.team0.gui;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
@@ -46,12 +48,20 @@ public class MainController {
 
 
     @FXML
-    protected void NewGame(ActionEvent event) throws IOException { // Action even gives info about the click (wtf does that mean), throws IOException if it can't find the file
+//    protected void NewGame(ActionEvent event) throws IOException { // Action even gives info about the click (wtf does that mean), throws IOException if it can't find the file
+//
+//        GameController game = new GameController();
+//        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+//        game.setupGameScene(stage);
+//
+//    }
 
-        GameController game = new GameController();
+    protected void CharacterName(ActionEvent event) throws IOException {
+
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        game.setupGameScene(stage);
-
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/CharacterNameLayout.fxml"));
+        stage.setScene(new Scene(loader.load()));
+        stage.show();
     }
 
 

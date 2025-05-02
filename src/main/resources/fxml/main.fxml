@@ -8,7 +8,7 @@
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng201.team0.gui.MainController">
    <children>
       <Label fx:id="defaultLabel" alignment="CENTER" layoutX="239.0" layoutY="137.0" prefHeight="16.0" prefWidth="73.0" AnchorPane.leftAnchor="239.0" AnchorPane.topAnchor="137.0" />
-      <Button fx:id="defaultButton" alignment="CENTER" contentDisplay="CENTER" layoutX="51.0" layoutY="62.0" onAction="#NewGame" text="Start Game " textAlignment="CENTER">
+      <Button fx:id="defaultButton" alignment="CENTER" contentDisplay="CENTER" layoutX="51.0" layoutY="62.0" onAction="#CharacterName" text="Start Game " textAlignment="CENTER">
          <font>
             <Font name="Century Schoolbook" size="25.0" />
          </font></Button>

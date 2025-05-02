@@ -11,7 +11,7 @@ version = '1.0-SNAPSHOT'
 mainClassName = 'seng201.team0.App'
 
 def javaVersion = '21'
-def javafxVersion = '21.0.2'
+def javafxVersion = '23.0.1'
 
 sourceCompatibility = "${javaVersion}"
 targetCompatibility = "${javaVersion}"
@@ -20,24 +20,18 @@ repositories {
     mavenCentral()
 }
 
+def platform = "win" // or "linux" / "mac"
+
 dependencies {
-    // https://mvnrepository.com/artifact/org.openjfx/javafx-controls
-    implementation "org.openjfx:javafx-controls:${javafxVersion}"
+    implementation "org.openjfx:javafx-controls:${javafxVersion}:${platform}"
+    implementation "org.openjfx:javafx-fxml:${javafxVersion}:${platform}"
 
-    // https://mvnrepository.com/artifact/org.openjfx/javafx-fxml
-    implementation "org.openjfx:javafx-fxml:${javafxVersion}"
+    implementation 'org.fxyz3d:fxyz3d-importers:0.6.0'
 
-     implementation 'org.fxyz3d:fxyz3d-importers:0.6.0'
-
-
-
-    // https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.2'
-
-    // https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter
     testImplementation 'org.junit.jupiter:junit-jupiter:5.10.2'
-
 }
+
 
 application {
     // Define the main class for the application.
