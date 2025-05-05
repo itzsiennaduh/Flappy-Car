@@ -5,6 +5,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -58,10 +59,20 @@ public class MainController {
 
     protected void CharacterName(ActionEvent event) throws IOException {
 
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+//        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/CharacterNameLayout.fxml"));
-        stage.setScene(new Scene(loader.load()));
-        stage.show();
+//        stage.setScene(new Scene(loader.load()));
+//        stage.setFullScreen(true);
+//        stage.show();
+
+        Parent root = loader.load();
+        Stage currentStage = (Stage) defaultButton.getScene().getWindow();
+        Scene newScene = new Scene(root);
+        currentStage.setScene(newScene);
+        currentStage.setFullScreen(true);
+        currentStage.show();
+
+
     }
 
 
