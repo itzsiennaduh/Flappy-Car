@@ -1,4 +1,4 @@
-package seng201.team0.gui;
+package seng201.team124.gui;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -9,7 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
-import seng201.team0.services.CounterService;
+import seng201.team124.services.CounterService;
 import java.io.IOException;
 
 /**

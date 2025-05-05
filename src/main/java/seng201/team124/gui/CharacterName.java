@@ -1,4 +1,4 @@
-package seng201.team0.gui;
+package seng201.team124.gui;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
@@ -6,7 +6,7 @@ import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import seng201.team0.services.Stored_Variables;
+import seng201.team124.services.Stored_Variables;
 
 public class CharacterName {
 

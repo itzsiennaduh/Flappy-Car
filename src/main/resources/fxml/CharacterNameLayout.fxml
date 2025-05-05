@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.VBox?>
 
 
-<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="seng201.team0.gui.CharacterName" alignment="CENTER" spacing="10" style="-fx-padding: 40;">
+<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="seng201.team124.gui.CharacterName" alignment="CENTER" spacing="10" style="-fx-padding: 40;">
    <children>
       <Label text="Enter your character name" />
        <TextField fx:id="nameField" promptText="Character Name"/>
