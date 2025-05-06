@@ -36,7 +36,7 @@ public class ChooseName {
         }
 
         if (!name.matches("[a-zA-Z0-9]+")) {
-            nameField.clear();
+            Checker.setText("Only letters and numbers allowed");
             nameField.setPromptText("Only letters allowed");
             nameField.setStyle("-fx-border-color: red;");
             return;

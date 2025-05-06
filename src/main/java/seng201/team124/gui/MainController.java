@@ -25,6 +25,9 @@ public class MainController {
     @FXML
     private Button defaultButton;
 
+    @FXML
+    private Button Gamebutton;
+
     private CounterService counterService;
 
     /**
@@ -49,14 +52,15 @@ public class MainController {
 
 
     @FXML
-//    protected void NewGame(ActionEvent event) throws IOException { // Action even gives info about the click (wtf does that mean), throws IOException if it can't find the file
-//
-//        GameController game = new GameController();
-//        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-//        game.setupGameScene(stage);
-//
-//    }
+    protected void NewGame(ActionEvent event) throws IOException { // Action even gives info about the click (wtf does that mean), throws IOException if it can't find the file
 
+        GameController game = new GameController();
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        game.setupGameScene(stage);
+
+    }
+
+    @FXML
     protected void CharacterName(ActionEvent event) throws IOException {
 
 //        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();

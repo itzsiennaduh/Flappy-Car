@@ -5,11 +5,10 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER" spacing="10" style="-fx-padding: 40;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng201.team124.gui.ChooseName">
-   <children>
-      <Label text="Enter your character name" />
-       <TextField fx:id="nameField" promptText="Character Name" maxWidth="200" />
-      <Label fx:id="Checker" />
-       <Button onAction="#handleContinue" text="Continue" />
-   </children>
+<VBox alignment="CENTER" spacing="10" style="-fx-padding: 40;" xmlns="http://javafx.com/javafx/23.0.1"
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng201.team124.gui.ChooseName">
+    <Label text="Enter your character name"/>
+    <TextField fx:id="nameField" promptText="Character Name" maxWidth="200"/>
+    <Label fx:id="Checker"/>
+    <Button onAction="#handleContinue" text="Continue"/>
 </VBox>
