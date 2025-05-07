@@ -1,19 +1,22 @@
-# Blender 4.2.1 LTS MTL File: 'main character_retoptime;-;_RetopoFlow_AutoSave.blend'
+# Blender 4.2.1 LTS MTL File: 'Main_Character.blend'
 # www.blender.org
 
 newmtl Material
-Ns 250.000000
-Ka 1.000000 1.000000 1.000000
-Kd 0.800283 0.498116 0.282718
+Ns 10.000000
+Ks 0.1 0.1 0.1
+
 Ks 0.500000 0.500000 0.500000
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 d 1.000000
 illum 2
+map_Kd color.png
+bump -bm 1.000000 Normals.png
 
 newmtl eyes
-Ns 250.000000
-Ka 1.000000 1.000000 1.000000
+Ns 10.000000
+Ks 0.1 0.1 0.1
+
 Ks 0.500000 0.500000 0.500000
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
@@ -22,18 +25,20 @@ map_Kd eyes.png
 map_d eyes.png
 
 newmtl hair
-Ns 360.000000
-Ka 1.000000 1.000000 1.000000
-Kd 0.800000 0.800000 0.800000
+Ns 10.000000
+Ks 0.1 0.1 0.1
+
+Kd 0.380941 0.169099 0.073017
 Ks 0.500000 0.500000 0.500000
 Ke 0.000000 0.000000 0.000000
-Ni 1.000000
+Ni 1.500000
 d 1.000000
 illum 2
 
 newmtl mouth
-Ns 250.000000
-Ka 1.000000 1.000000 1.000000
+Ns 10.000000
+Ks 0.1 0.1 0.1
+
 Ks 0.500000 0.500000 0.500000
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000

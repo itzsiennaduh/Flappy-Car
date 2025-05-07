@@ -18,6 +18,9 @@ targetCompatibility = "${javaVersion}"
 
 repositories {
     mavenCentral()
+    flatDir {
+        dirs 'lib'
+    }
 }
 
 def platform = "win" // or "linux" / "mac"
@@ -27,7 +30,7 @@ dependencies {
     implementation "org.openjfx:javafx-fxml:${javafxVersion}:${platform}"
 
     implementation 'org.fxyz3d:fxyz3d-importers:0.6.0'
-
+    implementation name: 'jimObjModelImporterJFX'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.2'
     testImplementation 'org.junit.jupiter:junit-jupiter:5.10.2'
 }
