@@ -27,6 +27,26 @@ public class TuningParts {
     }
 
     public String getDescription() {
-        return description;
+        return this.description;
+    }
+
+    public int getSpeedModifier() {
+        return this.speedModifier;
+    }
+
+    public int getHandlingModifier() {
+        return this.handlingModifier;
+    }
+
+    public int getReliabilityModifier() {
+        return this.reliabilityModifier;
+    }
+
+    public int getFuelEconomyModifier() {
+        return this.fuelEconomyModifier;
+    }
+
+    public int getCost() {
+        return this.cost;
     }
 }

@@ -4,23 +4,48 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Chariots attributes and modifications via tuning parts,
- * calculates new stats after tuning part modification.
+ * Represents a chariot vehicle with stats mutable with tuning parts.
+ * @see ChariotFactory for the initialisation of the different vehicles.
  */
 
 public class Chariot {
-    // Chariot variables
-    private String name; //cool name
+    /**
+     * chariot variables/attributes
+     * integer values are 0-20 and must add to 20 total (excluding cost). --> this is only
+     * for base stats, tuning parts will allow stats to exceed this limit.
+     * the cost value is 0-10000 and depends on the set difficulty and spread of chariot stats.
+     */
+    private String name;
     // private String customName; implement custom naming of cars if time
-    private int speed; // average velocity on a flat straight km/h
-    private int handling; //higher value is better handling e.g. cornering and maintaining control
-    private int reliability; //higher percent, higher reliability, less likely to break down during random events
-    private int fuelEconomy; //max distance in km for full fuel tank (km/tank)
-    private int cost; //purchase price (0-10000)
+    /**
+     * speed is average velocity on a flat straight km/h */
+    private int speed;
+    /**
+     * higher value is better handling e.g. cornering and maintaining control */
+    private int handling;
+    /**
+     * higher percent, higher reliability, less likely to break down during random events */
+    private int reliability;
+    /**
+     * max distance in km for full fuel tank (km/tank) */
+    private int fuelEconomy;
+    /**
+     * base cost of the chariot */
+    private int cost;
+    /**
+     * list of currently installed tuning parts */
+    private List<TuningParts> installedParts;
 
-    private List<TuningParts> installedParts; //list of parts installed
-
-    //constructor
+    /**
+     * creates a new Chariot with the specified characteristics.
+     *
+     * @param name         the name of the chariot
+     * @param speed       initial speed rating in km/h
+     * @param handling    initial handling rating
+     * @param reliability initial reliability percentage
+     * @param fuelEconomy initial fuel economy in km/tank
+     * @param cost        purchase price
+     */
     public Chariot(String name, int speed, int handling, int reliability, int fuelEconomy, int cost) {
         this.name = name;
         this.speed = speed;
@@ -39,37 +64,37 @@ public class Chariot {
     }
 
     /**
-     * @return chariots base cost
+     * @return chariot's base cost
      */
-    public double getCost() {
+    public int getCost() {
         return this.cost;
     }
 
     /**
-     * @return chariots base speed
+     * @return chariot's base speed
      */
-    public double getSpeed() {
+    public int getSpeed() {
         return this.speed;
     }
 
     /**
-     * @return chariots base handling
+     * @return chariot's base handling
      */
-    public double getHandling() {
+    public int getHandling() {
         return this.handling;
     }
 
     /**
-     * @return chariots base reliability
+     * @return chariot's base reliability
      */
-    public double getReliability() {
+    public int getReliability() {
         return this.reliability;
     }
 
     /**
-     * @return chariots base fuel economy
+     * @return chariot's base fuel economy
      */
-    public double getFuelEconomy() {
+    public int getFuelEconomy() {
         return this.fuelEconomy;
     }
 
@@ -84,10 +109,10 @@ public class Chariot {
      * Calculates the effective speed induced by all tuning parts applied
      * @return new speed value
      */
-    public double getEffectiveSpeed() {
-        double effectiveSpeed = speed;
+    public int getEffectiveSpeed() {
+        int effectiveSpeed = speed;
         for (TuningParts part : installedParts) {
-           // effectiveSpeed += part.getSpeedModifier();
+            effectiveSpeed += part.getSpeedModifier();
         }
         return effectiveSpeed;
     }
@@ -96,10 +121,10 @@ public class Chariot {
      * Calculates the effective handling induced by all tuning parts applied
      * @return new handling value
      */
-    public double getEffectiveHandling() {
-        double effectiveHandling = handling;
+    public int getEffectiveHandling() {
+        int effectiveHandling = handling;
         for (TuningParts part : installedParts) {
-          //  effectiveHandling += part.getHandlingModifier();
+            effectiveHandling += part.getHandlingModifier();
         }
         return effectiveHandling;
     }
@@ -108,10 +133,10 @@ public class Chariot {
      * Calculates the effective reliability induced by all tuning parts applied
      * @return new reliability value
      */
-    public double getEffectiveReliability() {
-        double effectiveReliability = reliability;
+    public int getEffectiveReliability() {
+        int effectiveReliability = reliability;
         for (TuningParts part : installedParts) {
-          //  effectiveReliability += part.getReliabilityModifier();
+            effectiveReliability += part.getReliabilityModifier();
         }
         return effectiveReliability;
     }
@@ -120,10 +145,10 @@ public class Chariot {
      * Calculates the effective fuel economy induced by all tuning parts applied
      * @return new fuel economy value
      */
-    public double getEffectiveFuelEconomy() {
-        double effectiveFuelEconomy = fuelEconomy;
+    public int getEffectiveFuelEconomy() {
+        int effectiveFuelEconomy = fuelEconomy;
         for (TuningParts part : installedParts) {
-         //   effectiveFuelEconomy += part.getFuelEconomyModifier();
+            effectiveFuelEconomy += part.getFuelEconomyModifier();
         }
         return effectiveFuelEconomy;
     }
@@ -132,16 +157,16 @@ public class Chariot {
      * Calculates the total cost after all tuning parts are applied
      * @return new total cost value
      */
-    public double getTotalCost() {
-        double totalCost = cost;
+    public int getTotalCost() {
+        int totalCost = cost;
         for (TuningParts part : installedParts) {
-          //  totalCost += part.getCost();
+            totalCost += part.getCost();
         }
         return totalCost;
     }
 
     /**
-     * installs new tuning part
+     * installs a new tuning part
      * @param part the specific part to install
      * @return successful installation message
      * @throws IllegalStateException if part is already installed
@@ -189,7 +214,7 @@ public class Chariot {
                 "\nHandling: " + handling + " [Effective: " + getEffectiveHandling() + "]" +
                 "\nReliability: " + reliability + " [Effective: " + getEffectiveReliability() + "]" +
                 "\nFuel Economy: " + fuelEconomy + " [Effective: " + getEffectiveFuelEconomy() + "]" +
-                "\nBase Cost: " + cost + "[Total: " + getTotalCost() + "]" +
+                "\nBase Cost: " + cost + " [Total: " + getTotalCost() + "]" +
                 "\nInstalled Parts: " + installedParts.size();
     }
 }
