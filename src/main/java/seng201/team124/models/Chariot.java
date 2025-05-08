@@ -15,26 +15,26 @@ public class Chariot {
      * for base stats, tuning parts will allow stats to exceed this limit.
      * the cost value is 0-10000 and depends on the set difficulty and spread of chariot stats.
      */
-    private String name;
+    private final String name;
     // private String customName; implement custom naming of cars if time
     /**
      * speed is average velocity on a flat straight km/h */
-    private int speed;
+    private final int speed;
     /**
      * higher value is better handling e.g. cornering and maintaining control */
-    private int handling;
+    private final int handling;
     /**
      * higher percent, higher reliability, less likely to break down during random events */
-    private int reliability;
+    private final int reliability;
     /**
      * max distance in km for full fuel tank (km/tank) */
-    private int fuelEconomy;
+    private final int fuelEconomy;
     /**
      * base cost of the chariot */
-    private int cost;
+    private final int cost;
     /**
      * list of currently installed tuning parts */
-    private List<TuningParts> installedParts;
+    private final List<TuningParts> installedParts;
 
     /**
      * creates a new Chariot with the specified characteristics.

@@ -1,13 +1,13 @@
 package seng201.team124.models;
 
 public class TuningParts {
-    private String name;
-    private String description;
-    private int speedModifier;
-    private int handlingModifier;
-    private int reliabilityModifier;
-    private int fuelEconomyModifier;
-    private int cost;
+    private final String name;
+    private final String description;
+    private final int speedModifier;
+    private final int handlingModifier;
+    private final int reliabilityModifier;
+    private final int fuelEconomyModifier;
+    private final int cost;
 
     //constructor
     public TuningParts(String name, String description, int speedModifier,
