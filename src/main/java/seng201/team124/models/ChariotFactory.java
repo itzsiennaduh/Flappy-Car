@@ -7,7 +7,6 @@ package seng201.team124.models;
 public class ChariotFactory {
 
     //Methods to create different chariots
-    @org.jetbrains.annotations.NotNull
     public static Chariot createRedChariot() {
         return new Chariot(
                 "Ferrari Chariot", //name EXAMPLE

@@ -87,7 +87,7 @@ public class Chariot {
     public double getEffectiveSpeed() {
         double effectiveSpeed = speed;
         for (TuningParts part : installedParts) {
-            effectiveSpeed += part.getSpeedModifier();
+           // effectiveSpeed += part.getSpeedModifier();
         }
         return effectiveSpeed;
     }
@@ -99,7 +99,7 @@ public class Chariot {
     public double getEffectiveHandling() {
         double effectiveHandling = handling;
         for (TuningParts part : installedParts) {
-            effectiveHandling += part.getHandlingModifier();
+          //  effectiveHandling += part.getHandlingModifier();
         }
         return effectiveHandling;
     }
@@ -111,7 +111,7 @@ public class Chariot {
     public double getEffectiveReliability() {
         double effectiveReliability = reliability;
         for (TuningParts part : installedParts) {
-            effectiveReliability += part.getReliabilityModifier();
+          //  effectiveReliability += part.getReliabilityModifier();
         }
         return effectiveReliability;
     }
@@ -123,7 +123,7 @@ public class Chariot {
     public double getEffectiveFuelEconomy() {
         double effectiveFuelEconomy = fuelEconomy;
         for (TuningParts part : installedParts) {
-            effectiveFuelEconomy += part.getFuelEconomyModifier();
+         //   effectiveFuelEconomy += part.getFuelEconomyModifier();
         }
         return effectiveFuelEconomy;
     }
@@ -135,7 +135,7 @@ public class Chariot {
     public double getTotalCost() {
         double totalCost = cost;
         for (TuningParts part : installedParts) {
-            totalCost += part.getCost();
+          //  totalCost += part.getCost();
         }
         return totalCost;
     }
