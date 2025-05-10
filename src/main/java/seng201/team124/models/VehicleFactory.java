@@ -1,15 +1,15 @@
 package seng201.team124.models;
 
 /**
- * Chariot Factory stores each chariot available in the game.
+ * vehicle Factory stores each vehicle available in the game.
  * the stats excluding cost must total 20 (spread stats out)
  */
-public class ChariotFactory {
+public class VehicleFactory {
 
-    //Methods to create different chariots
-    public static Chariot createRedChariot() {
-        return new Chariot(
-                "Ferrari Chariot", //name EXAMPLE
+    //Methods to create different vehicles
+    public static Vehicle createRedvehicle() {
+        return new Vehicle(
+                "Ferrari vehicle", //name EXAMPLE
                 10,  //speed
                 5,   //handling
                 2,   //reliability

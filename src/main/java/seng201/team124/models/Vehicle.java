@@ -4,16 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Represents a chariot vehicle with stats mutable with tuning parts.
- * @see ChariotFactory for the initialisation of the different vehicles.
+ * Represents a vehicle vehicle with stats mutable with tuning parts.
+ * @see VehicleFactory for the initialisation of the different vehicles.
  */
 
-public class Chariot {
+public class Vehicle {
     /**
-     * chariot variables/attributes
+     * vehicle variables/attributes
      * integer values are 0-20 and must add to 20 total (excluding cost). --> this is only
      * for base stats, tuning parts will allow stats to exceed this limit.
-     * the cost value is 0-10000 and depends on the set difficulty and spread of chariot stats.
+     * the cost value is 0-10000 and depends on the set difficulty and spread of vehicle stats.
      */
     private final String name;
     // private String customName; implement custom naming of cars if time
@@ -30,23 +30,23 @@ public class Chariot {
      * max distance in km for full fuel tank (km/tank) */
     private final int fuelEconomy;
     /**
-     * base cost of the chariot */
+     * base cost of the vehicle */
     private final int cost;
     /**
      * list of currently installed tuning parts */
     private final List<TuningParts> installedParts;
 
     /**
-     * creates a new Chariot with the specified characteristics.
+     * creates a new vehicle with the specified characteristics.
      *
-     * @param name         the name of the chariot
+     * @param name         the name of the vehicle
      * @param speed       initial speed rating in km/h
      * @param handling    initial handling rating
      * @param reliability initial reliability percentage
      * @param fuelEconomy initial fuel economy in km/tank
      * @param cost        purchase price
      */
-    public Chariot(String name, int speed, int handling, int reliability, int fuelEconomy, int cost) {
+    public Vehicle(String name, int speed, int handling, int reliability, int fuelEconomy, int cost) {
         this.name = name;
         this.speed = speed;
         this.handling = handling;
@@ -57,42 +57,42 @@ public class Chariot {
     }
 
     /**
-     * @return chariot name
+     * @return vehicle name
      */
     public String getName() {
         return this.name;
     }
 
     /**
-     * @return chariot's base cost
+     * @return vehicle's base cost
      */
     public int getCost() {
         return this.cost;
     }
 
     /**
-     * @return chariot's base speed
+     * @return vehicle's base speed
      */
     public int getSpeed() {
         return this.speed;
     }
 
     /**
-     * @return chariot's base handling
+     * @return vehicle's base handling
      */
     public int getHandling() {
         return this.handling;
     }
 
     /**
-     * @return chariot's base reliability
+     * @return vehicle's base reliability
      */
     public int getReliability() {
         return this.reliability;
     }
 
     /**
-     * @return chariot's base fuel economy
+     * @return vehicle's base fuel economy
      */
     public int getFuelEconomy() {
         return this.fuelEconomy;
@@ -193,11 +193,11 @@ public class Chariot {
     }
 
     /**
-     * @return a string with the chariot's effective stats
+     * @return a string with the vehicle's effective stats
      */
     @Override
     public String toString() {
-        return  "Chariot: " + name +
+        return  "vehicle: " + name +
                 "\nSpeed: " + getEffectiveSpeed() +
                 "\nHandling: " + getEffectiveHandling() +
                 "\nReliability: " + getEffectiveReliability() +
@@ -206,10 +206,10 @@ public class Chariot {
     }
 
     /**
-     * @return a string with the chariot's base and effective stats for comparison
+     * @return a string with the vehicle's base and effective stats for comparison
      */
     public String toDetailedString() {
-        return  "Chariot: " + name +
+        return  "vehicle: " + name +
                 "\nSpeed: " + speed + " [Effective: " + getEffectiveSpeed() + "]" +
                 "\nHandling: " + handling + " [Effective: " + getEffectiveHandling() + "]" +
                 "\nReliability: " + reliability + " [Effective: " + getEffectiveReliability() + "]" +
