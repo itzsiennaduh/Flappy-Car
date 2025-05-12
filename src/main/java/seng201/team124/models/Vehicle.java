@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Represents a vehicle vehicle with stats mutable with tuning parts.
+ * Represents a vehicle with stats mutable with tuning parts.
  * @see VehicleFactory for the initialisation of the different vehicles.
  */
 
@@ -37,14 +37,14 @@ public class Vehicle {
     private final List<TuningParts> installedParts;
 
     /**
+     * constructor for the vehicle class.
      * creates a new vehicle with the specified characteristics.
-     *
-     * @param name         the name of the vehicle
-     * @param speed       initial speed rating in km/h
-     * @param handling    initial handling rating
+     * @param name the name of the vehicle
+     * @param speed initial speed rating in km/h
+     * @param handling initial handling rating
      * @param reliability initial reliability percentage
      * @param fuelEconomy initial fuel economy in km/tank
-     * @param cost        purchase price
+     * @param cost purchase price
      */
     public Vehicle(String name, int speed, int handling, int reliability, int fuelEconomy, int cost) {
         this.name = name;
@@ -143,7 +143,7 @@ public class Vehicle {
 
     /**
      * Calculates the effective fuel economy induced by all tuning parts applied
-     * @return new fuel economy value
+     *@return new fuel economy value
      */
     public int getEffectiveFuelEconomy() {
         int effectiveFuelEconomy = fuelEconomy;
