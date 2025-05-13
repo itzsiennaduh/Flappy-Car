@@ -3,6 +3,7 @@ plugins {
     id 'java'
     id "org.openjfx.javafxplugin" version "0.1.0"
     id 'jacoco'
+    id 'checkstyle'
 }
 
 archivesBaseName = 'seng201_team124'
