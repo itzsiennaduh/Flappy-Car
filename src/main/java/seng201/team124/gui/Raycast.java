@@ -78,4 +78,55 @@ public class Raycast {
         double t = f * edge2.dotProduct(q);
         return t > EPSILON;
     }
+
+    public static class RaycastHit {
+        public final Point3D point;
+        public final Point3D normal;
+
+        public RaycastHit(Point3D point, Point3D normal) {
+            this.point = point;
+            this.normal = normal;
+        }
+    }
+
+    public RaycastHit getIntersection(Point3D origin, Point3D direction) {
+        for (Triangle tri : triangles) {
+            Point3D intersection = rayTriangleIntersectionPoint(origin, direction, tri.v0, tri.v1, tri.v2);
+            if (intersection != null) {
+                Point3D edge1 = tri.v1.subtract(tri.v0);
+                Point3D edge2 = tri.v2.subtract(tri.v0);
+                Point3D normal = edge1.crossProduct(edge2).normalize();
+                return new RaycastHit(intersection, normal);
+            }
+        }
+        return null;
+    }
+
+    // This method returns the point of intersection
+    private Point3D rayTriangleIntersectionPoint(Point3D origin, Point3D dir, Point3D v0, Point3D v1, Point3D v2) {
+        final double EPSILON = 1e-6;
+        Point3D edge1 = v1.subtract(v0);
+        Point3D edge2 = v2.subtract(v0);
+        Point3D h = dir.crossProduct(edge2);
+        double a = edge1.dotProduct(h);
+        if (Math.abs(a) < EPSILON) return null;
+
+        double f = 1.0 / a;
+        Point3D s = origin.subtract(v0);
+        double u = f * s.dotProduct(h);
+        if (u < 0.0 || u > 1.0) return null;
+
+        Point3D q = s.crossProduct(edge1);
+        double v = f * dir.dotProduct(q);
+        if (v < 0.0 || u + v > 1.0) return null;
+
+        double t = f * edge2.dotProduct(q);
+        if (t > EPSILON) {
+            return origin.add(dir.multiply(t));
+        }
+        return null;
+    }
+
+
+
 }

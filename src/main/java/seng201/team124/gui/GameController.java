@@ -16,7 +16,7 @@ import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;
 import javafx.stage.Stage;
 import javafx.scene.shape.MeshView;
-import seng201.team124.models.Bots;
+
 import java.net.URL;
 import java.util.*;
 
@@ -80,14 +80,6 @@ public class GameController {
         carCollisionBox.setVisible(false);
         root3D.getChildren().add(carCollisionBox);
 
-        Box wall = new Box(2, 2, 2);
-        wall.setTranslateX(30);
-        wall.setTranslateY(0);
-        wall.setTranslateZ(10);
-        wall.setMaterial(new PhongMaterial(Color.DARKRED));
-        root3D.getChildren().add(wall);
-
-
         // Load and add the track
         // This holds the 3D model of the racetrack. I've used a group because might consist of multiple meshes
         Group modelGroup = loadModel(getClass().getResource("/assets/models/racetrack.obj"));
@@ -105,7 +97,7 @@ public class GameController {
                 // Try matching by checking string output or assign manually
                 if (mesh.getId() != null) {
                     switch (mesh.getId()) {
-                        case "Plane.001" -> racetrack = mesh;
+                        case "Plane.004" -> racetrack = mesh;
                         case "Start" -> startMesh = mesh;
                         case "Finish" -> finishMesh = mesh;
                     }
@@ -153,28 +145,32 @@ public class GameController {
             Collections.reverse(waypoints); // Optional
 
             // Load bot model
-            Group botGroup = loadModel(getClass().getResource("/assets/models/Supra.obj"));
+            int numberOfBots = 15; // The amount of bots
+            for (int i = 0; i < numberOfBots; i++) {
+                Group botGroup = loadModel(getClass().getResource("/assets/models/Supra.obj"));
 
-            // Position and scale the bot
-            float botSize = 0.5F;
-            botGroup.setTranslateX(-210);
-            botGroup.setTranslateY(4);
-            botGroup.setTranslateZ(0);
-            botGroup.setScaleX(botSize);
-            botGroup.setScaleY(botSize);
-            botGroup.setScaleZ(-botSize);
+                // Position and scale the bot
+                float botSize = 0.5F;
+                double startOffset = i * 5; // Simple offset to avoid stacking
+                botGroup.setTranslateX(-210);
+                botGroup.setTranslateY(4);
+                botGroup.setTranslateZ(startOffset);
+                botGroup.setScaleX(botSize);
+                botGroup.setScaleY(botSize);
+                botGroup.setScaleZ(-botSize);
 
-            // Create bot and add to scene
-            Bots bot = new Bots(botGroup, waypoints);
-            root3D.getChildren().add(bot.getModel());
-            bots.add(bot); // Assuming you have a List<Bots> bots;
+                // Creates bots and adds them to the scene
+                Bots bot = new Bots(botGroup, new ArrayList<>(waypoints)); // Making sure they all have a set of checkpoints
+                root3D.getChildren().add(bot.getModel());
+                bots.add(bot);
+            }
         });
 
 
 
         racetrack.setTranslateY(4.5);
         racetrack.setTranslateX(-230);
-        racetrack.setTranslateZ(6800);
+        racetrack.setTranslateZ(0);
 
         racetrack.setScaleX(trackSize);
         racetrack.setScaleY(trackSize);
@@ -277,7 +273,7 @@ public class GameController {
         // The set movement of the car and the rotation
         double rotateSpeed = 35.0;
         double rotationSmoothFactor = 0.15;
-        double acceleration = 100;
+        double acceleration = 50;
         final double deceleration = 80;
         final double maxVelocity = 200;
         double friction = 40;
@@ -306,19 +302,54 @@ public class GameController {
         double dx = Math.sin(angleRad);
         double dz = Math.cos(angleRad);
 
-        Point3D carPosition = new Point3D(car.getTranslateX(), car.getTranslateY() + 2, car.getTranslateZ());
-        Point3D rayDirection = new Point3D(0, -1, 0); // cast straight down
+        Point3D carXZ = new Point3D(car.getTranslateX(), 500, car.getTranslateZ());
+        Point3D down = new Point3D(0, -1, 0);
+        Raycast.RaycastHit hit = raycast.getIntersection(carXZ, down);
 
-        boolean isOnTrack = raycast.isRayHitting(carPosition, rayDirection);
+        if (hit != null) {
+            // Smooth Y
+            double smoothY = car.getTranslateY() + (hit.point.getY() - car.getTranslateY()) * 1;
+            car.setTranslateY(smoothY);
+//            car.setTranslateY(hit.point.getY());
+            carCollisionBox.setTranslateY(hit.point.getY());
 
-        if (velocity != 0 && !isOnTrack) {
-//            System.out.println("Car is off the track!");
+
+            // Align rotation to surface normal
+            Point3D normal = hit.normal;
+
+            // Get pitch and roll from normal
+            double pitch = Math.toDegrees(Math.atan2(normal.getZ(), normal.getY()));
+            double roll = -Math.toDegrees(Math.atan2(normal.getX(), normal.getY()));
+
+            // Combine with yaw (carAngle)
+            car.getTransforms().setAll(
+                    new Rotate(roll, Rotate.Z_AXIS),
+                    new Rotate(-pitch + 2, Rotate.X_AXIS)
+            );
+        } else {
+            System.out.println("Player off track!");
+        }
+
+
+        if (hit != null) {
+            // Snap car to track height
+            double smoothY = car.getTranslateY() + (hit.point.getY() - car.getTranslateY()) * 0.2;
+            car.setTranslateY(smoothY - 0.1);
+
+            // Update collision box Y too
+            carCollisionBox.setTranslateY(smoothY);
+        } else if (velocity != 0) {
             friction *=2;
             if (velocity > maxVelocity/4) {
                 acceleration = -acceleration;
             }
         }
 
+
+        Point3D carPosition = new Point3D(car.getTranslateX(), car.getTranslateY(), car.getTranslateZ());
+
+
+        boolean isOnTrack = raycast.isRayHitting(carPosition, down);
 
 
 
@@ -341,7 +372,7 @@ public class GameController {
         if (velocity > maxVelocity) velocity = maxVelocity;
         if (velocity < -maxVelocity /2 ) velocity = -maxVelocity /2;
 
-
+        System.out.println(velocity);
 
         car.setTranslateX(car.getTranslateX() + dx * velocity * deltaTime);
         car.setTranslateZ(car.getTranslateZ() + dz * velocity * deltaTime);
@@ -354,8 +385,8 @@ public class GameController {
 
 
 
-        boolean finished = finishRay.isRayHitting(carPosition, rayDirection);
-        boolean started = startRay.isRayHitting(carPosition, rayDirection);
+        boolean finished = finishRay.isRayHitting(carPosition, down);
+        boolean started = startRay.isRayHitting(carPosition, down);
         if (finished) {
             System.out.println("Finished!");
         }
