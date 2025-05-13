@@ -33,7 +33,7 @@ public class Bots {
         if (currentWaypointIndex >= waypoints.size()) return;
 
         double rotateSpeed = 270; // how much the bot can turn degrees per second
-        double acceleration = 50; // Acceleration of the bot
+        double acceleration = 5; // Acceleration of the bot
 
 
         Point3D toTarget = getPoint3D();
