@@ -1,5 +1,7 @@
 package seng201.team124.models;
 
+import seng201.team124.services.GameManager;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,6 +43,22 @@ public class Player {
     public int getMoney() {
         return this.money;
     }
+
+    /**
+     * gets the difficulty value from game manager
+     * @return difficulty value
+     */
+    public Difficulty getDifficulty() {
+        return GameManager.getInstance().getDifficultyLevel();
+    }
+
+    /**
+     * gets the season length from game manager
+     * @return season length
+     */
+    //public int getSeasonLength() {
+        //return GameManager.getInstance().getTotalRaces();
+    //}
 
     /**
      * adds money to the player's account

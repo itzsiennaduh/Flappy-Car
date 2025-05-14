@@ -3,45 +3,108 @@ package seng201.team124.gui;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
-import seng201.team124.services.Stored_Variables;
+import javafx.stage.Stage;
+import javafx.scene.Scene;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import seng201.team124.models.*;
+import seng201.team124.services.GameManager;
 
 public class SelectDifficulty {
-
     @FXML
-    private Slider difficulty;
-
+    private Slider difficultySlider;
     @FXML
     private Label difficultyLabel;
+    @FXML
+    private Slider seasonLengthSlider;
+    @FXML
+    private Label seasonLengthLabel;
+    @FXML
+    private Label errorMessageLabel;
+
+    private final int MIN_SEASON_LENGTH = 5;
+    private final int MAX_SEASON_LENGTH = 15;
 
     @FXML
-    private Slider SeasonL;
+    public void initialise() {
+        //difficulty initialisation
+        difficultySlider.setSnapToTicks(true);
+        difficultySlider.setBlockIncrement(1);
+        difficultySlider.setMajorTickUnit(1);
+        difficultySlider.setMinorTickCount(0);
+        difficultySlider.setMin(1);
+        difficultySlider.setMax(3);
 
-    @FXML
-    public void initialize() {
-        updateDifficultyLabel(difficulty.getValue());
+        //initialise season length slider
+        seasonLengthSlider.setSnapToTicks(true);
+        seasonLengthSlider.setBlockIncrement(1);
+        seasonLengthSlider.setMin(MIN_SEASON_LENGTH);
+        seasonLengthSlider.setMax(MAX_SEASON_LENGTH);
 
-        difficulty.valueProperty().addListener((obs, oldVal, newVal) -> {
-            updateDifficultyLabel(newVal.doubleValue());
+        updateDifficultyLabel((int) difficultySlider.getValue());
+        updateSeasonLengthLabel((int) seasonLengthSlider.getValue());
+
+        difficultySlider.valueProperty().addListener((obs, oldVal, newVal) -> {
+            updateDifficultyLabel(newVal.intValue());
         });
+
+        seasonLengthSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
+            updateSeasonLengthLabel(newVal.intValue());
+        });
+
+        errorMessageLabel.setText("");
+        errorMessageLabel.setStyle("-fx-text-fill: red;");
     }
 
-    private void updateDifficultyLabel(double value) {
-        String text;
-        switch ((int) value) {
-            case 1: text = "Easy"; break;
-            case 2: text = "Medium"; break;
-            case 3: text = "Hard"; break;
-            default: text = "Unknown";
-        }
-        difficultyLabel.setText("Difficulty: " + text);
-        Stored_Variables.setDifficulty((int) value); // optional
+    private void updateDifficultyLabel(int value) {
+        Difficulty difficulty = Difficulty.values()[value - 1]; //convert 1-3 to enum
+        difficultyLabel.setText("Difficulty: " + difficulty.toString());
+
+        String description = switch (difficulty) {
+            case EASY -> "More starting money, less random events, easier races.";
+            case MEDIUM -> "A nice balance, how the game is usually played.";
+            case HARD -> "Less starting money, more random events, harder races (but so much more fun!).";
+        };
+
+        difficultyLabel.setText(difficultyLabel.getText() + " - " + description);
     }
 
-
+    private void updateSeasonLengthLabel(int value) {
+        seasonLengthLabel.setText("Season Length: " + value + " races");
+    }
 
     @FXML
     private void handleStartGame() {
-        System.out.println("Game starting with difficulty: " + Stored_Variables.getDifficulty());
-        // You can load the game scene here
+        int difficultyValue = (int)difficultySlider.getValue();
+        Difficulty difficulty = Difficulty.values()[difficultyValue - 1];
+        int seasonLength = (int)seasonLengthSlider.getValue();
+
+        GameManager.getInstance().initialiseGame(
+                GameManager.getInstance().getPlayerName(),
+                difficulty,
+                seasonLength
+        );
+
+        //GameManager gameManager = GameManager.getInstance();
+        //gameManager.initialiseGame(
+                //gameManager.getPlayerName(),
+                //difficulty,
+                //seasonLength
+        //);
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/GameScene.fxml"));
+            Parent root = loader.load();
+
+            GameController gameController = loader.getController();
+            //gameController.setupGameScene((Stage)difficultySlider.getScene().getWindow());
+
+            Stage stage = (Stage) difficultySlider.getScene().getWindow();
+            //stage.setScene(new Scene(root));
+            //stage.setFullScreen(true);
+            //stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

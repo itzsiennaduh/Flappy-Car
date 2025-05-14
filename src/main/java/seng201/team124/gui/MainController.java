@@ -11,6 +11,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import seng201.team124.services.CounterService;
+import seng201.team124.services.GameManager;
+
 import java.io.IOException;
 
 /**
@@ -31,7 +33,7 @@ public class MainController {
     private CounterService counterService;
 
     /**
-     * Initialize the window
+     * Initialise the window
      *
      * @param stage Top level container for this window
      */
@@ -40,7 +42,7 @@ public class MainController {
     }
 
     /**
-     * Method to call when our counter button is clicked
+     * Method to call when our counter-button is clicked
      *
      */
 
@@ -52,12 +54,16 @@ public class MainController {
 
 
     @FXML
-    protected void NewGame(ActionEvent event) throws IOException { // Action even gives info about the click (wtf does that mean), throws IOException if it can't find the file
-
-        GameController game = new GameController();
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        game.setupGameScene(stage);
-
+    protected void NewGame(ActionEvent event) { // Action even gives info about the click (wtf does that mean), throws IOException if it can't find the file
+        try {
+            GameManager.getInstance().initialiseDefaults();
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            GameController game = new GameController();
+            game.setupGameScene(stage);
+        } catch (Exception e) {
+            e.printStackTrace();
+            defaultLabel.setText("Error loading game");
+        }
     }
 
     @FXML

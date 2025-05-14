@@ -16,7 +16,10 @@ import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;
 import javafx.stage.Stage;
 import javafx.scene.shape.MeshView;
+import seng201.team124.models.*;
+import seng201.team124.services.GameManager;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 
@@ -48,7 +51,6 @@ public class GameController {
     private final List<Bots> bots = new ArrayList<>();
 
 
-
     // Stores the current x,y,z coordinates of the camera
     private double camX = 0;
     private double camY = 0;
@@ -56,193 +58,210 @@ public class GameController {
 
     @FXML
     public void setupGameScene(Stage stage) {
+        try {
+            System.out.println("Setting up game scene");
+            // Loads character-model
+            car = loadModel(getClass().getResource("/assets/models/Supra.obj"));
+            GameManager gameManager = GameManager.getInstance();
+            Player player = gameManager.getPlayer();
+            Difficulty difficulty = gameManager.getDifficultyLevel();
+            if (gameManager.getPlayer() == null) {
+                System.out.println("No player found, creating default player");
+                Player defaultPlayer = new Player("Default Player", 10000);
+                gameManager.setPlayer(defaultPlayer);
+            }
 
-        // Loads character-model
-        car = loadModel(getClass().getResource("/assets/models/Supra.obj"));
 
-        // Rotates the car a set amount of degrees on the y-axis. The first line just creates the rotation transform
-        Rotate rotateY = new Rotate(180, Rotate.Y_AXIS);
-        car.getTransforms().add(rotateY);
-        // Moves the car down the y-axis
-        car.setTranslateY(4);
-        car.setTranslateX(-215);
-        // Sets the scale
-        float size = 0.5F;
-        car.setScaleX(size);
-        car.setScaleY(size);
-        car.setScaleZ(size);
-        // The model gets added as a child to the main root3D
-        root3D.getChildren().add(car);
+            System.out.println("Starting game for player: " + player.getName());
+            System.out.println("Difficulty: " + difficulty);
+            System.out.println("Starting money: " + player.getMoney());
 
-        // Sets up the collision box for the car
-        // Troubleshoot this it's not moving correctly
-        carCollisionBox = new Box(1.5, 1, 3.5);
-        carCollisionBox.setVisible(false);
-        root3D.getChildren().add(carCollisionBox);
+            // Rotates the car a set number of degrees on the y-axis. The first line just creates the rotation transform
+            Rotate rotateY = new Rotate(180, Rotate.Y_AXIS);
+            car.getTransforms().add(rotateY);
+            // Moves the car down the y-axis
+            car.setTranslateY(4);
+            car.setTranslateX(-215);
+            // Sets the scale
+            float size = 0.5F;
+            car.setScaleX(size);
+            car.setScaleY(size);
+            car.setScaleZ(size);
+            // The model gets added as a child to the main root3D
+            root3D.getChildren().add(car);
 
-        // Load and add the track
-        // This holds the 3D model of the racetrack. I've used a group because might consist of multiple meshes
-        Group modelGroup = loadModel(getClass().getResource("/assets/models/racetrack.obj"));
+            // Sets up the collision box for the car
+            // Troubleshoot this it's not moving correctly
+            carCollisionBox = new Box(1.5, 1, 3.5);
+            carCollisionBox.setVisible(false);
+            root3D.getChildren().add(carCollisionBox);
 
-        MeshView racetrack = null;
-        MeshView startMesh = null;
-        MeshView finishMesh = null;
+            // Load and add the track
+            // This holds the 3D model of the racetrack. I've used a group because might consist of multiple meshes
+            Group modelGroup = loadModel(getClass().getResource("/assets/models/racetrack.obj"));
 
-        for (Node node : modelGroup.getChildren()) {
-            if (node instanceof MeshView) {
-                MeshView mesh = (MeshView) node;
-                String name = mesh.getId(); // Try getId() if it's set
-                if (name == null) name = mesh.toString(); // Fallback debug
+            MeshView racetrack = null;
+            MeshView startMesh = null;
+            MeshView finishMesh = null;
 
-                // Try matching by checking string output or assign manually
-                if (mesh.getId() != null) {
-                    switch (mesh.getId()) {
-                        case "Plane.004" -> racetrack = mesh;
-                        case "Start" -> startMesh = mesh;
-                        case "Finish" -> finishMesh = mesh;
+            for (Node node : modelGroup.getChildren()) {
+                if (node instanceof MeshView) {
+                    MeshView mesh = (MeshView) node;
+                    String name = mesh.getId(); // Try getId() if it's set
+                    if (name == null) name = mesh.toString(); // Fallback debug
+
+                    // Try matching by checking string output or assign manually
+                    if (mesh.getId() != null) {
+                        switch (mesh.getId()) {
+                            case "Plane.004" -> racetrack = mesh;
+                            case "Start" -> startMesh = mesh;
+                            case "Finish" -> finishMesh = mesh;
+                        }
                     }
                 }
             }
+
+            Group trackGroup = loadModel(getClass().getResource("/assets/models/CheckPoints.obj"));
+            PhongMaterial checkpointMaterial = new PhongMaterial(Color.LIMEGREEN);
+            float trackSize = 2;
+
+            // Set transforms before adding to scene
+            trackGroup.setTranslateX(-230);
+            trackGroup.setTranslateY(10);
+            trackGroup.setTranslateZ(6825);
+            trackGroup.setScaleX(trackSize);
+            trackGroup.setScaleY(trackSize);
+            trackGroup.setScaleZ(trackSize);
+
+            // Add to scene
+            root3D.getChildren().add(trackGroup);
+
+            // Defer waypoint collection until JavaFX layout is complete
+            Platform.runLater(() -> {
+                List<Point3D> waypoints = new ArrayList<>();
+                for (Node node : trackGroup.getChildren()) {
+                    if (node instanceof MeshView mesh) {
+                        mesh.setMaterial(checkpointMaterial);
+
+                        Bounds bounds = mesh.getBoundsInParent(); // or getBoundsInLocal() depending on what works
+                        Point3D localCenter = new Point3D(
+                                (bounds.getMinX() + bounds.getMaxX()) / 2,
+                                (bounds.getMinY() + bounds.getMaxY()) / 2,
+                                (bounds.getMinZ() + bounds.getMaxZ()) / 2
+                        );
+                        Point3D worldPosition = mesh.localToScene(localCenter);
+                        waypoints.add(worldPosition);
+
+
+                        System.out.println("Waypoint: " + worldPosition);
+                    }
+                }
+
+
+                Collections.reverse(waypoints); // Optional
+
+                // Load bot model
+                int numberOfBots = 15; // The amount of bots
+                for (int i = 0; i < numberOfBots; i++) {
+                    Group botGroup = loadModel(getClass().getResource("/assets/models/Supra.obj"));
+
+                    // Position and scale the bot
+                    float botSize = 0.5F;
+                    double startOffset = i * 5; // Simple offset to avoid stacking
+                    botGroup.setTranslateX(-210);
+                    botGroup.setTranslateY(4);
+                    botGroup.setTranslateZ(startOffset);
+                    botGroup.setScaleX(botSize);
+                    botGroup.setScaleY(botSize);
+                    botGroup.setScaleZ(-botSize);
+
+                    // Creates bots and adds them to the scene
+                    Bots bot = new Bots(botGroup, new ArrayList<>(waypoints)); // Making sure they all have a set of checkpoints
+                    root3D.getChildren().add(bot.getModel());
+                    bots.add(bot);
+                }
+            });
+
+
+            racetrack.setTranslateY(4.5);
+            racetrack.setTranslateX(-230);
+            racetrack.setTranslateZ(0);
+
+            racetrack.setScaleX(trackSize);
+            racetrack.setScaleY(trackSize);
+            racetrack.setScaleZ(trackSize);
+            root3D.getChildren().add(racetrack);
+
+
+            raycast.MeshRaycaster(racetrack);
+
+            startRay.MeshRaycaster(startMesh);
+            finishRay.MeshRaycaster(finishMesh);
+
+
+            // Sets up the camera and adds it to the root 3D group
+            camera = new PerspectiveCamera(true);
+            camera.setNearClip(0.1);
+            camera.setFarClip(1000.0);
+            root3D.getChildren().add(camera);
+
+            // SubScene setup. This is a container for 3D content that can be embedded within a regular 2D scene this also displaces the root 3D
+            SubScene subScene = new SubScene(root3D, 800, 600, true, SceneAntialiasing.BALANCED);
+            // Sets up the camera
+            subScene.setCamera(camera);
+            // Make the hdri skyblue
+            subScene.setFill(Color.SKYBLUE);
+
+            // Scene setup
+            Group mainRoot = new Group();
+            mainRoot.getChildren().add(subScene);
+            Scene scene = new Scene(mainRoot, 800, 600, true);
+
+            // Set up the key press and release
+            scene.setOnKeyPressed(this::handleKeyPressed);
+            scene.setOnKeyReleased(this::handleKeyReleased);
+
+            // sets up the location and rotation of the camera
+            camera.getTransforms().addAll(
+                    new Rotate(-10, Rotate.X_AXIS),
+                    new Translate(0, 0, -15)
+            );
+
+            // Updates the location of the camera
+            updateCameraFollow();
+
+            // This makes sure that the frame rate is consistent for all computers
+            new AnimationTimer() {
+                private long lastUpdate = -1;
+
+                public void handle(long now) {
+                    if (lastUpdate > 0) {
+                        double deltaTime = (now - lastUpdate) / 1_000_000_000.0;
+                        update(deltaTime);
+                        updateCameraFollow();
+                        for (Bots bot : bots) {
+                            bot.update(deltaTime);
+                        }
+                    }
+                    lastUpdate = now;
+
+
+                }
+            }.start();
+
+            // Sets the subscene to be fullscreen as well
+            subScene.widthProperty().bind(scene.widthProperty());
+            subScene.heightProperty().bind(scene.heightProperty());
+
+            // Creates the scene in the application and makes it fullscreen
+            stage.setScene(scene);
+            stage.setFullScreen(true);
+            System.out.println("Game scene setup complete");
+            stage.show();
+        } catch (Exception e) {
+            System.err.println("Error setting up game scene");
+            e.printStackTrace();
         }
-
-        Group trackGroup = loadModel(getClass().getResource("/assets/models/CheckPoints.obj"));
-        PhongMaterial checkpointMaterial = new PhongMaterial(Color.LIMEGREEN);
-        float trackSize = 2;
-
-// Set transforms before adding to scene
-        trackGroup.setTranslateX(-230);
-        trackGroup.setTranslateY(10);
-        trackGroup.setTranslateZ(6825);
-        trackGroup.setScaleX(trackSize);
-        trackGroup.setScaleY(trackSize);
-        trackGroup.setScaleZ(trackSize);
-
-// Add to scene
-        root3D.getChildren().add(trackGroup);
-
-// Defer waypoint collection until JavaFX layout is complete
-        Platform.runLater(() -> {
-            List<Point3D> waypoints = new ArrayList<>();
-            for (Node node : trackGroup.getChildren()) {
-                if (node instanceof MeshView mesh) {
-                    mesh.setMaterial(checkpointMaterial);
-
-                    Bounds bounds = mesh.getBoundsInParent(); // or getBoundsInLocal() depending on what works
-                    Point3D localCenter = new Point3D(
-                            (bounds.getMinX() + bounds.getMaxX()) / 2,
-                            (bounds.getMinY() + bounds.getMaxY()) / 2,
-                            (bounds.getMinZ() + bounds.getMaxZ()) / 2
-                    );
-                    Point3D worldPosition = mesh.localToScene(localCenter);
-                    waypoints.add(worldPosition);
-
-
-                    System.out.println("Waypoint: " + worldPosition);
-                }
-            }
-
-
-            Collections.reverse(waypoints); // Optional
-
-            // Load bot model
-            int numberOfBots = 15; // The amount of bots
-            for (int i = 0; i < numberOfBots; i++) {
-                Group botGroup = loadModel(getClass().getResource("/assets/models/Supra.obj"));
-
-                // Position and scale the bot
-                float botSize = 0.5F;
-                double startOffset = i * 5; // Simple offset to avoid stacking
-                botGroup.setTranslateX(-210);
-                botGroup.setTranslateY(4);
-                botGroup.setTranslateZ(startOffset);
-                botGroup.setScaleX(botSize);
-                botGroup.setScaleY(botSize);
-                botGroup.setScaleZ(-botSize);
-
-                // Creates bots and adds them to the scene
-                Bots bot = new Bots(botGroup, new ArrayList<>(waypoints)); // Making sure they all have a set of checkpoints
-                root3D.getChildren().add(bot.getModel());
-                bots.add(bot);
-            }
-        });
-
-
-
-        racetrack.setTranslateY(4.5);
-        racetrack.setTranslateX(-230);
-        racetrack.setTranslateZ(0);
-
-        racetrack.setScaleX(trackSize);
-        racetrack.setScaleY(trackSize);
-        racetrack.setScaleZ(trackSize);
-        root3D.getChildren().add(racetrack);
-
-
-        raycast.MeshRaycaster(racetrack);
-
-        startRay.MeshRaycaster(startMesh);
-        finishRay.MeshRaycaster(finishMesh);
-
-
-
-
-        // Sets up the camera and adds it to the root 3D group
-        camera = new PerspectiveCamera(true);
-        camera.setNearClip(0.1);
-        camera.setFarClip(1000.0);
-        root3D.getChildren().add(camera);
-
-        // SubScene setup. This is a container for 3D content that can be embedded within a regular 2D scene this also displaces the root 3D
-        SubScene subScene = new SubScene(root3D, 800, 600, true, SceneAntialiasing.BALANCED);
-        // Sets up the camera
-        subScene.setCamera(camera);
-        // Make the hdri skyblue
-        subScene.setFill(Color.SKYBLUE);
-
-        // Scene setup
-        Group mainRoot = new Group();
-        mainRoot.getChildren().add(subScene);
-        Scene scene = new Scene(mainRoot, 800, 600, true);
-
-        // Set up the key press and release
-        scene.setOnKeyPressed(this::handleKeyPressed);
-        scene.setOnKeyReleased(this::handleKeyReleased);
-
-        // sets up the location and rotation of the camera
-        camera.getTransforms().addAll(
-                new Rotate(-10, Rotate.X_AXIS),
-                new Translate(0, 0, -15)
-        );
-
-        // Updates the location of the camera
-        updateCameraFollow();
-
-        // This makes sure that the frame rate is consistent for all computers
-        new AnimationTimer() {
-            private long lastUpdate = -1;
-            public void handle(long now) {
-                if (lastUpdate > 0) {
-                    double deltaTime = (now - lastUpdate) / 1_000_000_000.0;
-                    update(deltaTime);
-                    updateCameraFollow();
-                    for (Bots bot : bots) {
-                        bot.update(deltaTime);
-                    }
-                }
-                lastUpdate = now;
-
-
-            }
-        }.start();
-
-        // Sets the subscene to be fullscreen as well
-        subScene.widthProperty().bind(scene.widthProperty());
-        subScene.heightProperty().bind(scene.heightProperty());
-
-        // Creats the scene in the application and makes it fullscreen
-        stage.setScene(scene);
-        stage.setFullScreen(true);
-        stage.show();
     }
 
     // This loads the 3D model this is also credited to a youtube video
