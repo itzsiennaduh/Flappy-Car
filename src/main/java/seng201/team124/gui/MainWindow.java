@@ -25,11 +25,6 @@ public class MainWindow extends Application {
         FXMLLoader baseLoader = new FXMLLoader(getClass().getResource("/fxml/main.fxml"));
         Parent root = baseLoader.load();
 
-        MainController baseController = baseLoader.getController();
-        baseController.init(primaryStage);
-
-//        Image icon = new Image("");
-//        primaryStage.getIcons().add(icon);
         primaryStage.setTitle("RomanRacing"); // sets the title of the stage
         Scene scene = new Scene(root, 600, 400); // creates a scene with the root node and dimensions
         primaryStage.setScene(scene); // add the scene to the stage

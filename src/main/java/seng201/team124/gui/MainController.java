@@ -1,97 +1,132 @@
 package seng201.team124.gui;
 
 import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
+import javafx.scene.*;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import seng201.team124.services.CounterService;
-import seng201.team124.services.GameManager;
 
 import java.io.IOException;
 
 /**
- * Controller for the main.fxml window
- * @author seng201 teaching team
+ * Controller for main.fxml, handling navigation and loading screen.
  */
 public class MainController {
-
-    @FXML
-    private Label defaultLabel;
-
-    @FXML
-    private Button defaultButton;
-
-    @FXML
-    private Button Gamebutton;
-
-    private CounterService counterService;
+    @FXML private Button defaultButton;
+    @FXML private Button Gamebutton;
 
     /**
-     * Initialise the window
-     *
-     * @param stage Top level container for this window
+     * Exit the application.
      */
-    public void init(Stage stage) {
-        counterService = new CounterService();
+    @FXML
+    protected void Exit() {
+        Platform.exit();
     }
 
     /**
-     * Method to call when our counter-button is clicked
-     *
+     * Start a new game with a loading screen, then show the 3D scene.
      */
-
     @FXML
-    protected void Exit() { //The name for the On Action
+    protected void NewGame(ActionEvent event) throws IOException {
+        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
 
-        Platform.exit(); // A better way to exit the application
+        // 1) Display loading screen
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/LoadingScreen.fxml"));
+        Parent loadingRoot = loader.load();
+        LoadingScreenController loadCtrl = loader.getController();
+        stage.setScene(new Scene(loadingRoot));
+        stage.setFullScreen(true);
+
+        // 2) Run background load task
+        GameController gameCtrl = new GameController();
+        Task<Group> loadTask = new GameLoadTask(gameCtrl);
+
+        // Bind progress UI
+        loadCtrl.getProgressBar().progressProperty().bind(loadTask.progressProperty());
+        loadCtrl.getStatusLabel().textProperty().bind(loadTask.messageProperty());
+
+        // On success, wrap the 3D group in a SubScene
+        loadTask.setOnSucceeded(e -> {
+            Group gameRoot = loadTask.getValue();
+            gameCtrl.updateCameraFollow();  // initial camera positioning
+
+            // 3) Build SubScene around the Group
+            SubScene gameSub = new SubScene(
+                    gameRoot,
+                    stage.getWidth(),
+                    stage.getHeight(),
+                    true,
+                    SceneAntialiasing.BALANCED
+            );
+            gameSub.setFill(Color.SKYBLUE);
+
+// 3a) Pre-warm the SubScene so shaders, meshes, and materials are compiled/uploaded
+            gameSub.getRoot().applyCss();            // process any CSS
+            gameSub.getRoot().layout();              // lay out the scene graph
+            gameSub.snapshot(new SnapshotParameters(), null);  // force an offscreen render
+
+// 4) Set camera
+            PerspectiveCamera cam = findCamera(gameRoot);
+            if (cam != null) gameSub.setCamera(cam);
+
+// 5) Wrap & bind size
+            StackPane root = new StackPane(gameSub);
+            gameSub.widthProperty().bind(root.widthProperty());
+            gameSub.heightProperty().bind(root.heightProperty());
+
+// 6) Finish building and show scene
+            Scene gameScene = new Scene(root);
+            gameScene.setOnKeyPressed(gameCtrl::handleKeyPressed);
+            gameScene.setOnKeyReleased(gameCtrl::handleKeyReleased);
+            stage.setScene(gameScene);
+            stage.setFullScreen(true);
+
+        });
+
+        // On failure, show error
+        loadTask.setOnFailed(e -> {
+            Throwable ex = loadTask.getException();
+            new Alert(Alert.AlertType.ERROR, "Failed to load game: " + ex.getMessage())
+                    .showAndWait();
+        });
+
+        new Thread(loadTask).start();
     }
 
-
-    @FXML
-    protected void NewGame(ActionEvent event) { // Action even gives info about the click (wtf does that mean), throws IOException if it can't find the file
-        try {
-            GameManager.getInstance().initialiseDefaults();
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            GameController game = new GameController();
-            game.setupGameScene(stage);
-        } catch (Exception e) {
-            e.printStackTrace();
-            defaultLabel.setText("Error loading game");
-        }
-    }
-
+    /**
+     * Navigate to character naming screen.
+     */
     @FXML
     protected void CharacterName(ActionEvent event) throws IOException {
-
-//        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/CharacterNameLayout.fxml"));
-//        stage.setScene(new Scene(loader.load()));
-//        stage.setFullScreen(true);
-//        stage.show();
-
+        FXMLLoader loader = new FXMLLoader(
+                getClass().getResource("/fxml/CharacterNameLayout.fxml")
+        );
         Parent root = loader.load();
-        Stage currentStage = (Stage) defaultButton.getScene().getWindow();
-        Scene newScene = new Scene(root);
-        currentStage.setScene(newScene);
-        currentStage.setFullScreen(true);
-        currentStage.show();
-
-
+        Stage stage = (Stage) defaultButton.getScene().getWindow();
+        stage.setScene(new Scene(root));
+        stage.setFullScreen(true);
     }
 
-
-    @FXML
-    public void onButtonClicked() {
-        System.out.println("Button has been clicked");
-        counterService.incrementCounter();
-
-        int count = counterService.getCurrentCount();
-        defaultLabel.setText(Integer.toString(count));
+    /**
+     * Recursively search for the PerspectiveCamera in the 3D graph.
+     */
+    private PerspectiveCamera findCamera(Node node) {
+        if (node instanceof PerspectiveCamera) {
+            return (PerspectiveCamera) node;
+        } else if (node instanceof Group) {
+            for (Node child : ((Group) node).getChildren()) {
+                PerspectiveCamera found = findCamera(child);
+                if (found != null) return found;
+            }
+        } else if (node instanceof SubScene) {
+            return (PerspectiveCamera) ((SubScene) node).getCamera();
+        }
+        return null;
     }
 }
