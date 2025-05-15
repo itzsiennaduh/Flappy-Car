@@ -380,7 +380,7 @@ public class GameController {
                     -groundHit.normal.getZ()
             ).normalize(); // Surface "up"
             Point3D carIntentForward = new Point3D(-Math.sin(Math.toRadians(carAngle)), 0, -Math.cos(Math.toRadians(carAngle))).normalize();
-            
+
             Point3D localX = carIntentForward.crossProduct(normal).normalize(); // local X axis
             if (localX.magnitude() < 0.001) {
                 Point3D worldAxes = new Point3D(1, 0, 0);
