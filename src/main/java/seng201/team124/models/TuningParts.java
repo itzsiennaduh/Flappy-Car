@@ -1,5 +1,11 @@
 package seng201.team124.models;
 
+import seng201.team124.models.Purchasable;
+
+/**
+ * tuning part class with properties.
+ * available in the shop and can be applied to vehicles.
+ */
 public class TuningParts {
     private final String name;
     private final String description;
@@ -14,7 +20,7 @@ public class TuningParts {
      * creates a new tuning part with the specified characteristics.
      * @param name the name of the part
      * @param description brief description of the part
-     * @param cost purchase cost of the part
+     * @param cost cost of the part
      * @param speedModifier effect on vehicle's speed (positive or negative)
      * @param handlingModifier effect on vehicle's handling (positive or negative)
      * @param reliabilityModifier effect on vehicle's reliability (positive or negative)
@@ -33,6 +39,7 @@ public class TuningParts {
     }
 
     /**
+     * gets the part name.
      * @return part name
      */
     public String getName() {
@@ -40,6 +47,7 @@ public class TuningParts {
     }
 
     /**
+     * gets the part description.
      * @return part description
      */
     public String getDescription() {
@@ -47,6 +55,7 @@ public class TuningParts {
     }
 
     /**
+     * gets the part speed modifier.
      * @return part speed modifier value
      */
     public int getSpeedModifier() {
@@ -54,6 +63,7 @@ public class TuningParts {
     }
 
     /**
+     * gets the part handling modifier.
      * @return part handling modifier value
      */
     public int getHandlingModifier() {
@@ -61,6 +71,7 @@ public class TuningParts {
     }
 
     /**
+     * gets the part reliability modifier.
      * @return part reliability modifier value
      */
     public int getReliabilityModifier() {
@@ -68,6 +79,7 @@ public class TuningParts {
     }
 
     /**
+     * gets the part fuel economy modifier.
      * @return part fuel economy modifier value
      */
     public int getFuelEconomyModifier() {
@@ -75,10 +87,19 @@ public class TuningParts {
     }
 
     /**
+     * gets the part cost.
      * @return cost of part in dollars (integer value)
      */
     public int getCost() {
         return this.cost;
+    }
+
+    /**
+     * calculates the sell price of the part.
+     * @return the sell price of the part
+     */
+    public int getSellPrice() {
+        return (int) (this.cost * 0.70);
     }
 
     /**
@@ -138,5 +159,4 @@ public class TuningParts {
         sb.append(modifier);
         return sb.toString();
     }
-
 }

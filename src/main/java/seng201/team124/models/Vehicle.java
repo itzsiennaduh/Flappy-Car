@@ -1,5 +1,8 @@
 package seng201.team124.models;
 
+import seng201.team124.models.Purchasable;
+import seng201.team124.factories.VehicleFactory;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,7 +11,7 @@ import java.util.List;
  * @see VehicleFactory for the initialisation of the different vehicles.
  */
 
-public class Vehicle {
+public class Vehicle implements Purchasable {
     /**
      * vehicle variables/attributes
      * integer values are 0-20 and must add to 20 total (excluding cost). --> this is only
@@ -16,7 +19,7 @@ public class Vehicle {
      * the cost value is 0-10000 and depends on the set difficulty and spread of vehicle stats.
      */
     private final String name;
-    // private String customName; implement custom naming of cars if time
+    private final String description;
     /**
      * speed is average velocity on a flat straight km/h */
     private final int speed;
@@ -40,14 +43,16 @@ public class Vehicle {
      * constructor for the vehicle class.
      * creates a new vehicle with the specified characteristics.
      * @param name the name of the vehicle
+     * @param description brief description of the vehicle
      * @param speed initial speed rating in km/h
      * @param handling initial handling rating
      * @param reliability initial reliability percentage
      * @param fuelEconomy initial fuel economy in km/tank
      * @param cost purchase price
      */
-    public Vehicle(String name, int speed, int handling, int reliability, int fuelEconomy, int cost) {
+    public Vehicle(String name, String description, int speed, int handling, int reliability, int fuelEconomy, int cost) {
         this.name = name;
+        this.description = description;
         this.speed = speed;
         this.handling = handling;
         this.reliability = reliability;
@@ -64,11 +69,33 @@ public class Vehicle {
     }
 
     /**
+     * @return vehicle description
+     */
+    public String getDescription() {
+        return this.description;
+    }
+
+    /**
      * @return vehicle's base cost
      */
     public int getCost() {
         return this.cost;
     }
+
+    /**
+     * calculates the sell price of the vehicle
+     * @return sell price of the vehicle (percentage of cost)
+     */
+    public int getSellPrice() {
+        int vehicleValue = (int) (this.cost * 0.70);
+
+        int partsValue = 0;
+        for (TuningParts part : installedParts) {
+            partsValue += (int) (part.getCost() * 0.70);
+        }
+        return vehicleValue + partsValue;
+    }
+
 
     /**
      * @return vehicle's base speed
@@ -197,24 +224,28 @@ public class Vehicle {
      */
     @Override
     public String toString() {
-        return  "vehicle: " + name +
+        return  "Vehicle: " + getName() +
                 "\nSpeed: " + getEffectiveSpeed() +
                 "\nHandling: " + getEffectiveHandling() +
-                "\nReliability: " + getEffectiveReliability() +
-                "\nFuel Economy: " + getEffectiveFuelEconomy() +
-                "\nTotal Cost: " + getTotalCost();
+                "\nReliability: " + getEffectiveReliability() + "%" +
+                "\nFuel Economy: " + getEffectiveFuelEconomy() + " km/tank" +
+                "\nCost: " + getCost() +
+                "\nInstalled Parts: " + installedParts.size();
+
     }
 
     /**
      * @return a string with the vehicle's base and effective stats for comparison
      */
     public String toDetailedString() {
-        return  "vehicle: " + name +
-                "\nSpeed: " + speed + " [Effective: " + getEffectiveSpeed() + "]" +
-                "\nHandling: " + handling + " [Effective: " + getEffectiveHandling() + "]" +
-                "\nReliability: " + reliability + " [Effective: " + getEffectiveReliability() + "]" +
-                "\nFuel Economy: " + fuelEconomy + " [Effective: " + getEffectiveFuelEconomy() + "]" +
-                "\nBase Cost: " + cost + " [Total: " + getTotalCost() + "]" +
+        return  "Vehicle: " + this.name + " - " + this.description +
+                "\nSpeed: " + this.speed + " [Effective: " + getEffectiveSpeed() + "]" +
+                "\nHandling: " + this.handling + " [Effective: " + getEffectiveHandling() + "]" +
+                "\nReliability: " + this.reliability + "% [Effective: " + getEffectiveReliability() + "]" +
+                "\nFuel Economy: " + this.fuelEconomy + "km/tank [Effective: " + getEffectiveFuelEconomy() + "]" +
+                "\nBase Cost: " + this.cost + " [Total: " + getTotalCost() + "]" +
+                "\nSell Price: $" + getSellPrice() +
                 "\nInstalled Parts: " + installedParts.size();
     }
+
 }

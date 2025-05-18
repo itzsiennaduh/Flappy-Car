@@ -1,7 +1,7 @@
 package seng201.team124.models;
 
 /**
- * Enum for difficulty levels
+ * enum for difficulty levels
  */
 public enum Difficulty {
     EASY(1.5, 0.7, 0.5),
@@ -10,7 +10,7 @@ public enum Difficulty {
 
     private final double moneyMultiplier; //prize money
     private final double eventChanceMultiplier;
-    private final double routeDifficultyMultiplier;
+    private final double raceDifficultyMultiplier;
 
     /**
      * constructs a difficulty level with the specified multipliers
@@ -21,7 +21,7 @@ public enum Difficulty {
     Difficulty(double moneyMultiplier, double eventChanceMultiplier, double routeDifficultyMultiplier) {
         this.moneyMultiplier = moneyMultiplier;
         this.eventChanceMultiplier = eventChanceMultiplier;
-        this.routeDifficultyMultiplier = routeDifficultyMultiplier;
+        this.raceDifficultyMultiplier = routeDifficultyMultiplier;
     }
 
     /**
@@ -44,8 +44,8 @@ public enum Difficulty {
      * gets the route difficulty multiplier for this difficulty level
      * @return multiplier for route difficulty
      */
-    public double getRouteDifficultyMultiplier() {
-        return routeDifficultyMultiplier;
+    public double getRaceDifficultyMultiplier() {
+        return raceDifficultyMultiplier;
     }
 
     /**

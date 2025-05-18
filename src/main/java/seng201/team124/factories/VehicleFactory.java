@@ -1,4 +1,6 @@
-package seng201.team124.models;
+package seng201.team124.factories;
+
+import seng201.team124.models.Vehicle;
 
 /**
  * stores each vehicle available in the game.
@@ -10,6 +12,7 @@ public class VehicleFactory {
     public static Vehicle createRedVehicle() {
         return new Vehicle(
                 "Ferrari", //name EXAMPLE
+                "Fast but unreliable, will you risk it?", //description
                 10,  //speed
                 5,   //handling
                 2,   //reliability
@@ -21,6 +24,7 @@ public class VehicleFactory {
     public static Vehicle createCatVehicle() {
         return new Vehicle(
                 "Kittyyyyy", //name EXAMPLE
+                "All rounder, but not the fastest.", //description
                 5,  //speed
                 5,   //handling
                 5,   //reliability
@@ -32,6 +36,7 @@ public class VehicleFactory {
     public static Vehicle createHorseChariot() {
         return new Vehicle(
                 "Horse Chariot", //name EXAMPLE
+                "Why does this exist", //description
                 9,  //speed
                 2,   //handling
                 4,   //reliability

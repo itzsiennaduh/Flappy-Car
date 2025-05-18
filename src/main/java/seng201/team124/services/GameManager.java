@@ -1,7 +1,6 @@
 package seng201.team124.services;
 
 import seng201.team124.models.*;
-import java.util.*;
 
 /**
  * Class to manage the game state
@@ -155,7 +154,7 @@ public class GameManager {
             double handlingMultiplier = vehicle.getHandling() / 100.0;
             double reliabilityMultiplier = vehicle.getReliability() / 100.0;
             double fuelEconomyMultiplier = vehicle.getFuelEconomy() / 100.0;
-            double difficultyPenalty = difficultyLevel.getRouteDifficultyMultiplier();
+            double difficultyPenalty = difficultyLevel.getRaceDifficultyMultiplier();
 
             //THESE PHYSICS NEED TO BE PASSED TO 3D CONTROLLER
         }
