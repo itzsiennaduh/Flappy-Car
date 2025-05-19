@@ -28,8 +28,10 @@ public class GameController {
     private Box carCollisionBox;
     private final List<Box> obstacles = new ArrayList<>();
     private final Raycast raycast = new Raycast();
-    private final Raycast startRay = new Raycast();
     private final Raycast finishRay = new Raycast();
+    private final Raycast safeRay = new Raycast();
+    private final Raycast death = new Raycast();
+    private final Raycast gasstation = new Raycast();
     private final List<Bots> bots = new ArrayList<>();
 
     private double camX = 0;
@@ -45,7 +47,7 @@ public class GameController {
         // Load and position car
         car = loadModel(getClass().getResource("/assets/models/Supra.obj"));
         car.setTranslateX(5);
-        float size = 0.5F;
+        float size = 0.75F;
         car.setScaleX(size);
         car.setScaleY(size);
         car.setScaleZ(size);
@@ -57,11 +59,16 @@ public class GameController {
         root3D.getChildren().add(carCollisionBox);
 
         // Load track & checkpoints
-        Group modelGroup = loadModel(getClass().getResource("/assets/models/racetrackplease_v0.2.obj"));
+        Group modelGroup = loadModel(getClass().getResource("/assets/models/racetrackplease_v0.3.obj"));
         MeshView racetrack = null;
+        MeshView racetrack2 = null;
         MeshView finishMesh = null;
         MeshView wall = null;
         MeshView safe = null;
+        MeshView Tree = null;
+        MeshView GasStation = null;
+        MeshView gasstation2 = null;
+        MeshView floor = null;
         List<MeshView> checkpointMeshes = new ArrayList<>();
         PhongMaterial checkpointMat = new PhongMaterial(Color.LIMEGREEN);
 
@@ -74,6 +81,8 @@ public class GameController {
                 switch (mesh.getId()) {
                     case "Track":
                         racetrack = mesh;
+                    case "Track2":
+                        racetrack2 = mesh;
                         break;
                     case "Finish":
                         finishMesh = mesh;
@@ -83,6 +92,17 @@ public class GameController {
                         break;
                     case "safe":
                         safe = mesh;
+                        break;
+                    case "TreeeMerged":
+                        Tree = mesh;
+                        break;
+                    case "GasStation2":
+                        gasstation2 = mesh;
+                    case "GasStation1":
+                        GasStation = mesh;
+                        break;
+                    case "floor":
+                        floor = mesh;
                         break;
                     default:
                         mesh.setMaterial(checkpointMat);
@@ -95,6 +115,10 @@ public class GameController {
 
         if (racetrack != null) raycast.MeshRaycaster(racetrack);
         if (finishMesh != null) finishRay.MeshRaycaster(finishMesh);
+        if (safe != null) safeRay.MeshRaycaster(safe);
+        if (wall != null) death.MeshRaycaster(wall);
+        if (gasstation2 != null) gasstation.MeshRaycaster(gasstation2);
+        if (GasStation != null) gasstation.MeshRaycaster(GasStation);
 
         // Compute waypoints in background without Platform.runLater
         List<Point3D> waypoints = new ArrayList<>();
@@ -124,7 +148,7 @@ public class GameController {
         // Camera initialization
         camera = new PerspectiveCamera(true);
         camera.setNearClip(0.1);
-        camera.setFarClip(1000.0);
+        camera.setFarClip(600);
         root3D.getChildren().add(camera);
         updateCameraFollow(); // initial placement
 
@@ -141,6 +165,7 @@ public class GameController {
                 last = now;
             }
         }.start();
+
 
         return root3D;
     }
@@ -194,7 +219,7 @@ public class GameController {
         };
         for (Point3D local : localOffsets) {
             Point3D rotated = rotateY.transform(local);
-            Raycast.RaycastHit hit = raycast.getIntersection(carPosition.add(rotated), down);
+            Raycast.RaycastHit hit = safeRay.getIntersection(carPosition.add(rotated), down);
             if (hit != null) hits.add(hit);
         }
         if (hits.isEmpty()) return null;
@@ -215,6 +240,7 @@ public class GameController {
         try {
             importer.read(url);
             for (MeshView view : importer.getImport()) {
+                view.setCullFace(CullFace.BACK);
                 modelroot.getChildren().add(view);
             }
         } catch (ImportException e) {
@@ -231,26 +257,42 @@ public class GameController {
     public void handleKeyReleased(KeyEvent event) { pressedKeys.remove(event.getCode()); }
 
     private void update(double deltaTime) {
-        double rotateSpeed = 50, smoothing = 0.15, acceleration = 50;
-        double decel = 80, maxVel = 73, friction = 40;
+
+        double rotateSpeed = 50,
+                smoothing = 0.15,
+                acceleration = 50;
+        double decel = 80,
+                maxVel = 73,
+                friction = 40;
+
+
         if (pressedKeys.contains(KeyCode.A)) targetCarAngle -= rotateSpeed*deltaTime;
         if (pressedKeys.contains(KeyCode.D)) targetCarAngle += rotateSpeed*deltaTime;
+
         double diff = targetCarAngle - carAngle;
         carAngle += diff * smoothing;
         carCollisionBox.setRotationAxis(Rotate.Y_AXIS);
         carCollisionBox.setRotate(carAngle);
+
         double angleRad = Math.toRadians(carAngle);
         double dx = Math.sin(angleRad), dz = Math.cos(angleRad);
+
         Point3D down = new Point3D(0,1,0);
         Point3D carPos = new Point3D(car.getTranslateX(), car.getTranslateY(), car.getTranslateZ());
         Raycast.RaycastHit groundHit = getAverageGroundHit(carPos);
+
+
+
         if (groundHit != null) {
+
             double targetY = groundHit.point.getY() - 0.4;
             car.setTranslateY(targetY);
             carCollisionBox.setTranslateY(targetY);
+
             Point3D normal = new Point3D(-groundHit.normal.getX(),-groundHit.normal.getY(),-groundHit.normal.getZ()).normalize();
             Point3D forward = new Point3D(-Math.sin(Math.toRadians(carAngle)),0,-Math.cos(Math.toRadians(carAngle))).normalize();
             Point3D localX = forward.crossProduct(normal).normalize();
+
             if (localX.magnitude() < 0.001) localX = new Point3D(1,0,0).crossProduct(normal).normalize();
             Point3D localZ = normal.crossProduct(localX).normalize();
             Rotate rX = new Rotate(0, Rotate.X_AXIS);
@@ -260,23 +302,45 @@ public class GameController {
                     localX.getY(), normal.getY(), localZ.getY(), 0,
                     localX.getZ(), normal.getZ(), localZ.getZ(), 0
             );
+
             car.getTransforms().setAll(rX, rZ, affine);
             carCollisionBox.setRotationAxis(Rotate.Y_AXIS);
             carCollisionBox.setRotate(carAngle);
         }
+
+        if (safeRay.isRayHitting(carPos, down) && !raycast.isRayHitting(carPos, down)) {
+            acceleration *= 0.8;
+            maxVel *= 0.8;
+        }
+
         if (pressedKeys.contains(KeyCode.W))      velocity += acceleration*deltaTime;
         else if (pressedKeys.contains(KeyCode.S)) velocity -= decel*deltaTime;
         else if (velocity>0) { velocity -= friction*deltaTime; if (velocity<0) velocity=0; }
         else if (velocity<0) { velocity += friction*deltaTime; if (velocity>0) velocity=0; }
         if (velocity>maxVel) velocity=maxVel;
         if (velocity< -maxVel/2) velocity=-maxVel/2;
+
+
+        if (finishRay.isRayHitting(carPos, down)) System.out.println("Finished!");
+
+
+        for (Box obs : obstacles) {
+            if (checkCollision(carCollisionBox, obs)) { System.out.println("Collision!"); break; }
+        }
+
+        if (death.isRayHitting(carPos, down)) {
+            velocity = 0;
+            System.out.println("You Crashed");
+        }
+
+
         car.setTranslateX(car.getTranslateX()+dx*velocity*deltaTime);
         car.setTranslateZ(car.getTranslateZ()+dz*velocity*deltaTime);
         carCollisionBox.setTranslateX(car.getTranslateX());
         carCollisionBox.setTranslateZ(car.getTranslateZ());
-        if (finishRay.isRayHitting(carPos, down)) System.out.println("Finished!");
-        for (Box obs : obstacles) {
-            if (checkCollision(carCollisionBox, obs)) { System.out.println("Collision!"); break; }
+
+        if (gasstation.isRayHitting(carPos,down)) {
+            System.out.println("FULLING");
         }
     }
 

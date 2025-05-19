@@ -1,0 +1,64 @@
+# Blender 4.2.1 LTS MTL File: 'racetrackplease_v0.2.blend'
+# www.blender.org
+
+newmtl Material.002
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.161255 0.069416 0.018719
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+
+newmtl Material.008
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd C:/Users/User/Pictures/TextureMadeByme/Material_BaseColor.png
+
+newmtl Material.009
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.067546 0.033380 0.013835
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+
+newmtl Material.010
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+
+newmtl Material.011
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+
+newmtl Material.012
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+illum 2
+map_Kd C:/Users/User/Pictures/TextureMadeByme/Tree/Material.012_BaseColor.png
+map_Ns C:/Users/User/Pictures/TextureMadeByme/Tree/Material.012_Roughness.png
+map_refl C:/Users/User/Pictures/TextureMadeByme/Tree/Material.012_Metallic.png
+map_d C:/Users/User/Pictures/TextureMadeByme/Tree/Material.012_Alpha.png
+map_Bump -bm 1.000000 C:/Users/User/Pictures/TextureMadeByme/Tree/Material.012_Normal.png
