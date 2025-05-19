@@ -4,7 +4,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.stage.Stage;
-import javafx.scene.Scene;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import seng201.team124.models.*;
@@ -79,18 +78,14 @@ public class SelectDifficulty {
         Difficulty difficulty = Difficulty.values()[difficultyValue - 1];
         int seasonLength = (int)seasonLengthSlider.getValue();
 
-        GameManager.getInstance().initializeGame(
-                GameManager.getInstance().getPlayerName(),
+        GameManager gm = GameManager.getInstance();
+        gm.initializeGame(
+                gm.getTempName(), //from temp storage
                 difficulty,
                 seasonLength
         );
 
-        //GameManager gameManager = GameManager.getInstance();
-        //gameManager.initializeGame(
-                //gameManager.getPlayerName(),
-                //difficulty,
-                //seasonLength
-        //);
+        gm.clearTempData();
 
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/GameScene.fxml"));

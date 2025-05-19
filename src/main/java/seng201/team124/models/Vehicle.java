@@ -1,6 +1,5 @@
 package seng201.team124.models;
 
-import seng201.team124.models.Purchasable;
 import seng201.team124.factories.VehicleFactory;
 
 import java.util.ArrayList;
@@ -20,23 +19,21 @@ public class Vehicle implements Purchasable {
      */
     private final String name;
     private final String description;
-    /**
-     * speed is average velocity on a flat straight km/h */
+
     private final double speed;
-    /**
-     * higher value is better handling e.g. cornering and maintaining control */
     private final double handling;
-    /**
-     * higher percent, higher reliability, less likely to break down during random events */
     private final double reliability;
-    /**
-     * max distance in km for full fuel tank (km/tank) */
     private final double fuelEconomy;
-    /**
-     * base cost of the vehicle */
     private final double cost;
-    /**
-     * list of currently installed tuning parts */
+
+    private double currentFuel;
+    private final double maxFuel;
+
+    private double routeSpeedModifier = 1.0;
+    private double routeHandlingModifier = 1.0;
+    private double routeReliabilityModifier = 1.0;
+    private double routeFuelEconomyModifier = 1.0;
+
     private final List<TuningParts> installedParts;
 
     /**
@@ -49,8 +46,10 @@ public class Vehicle implements Purchasable {
      * @param reliability initial reliability percentage
      * @param fuelEconomy initial fuel economy in km/tank
      * @param cost purchase price
+     * @param currentFuel the fuel level of the vehicle
+     * @param maxFuel max fuel the vehicle may have
      */
-    public Vehicle(String name, String description, double speed, double handling, double reliability, int fuelEconomy, int cost) {
+    public Vehicle(String name, String description, double speed, double handling, double reliability, double fuelEconomy, double cost, double currentFuel, double maxFuel) {
         this.name = name;
         this.description = description;
         this.speed = speed;
@@ -58,6 +57,8 @@ public class Vehicle implements Purchasable {
         this.reliability = reliability;
         this.fuelEconomy = fuelEconomy;
         this.cost = cost;
+        this.currentFuel = currentFuel;
+        this.maxFuel = maxFuel;
         this.installedParts = new ArrayList<>();
     }
 
@@ -133,7 +134,7 @@ public class Vehicle implements Purchasable {
     }
 
     /**
-     * Calculates the effective speed induced by all tuning parts applied
+     * calculates the effective speed induced by all tuning parts applied
      * @return new speed value
      */
     public double getEffectiveSpeed() {
@@ -141,11 +142,11 @@ public class Vehicle implements Purchasable {
         for (TuningParts part : installedParts) {
             effectiveSpeed += part.getSpeedModifier();
         }
-        return effectiveSpeed;
+        return effectiveSpeed * routeSpeedModifier;
     }
 
     /**
-     * Calculates the effective handling induced by all tuning parts applied
+     * calculates the effective handling induced by all tuning parts applied
      * @return new handling value
      */
     public double getEffectiveHandling() {
@@ -153,11 +154,11 @@ public class Vehicle implements Purchasable {
         for (TuningParts part : installedParts) {
             effectiveHandling += part.getHandlingModifier();
         }
-        return effectiveHandling;
+        return effectiveHandling * routeHandlingModifier;
     }
 
     /**
-     * Calculates the effective reliability induced by all tuning parts applied
+     * calculates the effective reliability induced by all tuning parts applied
      * @return new reliability value
      */
     public double getEffectiveReliability() {
@@ -165,23 +166,23 @@ public class Vehicle implements Purchasable {
         for (TuningParts part : installedParts) {
             effectiveReliability += part.getReliabilityModifier();
         }
-        return effectiveReliability;
+        return effectiveReliability * routeReliabilityModifier;
     }
 
     /**
-     * Calculates the effective fuel economy induced by all tuning parts applied
-     *@return new fuel economy value
+     * calculates the effective fuel economy induced by all tuning parts applied
+     * @return new fuel economy value
      */
     public double getEffectiveFuelEconomy() {
         double effectiveFuelEconomy = fuelEconomy;
         for (TuningParts part : installedParts) {
             effectiveFuelEconomy += part.getFuelEconomyModifier();
         }
-        return effectiveFuelEconomy;
+        return effectiveFuelEconomy * routeFuelEconomyModifier;
     }
 
     /**
-     * Calculates the total cost after all tuning parts are applied
+     * calculates the total cost after all tuning parts are applied
      * @return new total cost value
      */
     public double getTotalCost() {
@@ -190,6 +191,14 @@ public class Vehicle implements Purchasable {
             totalCost += part.getCost();
         }
         return totalCost;
+    }
+
+    /**
+     * get the amount of fuel in the vehicle
+     * @return current fuel level
+     */
+    public double getFuelLevel() {
+        return this.currentFuel;
     }
 
     /**
@@ -220,6 +229,47 @@ public class Vehicle implements Purchasable {
     }
 
     /**
+     * refuels vehicle back to max fuel
+     */
+    public void refuel() {
+        this.currentFuel = this.maxFuel;
+    }
+
+    /**
+     * consumes a specified amount of fuel
+     * throws an exception if the fuel level reaches zero after consumption.
+     * @param amount the amount of fuel to consume
+     * @throws IllegalStateException if the vehicle runs out of fuel after consumption
+     */
+    public void consumeFuel(double amount) {
+        this.currentFuel = Math.max(0, this.currentFuel - amount);
+        if (this.currentFuel == 0) {
+            throw new IllegalStateException("Out of fuel!");
+        }
+    }
+
+    /**
+     * apply temporary route modifiers to the vehicle
+     * @param route the route from which the modifiers are from
+     */
+    public void applyRouteModifiers(Route route) {
+        this.routeSpeedModifier = route.getSpeedModifier();
+        this.routeHandlingModifier = route.getHandlingModifier();
+        this.routeReliabilityModifier = route.getReliabilityModifier();
+        this.routeFuelEconomyModifier = route.getFuelEconomyModifier();
+    }
+
+    /**
+     * reset route modifiers back to default (usually used after a race)
+     */
+    public void resetRouteModifiers() {
+        this.routeSpeedModifier = 1.0;
+        this.routeHandlingModifier = 1.0;
+        this.routeReliabilityModifier = 1.0;
+        this.routeFuelEconomyModifier = 1.0;
+    }
+
+    /**
      * @return a string with the vehicle's effective stats
      */
     @Override
@@ -247,5 +297,6 @@ public class Vehicle implements Purchasable {
                 "\nSell Price: $" + getSellPrice() +
                 "\nInstalled Parts: " + installedParts.size();
     }
+
 
 }

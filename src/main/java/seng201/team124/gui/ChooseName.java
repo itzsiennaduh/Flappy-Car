@@ -42,8 +42,7 @@ public class ChooseName {
         // Reset style on success
         nameField.setStyle(null);
 
-        // Save and go to the next screen
-        GameManager.getInstance().setPlayerName(name);
+        GameManager.getInstance().setTempName(name);
 
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Select_Dif_SeasonL.fxml"));

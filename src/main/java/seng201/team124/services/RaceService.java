@@ -12,15 +12,16 @@ public class RaceService {
     private Race currentRace;
     private Route currentRoute;
     private final Random random = new Random();
+    private int completedRaces = 0;
     private static final double BASE_EVENT_CHANCE = 0.2;
     private double elapsedHours; // time passed in the current race
     private double totalRaceHours; //original race duration
     private final CounterService counter;
 
-    public RaceService(Player player, GameManager gameManager) {
+    public RaceService(Player player, GameManager gameManager, CounterService counterService) {
         this.player = player;
         this.gameManager = gameManager;
-        this.counter = new CounterService();
+        this.counter = counterService;
     }
 
     /**
@@ -35,8 +36,14 @@ public class RaceService {
         }
         this.currentRace = race;
         this.currentRoute = route;
-        this.counter.startRace(race);
-        this.gameManager.startRace(race);
+        this.totalRaceHours = race.getHours();
+        this.elapsedHours = 0;
+
+        Vehicle vehicle = player.getCurrentVehicle();
+        vehicle.applyRouteModifiers(route);
+
+        this.counter.startRace(this.currentRace);
+        this.gameManager.startRace(this.currentRace, this.currentRoute);
         return true;
     }
 
@@ -64,11 +71,21 @@ public class RaceService {
     public void completeRace(int position) {
         if (currentRace == null) return;
 
+        Vehicle vehicle = player.getCurrentVehicle();
+        if (vehicle != null) {
+            vehicle.resetRouteModifiers();
+        }
+
+        completedRaces++;
         double prizeMoney = calculatePrizeMoney(position);
         player.addMoney(prizeMoney);
         gameManager.completeRace(position);
         currentRace = null;
         currentRoute = null;
+    }
+
+    public int getCompletedRacesCount() {
+        return completedRaces;
     }
 
     /**
@@ -101,7 +118,7 @@ public class RaceService {
             return null; //no event
         }
 
-        RaceEvent[] weightedEvents = RaceEvent.getWeightedEvents();
+        RaceEvent[] weightedEvents = new RaceEvent[] {RaceEvent.getRandomEvent()};
         RaceEvent selectedEvent = weightedEvents[random.nextInt(weightedEvents.length)];
 
         return new EventResult(selectedEvent);
@@ -127,5 +144,53 @@ public class RaceService {
         }
     }
 
+    public boolean handleRefuel(boolean shouldRefuel) {
+        if (shouldRefuel) {
+            this.counter.modifyTime(1.0);
+            player.getCurrentVehicle().refuel();
+            return true;
+        }
+        return false;
+    }
+
+    public boolean checkFuelLevel(Vehicle vehicle, Route route) {
+        double effectiveFuelEconomy = vehicle.getEffectiveFuelEconomy();
+        return vehicle.getFuelLevel() >= (route.getDistance() / effectiveFuelEconomy);
+    }
+
+    /** determines if random even should take place according to selected difficulty
+     * @param difficulty the current game difficulty
+     * @return true if a random event should occur
+     */
+    public boolean shouldRandomEventOccur(Difficulty difficulty) {
+        Random random = new Random();
+        double baseChance = 0.2;
+        double adjustedChance = baseChance * difficulty.getEventChanceMultiplier();
+        return random.nextDouble() < adjustedChance;
+    }
+
+    /**
+     * process race progress and check for random events
+     */
+    public void processRaceProgress() {
+        if (shouldRandomEventOccur(player.getDifficulty())) {
+            RaceEvent event = RaceEvent.getRandomEvent();
+            EventResult result = new EventResult(event);
+            handleRandomEvent();
+        }
+
+        Vehicle vehicle = player.getCurrentVehicle();
+        double distanceCovered = vehicle.getEffectiveSpeed() * 0.1;
+        double fuelConsumed = distanceCovered / vehicle.getEffectiveFuelEconomy();
+
+        try {
+            vehicle.consumeFuel(fuelConsumed);
+        } catch (IllegalStateException e) {
+            //ran out of fuel
+            completeRace(0);
+        }
+    }
+
 
 }
+

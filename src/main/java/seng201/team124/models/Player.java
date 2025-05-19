@@ -33,7 +33,7 @@ public class Player {
      * @return the name of the player as a string, between 3-15 characters long.
      */
     public String getName() {
-        return this.name;
+        return GameManager.getInstance().getPlayerName();
     }
 
     /**
@@ -56,9 +56,9 @@ public class Player {
      * gets the season length from game manager
      * @return season length
      */
-    //public double getSeasonLength() {
-        //return GameManager.getInstance().getTotalRaces();
-    //}
+    public double getSeasonLength() {
+        return GameManager.getInstance().getSeasonLength();
+    }
 
     /**
      * adds money to the player's account

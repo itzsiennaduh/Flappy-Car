@@ -3,26 +3,30 @@ package seng201.team124.services;
 import seng201.team124.models.*;
 
 /**
- * Class to manage the game state
+ * class to manage the game state
  */
 public class GameManager {
     private static GameManager instance;
-    private Player player;
-    //private Season season;
-    //private Shop shop;
-    //private Garage garage;
-    private Race currentRace;
 
-    private Difficulty difficultyLevel;
-    private String playerName;
-    private boolean isRaceActive = false;
+    private Player player;
+    private Difficulty difficulty;
+    private int seasonLength;
+
+    private ShopService shopService;
+    private GarageService garageService;
+    private RaceService raceService;
+    private CounterService counterService;
+
+    private boolean isRaceInProgress = false;
 
     private static final double BASE_STARTING_MONEY = 10000;
+
+    private String tempName;
 
     private GameManager() {
     }
 
-    public static GameManager getInstance() {
+    public static synchronized GameManager getInstance() { //AI taught me what synchronized does
         if (instance == null) {
             instance = new GameManager();
         }
@@ -31,74 +35,119 @@ public class GameManager {
 
     /**
      * initialises a new game
-     * @param playerName name of the player
-     * @param difficultyLevel selected difficulty level of the game
+     *
+     * @param playerName   name of the player
+     * @param difficulty   selected difficulty level of the game
      * @param seasonLength number of races in the season
      */
-    public void initializeGame(String playerName, Difficulty difficultyLevel, int seasonLength) {
-        this.playerName = playerName;
-        this.difficultyLevel = difficultyLevel;
+    public void initializeGame(String playerName, Difficulty difficulty, int seasonLength) {
+        validatePlayerName(playerName);
 
-        double startingMoney = difficultyLevel.calculateStartingMoney(BASE_STARTING_MONEY);
+        double startingMoney = difficulty.calculateStartingMoney(BASE_STARTING_MONEY);
         this.player = new Player(playerName, startingMoney);
-        //this.season = new Season(seasonLength, difficultyLevel);
-        //this.shop = new Shop(difficultyLevel);
-        //this.garage = new Garage(player);
-        currentRace = null;
+        this.difficulty = difficulty;
+        this.seasonLength = seasonLength;
+
+        this.shopService = new ShopService(new Shop(), this.player, player.getVehicles() , player.getTuningParts());
+        this.garageService = new GarageService(this.player);
+        this.counterService = new CounterService();
+        this.raceService = new RaceService(this.player, this, this.counterService);
     }
 
-    public void setPlayer(Player player) {
-        this.player = player;
-    }
-
+    /**
+     * gets current player info
+     * @return player info
+     */
     public Player getPlayer() {
+        if (player == null) {
+            initializeDefaults();
+        }
         return this.player;
     }
 
-    public void setPlayerName(String name) {
-        if (name == null || name.trim().length() < 3 || name.trim().length() > 15) {
-            throw new IllegalArgumentException("Player name must be between 3 and 15 characters long.");
-        }
-        this.playerName = name.trim();
-    }
-
+    /**
+     * gets the name of the current player
+     * @return the player's name as a string
+     */
     public String getPlayerName() {
-        return this.playerName;
+        return getPlayer().getName();
     }
 
+    /**
+     * gets the selected difficulty level
+     * @return selected difficulty level
+     */
     public Difficulty getDifficultyLevel() {
-        return this.difficultyLevel;
+        return this.difficulty;
     }
 
-    //public List<Vehicle> getAvailableVehicles() {
-        //return shop.getAvailableVehicles();
-    //}
-
-    //public List<TuningParts> getAvailableTuningParts() {
-        //return shop.getAvailableTuningParts();
-    //}
-
-    //public List<Vehicle> getGarageVehicles() {
-        //return garage.getVehicles();
-    //}
-
-    public boolean purchaseVehicle(Vehicle vehicle) {
-        if (player.subtractMoney(vehicle.getCost())) {
-            if (player.addVehicle(vehicle)) {
-                //shop.removeVehicle(vehicle);
-                return true;
-            }
-            player.addMoney(vehicle.getCost());
-        }
-        return false;
+    /**
+     * get selected season length
+     * @return selected season length
+     */
+    public int getSeasonLength() {
+        return this.seasonLength;
     }
 
-    public void startRace(Race race) {
-        if (player.getCurrentVehicle() == null) {
-            throw new IllegalStateException("Cannot start a race without a vehicle selected.");
-        }
-        this.currentRace = race;
-        this.isRaceActive = true;
+    /**
+     * is the race in progress?
+     * @return true if so, false otherwise
+     */
+    public boolean isRaceInProgress() {
+        return this.isRaceInProgress;
+    }
+
+    /**
+     * access service shop
+     * @return shop service
+     */
+    public ShopService getShopService() {
+        if (shopService == null) initializeDefaults();
+        return this.shopService;
+    }
+
+    /**
+     * access service garage
+     * @return garage service
+     */
+    public GarageService getGarageService() {
+        if (garageService == null) initializeDefaults();
+        return this.garageService;
+    }
+
+    /**
+     * access service race
+     * @return race service
+     */
+    public RaceService getRaceService() {
+        if (raceService == null) initializeDefaults();
+        return this.raceService;
+    }
+
+    /**
+     * access time counter service
+     * @return counter service
+     */
+    public CounterService getCounterService() {
+        if (counterService == null) initializeDefaults();
+        return this.counterService;
+    }
+
+    public void setTempName(String name) {
+        this.tempName = name;
+    }
+
+    public String getTempName() {
+        return this.tempName;
+    }
+
+    public void clearTempData() {
+        this.tempName = null;
+    }
+
+    public void startRace(Race race, Route route) {
+        getRaceService().startRace(race, route);
+        this.isRaceInProgress = true;
     }
 
     /**
@@ -106,68 +155,48 @@ public class GameManager {
      * @param position final race position (1=first place, 2=second place, etc.)
      */
     public void completeRace(int position) {
-        if (!isRaceActive) return;
-
-        //double basePrize = currentRace.getBasePrize();
-        double difficultyMultiplier = difficultyLevel.getMoneyMultiplier();
-        //double actualPrize = (int) (basePrize * (1.0 / position) * difficultyMultiplier);
-
-        //player.addMoney(actualPrize);
-        //season.completeRace();
-        currentRace = null;
-        isRaceActive = false;
-
-        // refresh
-        //shop.refreshStock();
-        //season.generateNewRaces();
+        getRaceService().completeRace(position);
+        isRaceInProgress = false;
+        getShopService().restockShop();
     }
 
-    public boolean installPart(TuningParts part, Vehicle vehicle) {
-        if (!player.getTuningParts().contains(part)) return false;
-        //if (!player.getVehicles.contains(vehicle)) return false;
-
-        vehicle.installPart(part);
-        player.removeTuningPart(part);
-        return true;
+    public int getRacesCompleted() {
+        return getRaceService().getCompletedRacesCount();
     }
 
-    //public int getRacesCompleted() {
-        //return season.getRacesCompleted();
-    //}
+    public boolean isSeasonComplete() {
+        return getRacesCompleted() >= getSeasonLength();
+    }
 
-    //public int getTotalRaces() {
-        //return season.getTotalRaces();
-    //}
+    public int getRemainingRaces() {
+        return getSeasonLength() - getRacesCompleted();
+    }
 
-    //public boolean isSeasonComplete() {
-        //return season.isSeasonComplete();
-    //}
+    public void restockShop() {
+        getShopService().restockShop();
+    }
+
+    private void validatePlayerName(String name) {
+        if (name == null || name.trim().length() < 3 || name.trim().length() > 15) {
+            throw new IllegalArgumentException("Player name must be between 3 and 15 characters long.");
+        }
+    }
 
     public Vehicle getCurrentVehicle() {
         return player.getCurrentVehicle();
     }
 
-    public void applyVehicleStats() {
-        Vehicle vehicle = getCurrentVehicle();
-        if (vehicle != null) {
-            double speedMultiplier = vehicle.getSpeed() / 100.0;
-            double handlingMultiplier = vehicle.getHandling() / 100.0;
-            double reliabilityMultiplier = vehicle.getReliability() / 100.0;
-            double fuelEconomyMultiplier = vehicle.getFuelEconomy() / 100.0;
-            double difficultyPenalty = difficultyLevel.getRaceDifficultyMultiplier();
-
-            //THESE PHYSICS NEED TO BE PASSED TO 3D CONTROLLER
-        }
-    }
-
     public void initializeDefaults() {
-        if (player == null) {
-            player = new Player("Default Player", 10000);
+        this.player = new Player("Default Player", 10000);
+        this.difficulty = Difficulty.MEDIUM;
+        this.seasonLength = 10;
+        this.shopService = new ShopService(new Shop(), this.player, player.getVehicles() , player.getTuningParts());
+        this.garageService = new GarageService(this.player);
+        this.counterService = new CounterService();
+        this.raceService = new RaceService(this.player, this, this.counterService);
         }
-        if (difficultyLevel == null) {
-            difficultyLevel = Difficulty.MEDIUM;
-        }
-    }
 
-    //random even handling in here
+
+
+    //random event handling in here
 }

@@ -1,10 +1,12 @@
 package seng201.team124.services;
 
 import seng201.team124.models.*;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
- * handles all shop related operations and logic
+ * handles all shop-related operations and logic
  */
 
 public class ShopService {
@@ -61,11 +63,25 @@ public class ShopService {
 
     /**
      * restocks the shop with new items
-     * @param vehicleCount number of vehicles to restock (3-5)
-     * @param partCount number of tuning parts to restock (at least 3)
      */
-    public void restockShop(int vehicleCount, int partCount) {
-        shop.restock(allPossibleVehicles, allPossibleParts, vehicleCount, partCount);
+    public void restockShop() {
+        // get lists
+        List<Vehicle> availableVehicles = new ArrayList<>(allPossibleVehicles);
+        for (Vehicle vehicle : player.getVehicles()) {
+            availableVehicles.remove(vehicle);
+        }
+        List<TuningParts> availableParts = new ArrayList<>(allPossibleParts);
+        for (TuningParts part : player.getTuningParts()) {
+            availableParts.remove(part);
+        }
+
+        shop.clearInventory();
+        shop.addVehicles(availableVehicles);
+        shop.addParts(availableParts);
+    }
+
+    public Shop getShop() {
+        return this.shop;
     }
 
     /**

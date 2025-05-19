@@ -17,7 +17,9 @@ public class VehicleFactory {
                 5,   //handling
                 2,   //reliability
                 3,   //fuel eco
-                9000 //cost
+                9000, //cost
+                100, //current fuel
+                100 //max fuel
         );
     }
 
@@ -29,7 +31,9 @@ public class VehicleFactory {
                 5,   //handling
                 5,   //reliability
                 5,   //fuel eco
-                5000 //cost
+                5000, //cost
+                100,
+                100
         );
     }
 
@@ -41,7 +45,9 @@ public class VehicleFactory {
                 2,   //handling
                 4,   //reliability
                 5,   //fuel eco
-                10000 //cost
+                10000, //cost
+                100, //current fuel
+                100 //max fuel
         );
     }
 }

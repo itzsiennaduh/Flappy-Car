@@ -1,5 +1,6 @@
 package seng201.team124.models;
 
+import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,7 +8,7 @@ import java.util.List;
  * player's garage containing their vehicles and tuning parts.
  */
 public class Garage {
-    private final List<Vehicle> vehicles;
+    private final List<Vehicle> vehiclesInventory;
     private final List<TuningParts> tuningPartsInventory;
     private Vehicle currentVehicle;
 
@@ -15,7 +16,7 @@ public class Garage {
      * constructor for the garage class.
      */
     public Garage() {
-        this.vehicles = new ArrayList<>();
+        this.vehiclesInventory = new ArrayList<>();
         this.tuningPartsInventory = new ArrayList<>();
         this.currentVehicle = null;
     }
@@ -24,8 +25,8 @@ public class Garage {
      * gets all vehicles in the garage.
      * @return list of vehicles
      */
-    public List<Vehicle> getVehicles() {
-        return new ArrayList<>(vehicles);
+    public List<Vehicle> getVehiclesInventory() {
+        return new ArrayList<>(vehiclesInventory);
     }
 
     /**
@@ -51,10 +52,10 @@ public class Garage {
      * @throws IllegalStateException if the garage already has 5 vehicles
      */
     public void addVehicle(Vehicle vehicle) {
-        if (vehicles.size() >= 5) {
+        if (vehiclesInventory.size() >= 5) {
             throw new IllegalStateException("Garage already has 5 vehicles. Sell some to create room for more.");
         }
-        vehicles.add(vehicle);
+        vehiclesInventory.add(vehicle);
         if (currentVehicle == null) {
             currentVehicle = vehicle;
         }
@@ -67,12 +68,12 @@ public class Garage {
      * @throws IllegalStateException if the garage does not contain the vehicle or trying to remove the last vehicle
      */
     public void removeVehicle(Vehicle vehicle) {
-        if (vehicles.size() <= 1 || !vehicles.contains(vehicle)) {
+        if (vehiclesInventory.size() <= 1 || !vehiclesInventory.contains(vehicle)) {
             throw new IllegalStateException("Must have at least one vehicle. Cannot remove the last one.");
         }
-        vehicles.remove(vehicle);
+        vehiclesInventory.remove(vehicle);
         if (currentVehicle.equals(vehicle)) {
-            currentVehicle = vehicles.get(0); //select the first remaining vehicle
+            currentVehicle = vehiclesInventory.get(0); //select the first remaining vehicle
         }
     }
 
@@ -82,7 +83,7 @@ public class Garage {
      * @throws IllegalStateException if the garage does not contain the vehicle
      */
     public void setCurrentVehicle(Vehicle vehicle) {
-        if (!vehicles.contains(vehicle)) {
+        if (!vehiclesInventory.contains(vehicle)) {
             throw new IllegalStateException("Garage does not contain vehicle.");
         }
         currentVehicle = vehicle;

@@ -88,6 +88,57 @@ public class Shop {
             availableParts.add(partPool.remove(index));
         }
     }
+
+    public void clearInventory() {
+        this.availableVehicles.clear();
+        this.availableParts.clear();
+    }
+
+    /**
+     * adds a single vehicle to the shop inventory
+     * @param vehicle vehicle to add
+     */
+    public void addVehicle(Vehicle vehicle) {
+        if (!this.availableVehicles.contains(vehicle)) {
+            this.availableVehicles.add(vehicle);
+        }
+    }
+
+    /**
+     * adds a single tuning part to the shop inventory
+     * @param part tuning part to add
+     */
+    public void addPart(TuningParts part) {
+        if (!this.availableParts.contains(part)) {
+            this.availableParts.add(part);
+        }
+    }
+
+    /**
+     * adds multiple vehicles to the shop inventory
+     * @param vehicles list of vehicles to add
+     */
+    public void addVehicles(List<Vehicle> vehicles) {
+        for (Vehicle vehicle : vehicles) {
+            if (!this.availableVehicles.contains(vehicle)) {
+                this.availableVehicles.add(vehicle);
+            }
+        }
+    }
+
+    /**
+     * adds multiple tuning parts to the shop inventory
+     * @param parts list of tuning parts to add
+     */
+    public void addParts(List<TuningParts> parts) {
+        for (TuningParts part : parts) {
+            if (!this.availableParts.contains(part)) {
+                this.availableParts.add(part);
+            }
+        }
+    }
+
+
     //List<Car> shopCars = new ArrayList<>();
     //shopCars.add(VehicleFactory.createRedVehicle());
     //shopCars.add(VehicleFactory.createCatVehicle());

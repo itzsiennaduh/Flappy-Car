@@ -1,5 +1,7 @@
 package seng201.team124.models;
 
+import java.util.Random;
+
 /**
  * enum for possible random events during a race
  */
@@ -12,7 +14,7 @@ public enum RaceEvent {
     ),
     STRANDED_TRAVELLER("You happen upon a wandering traveller. He looks like he may need a ride. You pull over and pick him up because you're a good person. He rewards you but you lose some race time)",
             1000,
-            -1,
+            1.0,
             false,
             null, null
     ),
@@ -97,11 +99,16 @@ public enum RaceEvent {
     /**
      * gets all events with their weights for selection randomly
      */
-    public static RaceEvent[] getWeightedEvents() {
-        return new RaceEvent[]{BREAKDOWN, BREAKDOWN, BREAKDOWN, BREAKDOWN, BREAKDOWN, // 5/8
+    public static RaceEvent getRandomEvent() {
+        Random random = new Random();
+        RaceEvent[] weightedEvents = {BREAKDOWN, BREAKDOWN, BREAKDOWN, BREAKDOWN, BREAKDOWN, // 5/8
                 STRANDED_TRAVELLER, STRANDED_TRAVELLER, // 3/8
                 SEVERE_WEATHER // 1/8
         };
+
+        int index = random.nextInt(weightedEvents.length);
+        return weightedEvents[index];
+
     }
 
 
