@@ -10,7 +10,7 @@ import java.util.List;
  */
 public class Player {
     private String name; //players name between 3-15 char incl
-    private int money; //money im dollars accessible to the player
+    private double money; //money in dollars accessible to the player
     private final List<Vehicle> vehicles; //list of vehicles owned by the player
     private final List<TuningParts> tuningParts; //list of tuning parts owned by the player (not yet installed)
     private Vehicle currentVehicle; //the vehicle the player is currently driving
@@ -20,7 +20,7 @@ public class Player {
      * @param name the name of the player, between 3-15 characters long
      * @param money the initial money of the player based on difficulty setting
      */
-    public Player(String name, int money) {
+    public Player(String name, double money) {
         this.name = name;
         this.money = money;
         this.vehicles = new ArrayList<>();
@@ -40,7 +40,7 @@ public class Player {
      * gets the current money of the player
      * @return current money amount
      */
-    public int getMoney() {
+    public double getMoney() {
         return this.money;
     }
 
@@ -56,7 +56,7 @@ public class Player {
      * gets the season length from game manager
      * @return season length
      */
-    //public int getSeasonLength() {
+    //public double getSeasonLength() {
         //return GameManager.getInstance().getTotalRaces();
     //}
 
@@ -64,7 +64,7 @@ public class Player {
      * adds money to the player's account
      * @param amount the amount of money to add
      */
-    public void addMoney(int amount) {
+    public void addMoney(double amount) {
         this.money += amount;
     }
 
@@ -73,7 +73,7 @@ public class Player {
      * @param amount the amount of money to subtract
      * @return true if the player has enough money to subtract the amount, false otherwise
      */
-    public boolean subtractMoney(int amount) {
+    public boolean subtractMoney(double amount) {
         if (amount > this.money) {
             return false;
         }

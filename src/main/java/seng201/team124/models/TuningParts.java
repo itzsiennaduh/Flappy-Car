@@ -9,11 +9,11 @@ import seng201.team124.models.Purchasable;
 public class TuningParts {
     private final String name;
     private final String description;
-    private final int speedModifier;
-    private final int handlingModifier;
-    private final int reliabilityModifier;
-    private final int fuelEconomyModifier;
-    private final int cost;
+    private final double speedModifier;
+    private final double handlingModifier;
+    private final double reliabilityModifier;
+    private final double fuelEconomyModifier;
+    private final double cost;
 
     /**
      * constructor for tuning parts class.
@@ -26,9 +26,9 @@ public class TuningParts {
      * @param reliabilityModifier effect on vehicle's reliability (positive or negative)
      * @param fuelEconomyModifier effect on vehicle's fuel economy (positive or negative)
      */
-    public TuningParts(String name, String description, int speedModifier,
-                       int handlingModifier, int reliabilityModifier,
-                       int fuelEconomyModifier, int cost) {
+    public TuningParts(String name, String description, double speedModifier,
+                       double handlingModifier, double reliabilityModifier,
+                       double fuelEconomyModifier, double cost) {
         this.name = name;
         this.description = description;
         this.speedModifier = speedModifier;
@@ -58,7 +58,7 @@ public class TuningParts {
      * gets the part speed modifier.
      * @return part speed modifier value
      */
-    public int getSpeedModifier() {
+    public double getSpeedModifier() {
         return this.speedModifier;
     }
 
@@ -66,7 +66,7 @@ public class TuningParts {
      * gets the part handling modifier.
      * @return part handling modifier value
      */
-    public int getHandlingModifier() {
+    public double getHandlingModifier() {
         return this.handlingModifier;
     }
 
@@ -74,7 +74,7 @@ public class TuningParts {
      * gets the part reliability modifier.
      * @return part reliability modifier value
      */
-    public int getReliabilityModifier() {
+    public double getReliabilityModifier() {
         return this.reliabilityModifier;
     }
 
@@ -82,7 +82,7 @@ public class TuningParts {
      * gets the part fuel economy modifier.
      * @return part fuel economy modifier value
      */
-    public int getFuelEconomyModifier() {
+    public double getFuelEconomyModifier() {
         return this.fuelEconomyModifier;
     }
 
@@ -90,7 +90,7 @@ public class TuningParts {
      * gets the part cost.
      * @return cost of part in dollars (integer value)
      */
-    public int getCost() {
+    public double getCost() {
         return this.cost;
     }
 
@@ -98,7 +98,7 @@ public class TuningParts {
      * calculates the sell price of the part.
      * @return the sell price of the part
      */
-    public int getSellPrice() {
+    public double getSellPrice() {
         return (int) (this.cost * 0.70);
     }
 
@@ -151,7 +151,7 @@ public class TuningParts {
      * @param modifier the modifier value to format
      * @return a string with the formatted modifier value
      */
-    private String formatModifier(int modifier) {
+    private String formatModifier(double modifier) {
         StringBuilder sb = new StringBuilder();
         if (modifier > 0) {
             sb.append('+');

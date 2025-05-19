@@ -9,10 +9,10 @@ import java.util.List;
  */
 public class Race {
     private final String name;
-    private final int hours; //in hours
+    private final double hours; //in hours
     private final List<Route> routes; //select race route, at least 1
     private final int entries; //number of competitors
-    private final int prizeMoney; //amount of prize money for first place
+    private final double prizeMoney; //amount of prize money for first place
 
     /**
      * constructor for the race class.
@@ -23,7 +23,7 @@ public class Race {
      * @param entries number of competitors excluding the player.
      * @param prizeMoney amount of prize money for first place.
      */
-    public Race(String name, int hours, List<Route> routes, int entries, int prizeMoney) {
+    public Race(String name, double hours, List<Route> routes, int entries, double prizeMoney) {
         this.name = name;
         this.hours = hours;
         this.routes = new ArrayList<>(routes);
@@ -32,42 +32,77 @@ public class Race {
     }
 
     //getters
+    /**
+     * gets the name of the race.
+     * @return name of the race.
+     */
     public String getName() {
         return this.name;
     }
 
-    public int getHours() {
+    /**
+     * gets the duration of the race in hours.
+     * @return duration of the race in hours.
+     */
+    public double getHours() {
         return this.hours;
     }
 
+    /**
+     * gets a list of all routes in the race.
+     * @return list of all routes in the race.
+     */
     public List<Route> getRoutes() {
-        return new ArrayList<>(routes);
+        return new ArrayList<>(routes); //copy
     }
 
+    /**
+     * gets a specific route from the race.
+     * @param index the index of the route to get.
+     * @return the route at the specified index.
+     */
     public Route getRoute(int index) {
         return routes.get(index);
     }
 
+    /**
+     * gets the number of routes in the race.
+     * @return number of routes in the race, in integer value.
+     */
     public int getNumberOfRoutes() {
         return routes.size();
     }
 
+    /**
+     * gets the number of competitors excluding the player.
+     * @return number of competitors excluding the player, in integer value.
+     */
     public int getEntries() {
         return this.entries;
     }
 
-    public int getPrizeMoney() {
+    /**
+     * gets the prize money for the first place. other placings prizes are calculated in RaceService.
+     * @return prize money for the first place, in dollars (integer value)
+     */
+    public double getPrizeMoney() {
         return this.prizeMoney;
     }
 
-    //IMPROVE
-    public int calculatePrizeMoney(int place) {
-        if (place <= 0) {
-            return 0; //Invalid or DNF
-        }
-        return (int) (place * prizeMoney);
+    /**
+     * calculates the time penalty for a specific number of hours.
+     * @param penalty the number of hours to apply the penalty to.
+     * @return new time
+     */
+    public double applyTimePenalty(double penalty) {
+        return this.hours - penalty;
     }
 
+    /**
+     * @return a string with the race's name, duration, number of routes, routes, competitors, and prize money.
+     * as per the design brief/specs.
+     */
+    @Override
     public String toString() {
         return  "Race: " + getName() +
                 "\nDuration: " + getHours() + " hours" +

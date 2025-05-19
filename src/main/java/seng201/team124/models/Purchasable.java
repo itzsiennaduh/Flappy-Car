@@ -21,11 +21,11 @@ public interface Purchasable {
      * gets the cost of the purchasable item.
      * @return purchase cost of the item, in dollars
      */
-    int getCost();
+    double getCost();
 
     /**
      * gets the sell price of the purchasable item.
      * @return sell price of the item, in dollars
      */
-    int getSellPrice();
+    double getSellPrice();
 }

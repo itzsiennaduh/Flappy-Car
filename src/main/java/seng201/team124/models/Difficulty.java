@@ -53,7 +53,7 @@ public enum Difficulty {
      * @param baseMoney Base money amount
      * @return starting money adjusted for difficulty
      */
-    public int calculateStartingMoney(int baseMoney) {
+    public double calculateStartingMoney(double baseMoney) {
         return (int) (baseMoney * getMoneyMultiplier());
     }
 }

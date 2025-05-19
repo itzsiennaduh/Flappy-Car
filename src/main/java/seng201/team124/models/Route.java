@@ -6,7 +6,7 @@ package seng201.team124.models;
  */
 public class Route {
     private final String description; //routes properties
-    private final int distance; //length in kms
+    private final double distance; //length in kms
     private final int fuelStops; // num of fuel stops
     private final int difficulty; //overall route difficulty.
 
@@ -16,7 +16,7 @@ public class Route {
     private final double fuelEconomyModifier; //effect on a vehicle's fuel economy
 
     //constructor
-    public Route(String description, int distance, int fuelStops, int difficulty, double speedModifier, double handlingModifier, double reliabilityModifier, double fuelEconomyModifier) {
+    public Route(String description, double distance, int fuelStops, int difficulty, double speedModifier, double handlingModifier, double reliabilityModifier, double fuelEconomyModifier) {
         this.description = description;
         this.distance = distance;
         this.fuelStops = fuelStops;
@@ -32,7 +32,7 @@ public class Route {
         return this.description;
     }
 
-    public int getDistance() {
+    public double getDistance() {
         return this.distance;
     }
 

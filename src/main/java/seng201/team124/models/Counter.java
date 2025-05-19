@@ -1,32 +1,49 @@
 package seng201.team124.models;
 
 /**
- * Simple counter class to keep track of current count
- * @author seng201 teaching team
+ * Simple counter-class to keep track of the current time
+ * @author seng201 teaching team and team124
  */
 public class Counter {
-    private int count;
+    private double currentTime;
 
     /**
      * Constructor
      */
-    public Counter() {
-        count = 0;
+    public Counter(double initialTime) {
+        this.currentTime = initialTime;
     }
 
     /**
-     * Get current counter count
-     * @return Current count
+     * add hours to the count
      */
-    public int getCount() {
-        return count;
+    public void addHours(double hours) {
+        this.currentTime += hours;
     }
 
     /**
-     * Set current counter count
-     * @param value Value of counter
+     * subtract hours from the count
      */
-    public void setCount(int value) {
-        count = value;
+    public void subtractHours(double hours) {
+        this.currentTime -= hours;
+    }
+
+    /**
+     * make time look pretty :)
+     *
+     * @return pretty time
+     */
+    public String getFormattedTime() {
+        int hours = (int) currentTime;
+        int minutes = (int) ((currentTime - hours) * 60);
+        return String.format("%d:%02d", hours, minutes);
+    }
+
+    /**
+     * Get current time
+     * @return Current time in hrs
+     */
+    public double getCurrentTime() {
+        return this.currentTime;
     }
 }

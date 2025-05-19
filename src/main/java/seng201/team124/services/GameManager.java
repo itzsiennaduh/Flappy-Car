@@ -17,7 +17,7 @@ public class GameManager {
     private String playerName;
     private boolean isRaceActive = false;
 
-    private static final int BASE_STARTING_MONEY = 10000;
+    private static final double BASE_STARTING_MONEY = 10000;
 
     private GameManager() {
     }
@@ -39,7 +39,7 @@ public class GameManager {
         this.playerName = playerName;
         this.difficultyLevel = difficultyLevel;
 
-        int startingMoney = difficultyLevel.calculateStartingMoney(BASE_STARTING_MONEY);
+        double startingMoney = difficultyLevel.calculateStartingMoney(BASE_STARTING_MONEY);
         this.player = new Player(playerName, startingMoney);
         //this.season = new Season(seasonLength, difficultyLevel);
         //this.shop = new Shop(difficultyLevel);
@@ -108,9 +108,9 @@ public class GameManager {
     public void completeRace(int position) {
         if (!isRaceActive) return;
 
-        //int basePrize = currentRace.getBasePrize();
+        //double basePrize = currentRace.getBasePrize();
         double difficultyMultiplier = difficultyLevel.getMoneyMultiplier();
-        //int actualPrize = (int) (basePrize * (1.0 / position) * difficultyMultiplier);
+        //double actualPrize = (int) (basePrize * (1.0 / position) * difficultyMultiplier);
 
         //player.addMoney(actualPrize);
         //season.completeRace();

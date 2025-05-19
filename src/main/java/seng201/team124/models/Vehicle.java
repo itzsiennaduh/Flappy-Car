@@ -22,19 +22,19 @@ public class Vehicle implements Purchasable {
     private final String description;
     /**
      * speed is average velocity on a flat straight km/h */
-    private final int speed;
+    private final double speed;
     /**
      * higher value is better handling e.g. cornering and maintaining control */
-    private final int handling;
+    private final double handling;
     /**
      * higher percent, higher reliability, less likely to break down during random events */
-    private final int reliability;
+    private final double reliability;
     /**
      * max distance in km for full fuel tank (km/tank) */
-    private final int fuelEconomy;
+    private final double fuelEconomy;
     /**
      * base cost of the vehicle */
-    private final int cost;
+    private final double cost;
     /**
      * list of currently installed tuning parts */
     private final List<TuningParts> installedParts;
@@ -50,7 +50,7 @@ public class Vehicle implements Purchasable {
      * @param fuelEconomy initial fuel economy in km/tank
      * @param cost purchase price
      */
-    public Vehicle(String name, String description, int speed, int handling, int reliability, int fuelEconomy, int cost) {
+    public Vehicle(String name, String description, double speed, double handling, double reliability, int fuelEconomy, int cost) {
         this.name = name;
         this.description = description;
         this.speed = speed;
@@ -78,7 +78,7 @@ public class Vehicle implements Purchasable {
     /**
      * @return vehicle's base cost
      */
-    public int getCost() {
+    public double getCost() {
         return this.cost;
     }
 
@@ -86,12 +86,12 @@ public class Vehicle implements Purchasable {
      * calculates the sell price of the vehicle
      * @return sell price of the vehicle (percentage of cost)
      */
-    public int getSellPrice() {
-        int vehicleValue = (int) (this.cost * 0.70);
+    public double getSellPrice() {
+        double vehicleValue = (int) (this.cost * 0.70);
 
-        int partsValue = 0;
+        double partsValue = 0;
         for (TuningParts part : installedParts) {
-            partsValue += (int) (part.getCost() * 0.70);
+            partsValue += part.getCost() * 0.70;
         }
         return vehicleValue + partsValue;
     }
@@ -100,28 +100,28 @@ public class Vehicle implements Purchasable {
     /**
      * @return vehicle's base speed
      */
-    public int getSpeed() {
+    public double getSpeed() {
         return this.speed;
     }
 
     /**
      * @return vehicle's base handling
      */
-    public int getHandling() {
+    public double getHandling() {
         return this.handling;
     }
 
     /**
      * @return vehicle's base reliability
      */
-    public int getReliability() {
+    public double getReliability() {
         return this.reliability;
     }
 
     /**
      * @return vehicle's base fuel economy
      */
-    public int getFuelEconomy() {
+    public double getFuelEconomy() {
         return this.fuelEconomy;
     }
 
@@ -136,8 +136,8 @@ public class Vehicle implements Purchasable {
      * Calculates the effective speed induced by all tuning parts applied
      * @return new speed value
      */
-    public int getEffectiveSpeed() {
-        int effectiveSpeed = speed;
+    public double getEffectiveSpeed() {
+        double effectiveSpeed = speed;
         for (TuningParts part : installedParts) {
             effectiveSpeed += part.getSpeedModifier();
         }
@@ -148,8 +148,8 @@ public class Vehicle implements Purchasable {
      * Calculates the effective handling induced by all tuning parts applied
      * @return new handling value
      */
-    public int getEffectiveHandling() {
-        int effectiveHandling = handling;
+    public double getEffectiveHandling() {
+        double effectiveHandling = handling;
         for (TuningParts part : installedParts) {
             effectiveHandling += part.getHandlingModifier();
         }
@@ -160,8 +160,8 @@ public class Vehicle implements Purchasable {
      * Calculates the effective reliability induced by all tuning parts applied
      * @return new reliability value
      */
-    public int getEffectiveReliability() {
-        int effectiveReliability = reliability;
+    public double getEffectiveReliability() {
+        double effectiveReliability = reliability;
         for (TuningParts part : installedParts) {
             effectiveReliability += part.getReliabilityModifier();
         }
@@ -172,8 +172,8 @@ public class Vehicle implements Purchasable {
      * Calculates the effective fuel economy induced by all tuning parts applied
      *@return new fuel economy value
      */
-    public int getEffectiveFuelEconomy() {
-        int effectiveFuelEconomy = fuelEconomy;
+    public double getEffectiveFuelEconomy() {
+        double effectiveFuelEconomy = fuelEconomy;
         for (TuningParts part : installedParts) {
             effectiveFuelEconomy += part.getFuelEconomyModifier();
         }
@@ -184,8 +184,8 @@ public class Vehicle implements Purchasable {
      * Calculates the total cost after all tuning parts are applied
      * @return new total cost value
      */
-    public int getTotalCost() {
-        int totalCost = cost;
+    public double getTotalCost() {
+        double totalCost = cost;
         for (TuningParts part : installedParts) {
             totalCost += part.getCost();
         }
