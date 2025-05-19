@@ -8,9 +8,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.*;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.scene.image.ImageView;
 
 import java.io.IOException;
 
@@ -64,7 +67,8 @@ public class MainController {
                     true,
                     SceneAntialiasing.BALANCED
             );
-            gameSub.setFill(Color.SKYBLUE);
+
+
 
 // 3a) Pre-warm the SubScene so shaders, meshes, and materials are compiled/uploaded
             gameSub.getRoot().applyCss();            // process any CSS
@@ -76,11 +80,24 @@ public class MainController {
             if (cam != null) gameSub.setCamera(cam);
 
 // 5) Wrap & bind size
-            StackPane root = new StackPane(gameSub);
+
+            Image bgTex = new Image(
+                    getClass().getResource("/assets/models/sunflowers_4k.jpg")
+                            .toExternalForm()
+            );
+
+// 2) make an ImageView that always fills the window
+            ImageView bgView = new ImageView(bgTex);
+            bgView.setPreserveRatio(false);
+            bgView.setSmooth(true);
+
+
+// 3) stack the SubScene on top of the ImageView
+            StackPane root = new StackPane(bgView, gameSub);
             gameSub.widthProperty().bind(root.widthProperty());
             gameSub.heightProperty().bind(root.heightProperty());
 
-// 6) Finish building and show scene
+// 4) use THAT as your Scene’s root
             Scene gameScene = new Scene(root);
             gameScene.setOnKeyPressed(gameCtrl::handleKeyPressed);
             gameScene.setOnKeyReleased(gameCtrl::handleKeyReleased);

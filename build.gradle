@@ -40,6 +40,12 @@ dependencies {
 application {
     // Define the main class for the application.
     mainClass = "${mainClassName}"
+
+    applicationDefaultJvmArgs = ['-Xmx2g']
+}
+
+run {
+    jvmArgs = ['-Xmx2g']
 }
 
 javafx {
@@ -78,4 +84,8 @@ jacocoTestReport {
     reports {
         html.destination file("${buildDir}/reports/tests/coverage/")
     }
+}
+
+tasks.withType(JavaExec).configureEach {
+    jvmArgs += ['-Xmx2g']
 }
