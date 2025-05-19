@@ -26,8 +26,8 @@ public class SelectDifficulty {
     private final int MAX_SEASON_LENGTH = 15;
 
     @FXML
-    public void initialise() {
-        //difficulty initialisation
+    public void initialize() {
+        //difficulty initialisation why is javafx AMERICAN
         difficultySlider.setSnapToTicks(true);
         difficultySlider.setBlockIncrement(1);
         difficultySlider.setMajorTickUnit(1);
@@ -79,14 +79,14 @@ public class SelectDifficulty {
         Difficulty difficulty = Difficulty.values()[difficultyValue - 1];
         int seasonLength = (int)seasonLengthSlider.getValue();
 
-        GameManager.getInstance().initialiseGame(
+        GameManager.getInstance().initializeGame(
                 GameManager.getInstance().getPlayerName(),
                 difficulty,
                 seasonLength
         );
 
         //GameManager gameManager = GameManager.getInstance();
-        //gameManager.initialiseGame(
+        //gameManager.initializeGame(
                 //gameManager.getPlayerName(),
                 //difficulty,
                 //seasonLength

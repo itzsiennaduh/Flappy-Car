@@ -35,7 +35,7 @@ public class GameManager {
      * @param difficultyLevel selected difficulty level of the game
      * @param seasonLength number of races in the season
      */
-    public void initialiseGame(String playerName, Difficulty difficultyLevel, int seasonLength) {
+    public void initializeGame(String playerName, Difficulty difficultyLevel, int seasonLength) {
         this.playerName = playerName;
         this.difficultyLevel = difficultyLevel;
 
@@ -160,7 +160,7 @@ public class GameManager {
         }
     }
 
-    public void initialiseDefaults() {
+    public void initializeDefaults() {
         if (player == null) {
             player = new Player("Default Player", 10000);
         }

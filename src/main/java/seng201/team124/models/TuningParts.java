@@ -1,10 +1,12 @@
 package seng201.team124.models;
 
 import seng201.team124.models.Purchasable;
+import seng201.team124.factories.TuningPartFactory;
 
 /**
  * tuning part class with properties.
  * available in the shop and can be applied to vehicles.
+ * @see TuningPartFactory for the tuning parts
  */
 public class TuningParts {
     private final String name;

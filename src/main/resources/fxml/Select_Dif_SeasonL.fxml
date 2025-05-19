@@ -3,12 +3,13 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.VBox?>
 
 <VBox alignment="CENTER" spacing="10" style="-fx-padding: 40;" xmlns="http://javafx.com/javafx/23.0.1"
       xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng201.team124.gui.SelectDifficulty">
    <children>
-      <Label fx:id="difficultyLabel" layoutX="50" layoutY="140" text="Difficulty: Medium" />
+      <Label fx:id="difficultyLabel" />
       <Slider fx:id="difficultySlider" blockIncrement="1" majorTickUnit="1.0" max="3" min="1" minorTickCount="0"
               showTickLabels="true" showTickMarks="true" snapToTicks="true" value="2.0" maxWidth="200"/>
 
