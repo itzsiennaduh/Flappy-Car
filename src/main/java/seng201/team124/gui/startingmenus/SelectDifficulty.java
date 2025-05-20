@@ -2,7 +2,6 @@ package seng201.team124.gui.startingmenus;
 
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.VBox;
@@ -14,8 +13,6 @@ import seng201.team124.models.racelogic.Difficulty;
 import seng201.team124.services.GameManager;
 
 import java.io.IOException;
-import java.util.Collections;
-import java.util.List;
 
 public class SelectDifficulty {
     @FXML
@@ -140,11 +137,11 @@ public class SelectDifficulty {
 
     @FXML
     private void handleContinue() throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Start Shop.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/StartShop.fxml"));
         Parent root = loader.load();
-        Stage stage = (Stage) difficultySlider.getScene().getWindow();
-        stage.setScene(new Scene(root));
+        Scene currentScene = difficultySlider.getScene();
+        currentScene.setRoot(root);
+        Stage stage = (Stage) currentScene.getWindow();
         stage.setFullScreen(true);
-        stage.show();
     }
 }

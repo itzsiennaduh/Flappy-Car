@@ -45,12 +45,12 @@ public class ChooseName {
         GameManager.getInstance().setTempName(name);
 
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Select_Dif_SeasonL.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/DifficultySeasonSelect.fxml"));
             Parent root = loader.load();
-            Stage stage = (Stage) nameField.getScene().getWindow();
-            stage.setScene(new Scene(root));
+            Scene currentScene = nameField.getScene();
+            currentScene.setRoot(root);
+            Stage stage = (Stage) currentScene.getWindow();
             stage.setFullScreen(true);
-            stage.show();
         } catch (Exception e) {
             e.printStackTrace();
         }
