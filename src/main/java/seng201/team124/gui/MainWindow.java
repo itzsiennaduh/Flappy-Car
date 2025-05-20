@@ -6,6 +6,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import seng201.team124.gui.importantcontrollers.MainController;
 
 import java.io.IOException;
 
@@ -26,7 +27,9 @@ public class MainWindow extends Application {
         Parent root = baseLoader.load();
 
         primaryStage.setTitle("RomanRacing"); // sets the title of the stage
+        MainController ctrl = baseLoader.getController();
         Scene scene = new Scene(root, 600, 400); // creates a scene with the root node and dimensions
+        ctrl.setScene(scene);
         primaryStage.setScene(scene); // add the scene to the stage
         primaryStage.setFullScreen(true); // makes it full screen
         primaryStage.show(); // To show the stage
