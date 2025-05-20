@@ -1,4 +1,4 @@
-package seng201.team124.gui;
+package seng201.team124.gui.startingmenus;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -6,7 +6,8 @@ import javafx.scene.control.Slider;
 import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import seng201.team124.models.*;
+import seng201.team124.gui.importantcontrollers.GameController;
+import seng201.team124.models.racelogic.Difficulty;
 import seng201.team124.services.GameManager;
 
 public class SelectDifficulty {

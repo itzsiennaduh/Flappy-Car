@@ -1,6 +1,6 @@
 package seng201.team124.factories;
 
-import seng201.team124.models.TuningParts;
+import seng201.team124.models.vehicleutility.TuningParts;
 
 /**
  * stores each tuning part available in the game.

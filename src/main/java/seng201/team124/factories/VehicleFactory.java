@@ -1,6 +1,6 @@
 package seng201.team124.factories;
 
-import seng201.team124.models.Vehicle;
+import seng201.team124.models.vehicleutility.Vehicle;
 
 /**
  * stores each vehicle available in the game.

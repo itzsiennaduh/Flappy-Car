@@ -1,4 +1,4 @@
-package seng201.team124.gui;
+package seng201.team124.gui.startingmenus;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;

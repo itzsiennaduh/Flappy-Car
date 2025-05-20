@@ -1,4 +1,4 @@
-package seng201.team124.models;
+package seng201.team124.models.vehicleutility;
 
 /**
  * represents any item that can be purchased or sold in the game.
@@ -28,4 +28,11 @@ public interface Purchasable {
      * @return sell price of the item, in dollars
      */
     double getSellPrice();
+
+    /**
+     * calculates sell price
+     */
+    default double calculateSellPrice() {
+        return getCost() * 0.7;
+    }
 }

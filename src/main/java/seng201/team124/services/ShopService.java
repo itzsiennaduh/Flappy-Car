@@ -1,6 +1,9 @@
 package seng201.team124.services;
 
 import seng201.team124.models.*;
+import seng201.team124.models.vehicleutility.Shop;
+import seng201.team124.models.vehicleutility.TuningParts;
+import seng201.team124.models.vehicleutility.Vehicle;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +40,9 @@ public class ShopService {
         if (player.getVehicles().size() >= 5) {
             return "You have already purchased 5 vehicles.";
         }
+        if (player.getVehicles().contains(vehicle)) {
+            return "You already own this vehicle.";
+        }
         player.addVehicle(vehicle);
         player.subtractMoney(vehicle.getCost());
         Vehicle purchasedVehicle = shop.purchaseVehicle(vehicle);
@@ -54,6 +60,9 @@ public class ShopService {
         }
         if (!shop.getAvailableParts().contains(part)) {
             return "This tuning part is not available for purchase.";
+        }
+        if (player.getTuningParts().contains(part)) {
+            return "You already own this tuning part.";
         }
         player.subtractMoney(part.getCost());
         player.addTuningPart(part);
@@ -98,8 +107,7 @@ public class ShopService {
         }
         player.removeVehicle(vehicle);
         player.addMoney(vehicle.getSellPrice());
-        Vehicle soldVehicle = player.getVehicles().get(player.getVehicles().size() - 1);
-        return "Vehicle sold back to the shop. %s removed from your inventory.".formatted(soldVehicle.getName());
+        return "Vehicle sold back to the shop. %s removed from your inventory.".formatted(vehicle.getName());
     }
 
     /**

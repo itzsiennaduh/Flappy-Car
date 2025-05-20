@@ -1,6 +1,11 @@
 package seng201.team124.services;
 
 import seng201.team124.models.*;
+import seng201.team124.models.racelogic.Difficulty;
+import seng201.team124.models.racelogic.Race;
+import seng201.team124.models.racelogic.Route;
+import seng201.team124.models.vehicleutility.Shop;
+import seng201.team124.models.vehicleutility.Vehicle;
 
 /**
  * class to manage the game state

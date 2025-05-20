@@ -1,7 +1,8 @@
-package seng201.team124.gui;
+package seng201.team124.gui.loadingscreen;
 
 import javafx.concurrent.Task;
 import javafx.scene.Group;
+import seng201.team124.gui.importantcontrollers.GameController;
 
 public class GameLoadTask extends Task<Group> {
     private final GameController controller;
