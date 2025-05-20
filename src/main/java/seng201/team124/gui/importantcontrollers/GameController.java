@@ -16,6 +16,7 @@ import javafx.scene.transform.Rotate;
 import seng201.team124.factories.VehicleFactory;
 import seng201.team124.gui.bots.Bots;
 import seng201.team124.gui.bots.Raycast;
+import seng201.team124.gui.startingmenus.HUDController;
 import seng201.team124.models.vehicleutility.Vehicle;
 import seng201.team124.services.GameManager;
 import javafx.scene.media.Media;
@@ -31,6 +32,7 @@ public class GameController {
     private double carAngle = 0;
     private double targetCarAngle = 0;
     private double velocity = 0;
+    private HUDController hudController;
 
     private Box carCollisionBox;
     private final List<Box> obstacles = new ArrayList<>();
@@ -47,13 +49,14 @@ public class GameController {
 
     public Group setupGameRootNode() throws Exception {
 
-        String musicPath = Objects.requireNonNull(getClass().getResource("/assets/models/Audio/dont-talk-315229.mp3")).toExternalForm();
-        Media bgm = new Media(musicPath);
-        MediaPlayer player = new MediaPlayer(bgm);
-        player.setCycleCount(MediaPlayer.INDEFINITE);
-        player.setVolume(0.3);
-        player.play();
-        Group root3D = new Group();
+//        String musicPath = Objects.requireNonNull(getClass().getResource("/assets/models/Audio/dont-talk-315229.mp3")).toExternalForm();
+//        Media bgm = new Media(musicPath);
+//        MediaPlayer player = new MediaPlayer(bgm);
+//        player.setCycleCount(MediaPlayer.INDEFINITE);
+//        player.setVolume(0.3);
+//        player.play();
+
+          Group root3D = new Group();
 
 //        car = loadModel(getClass().getResource("/assets/models/Supra.obj"));
         Vehicle playerVehicle = VehicleFactory.createRedVehicle();
@@ -378,6 +381,10 @@ public class GameController {
         if (gasstation.isRayHitting(carPos,down)) {
             System.out.println("FULLING");
         }
+    }
+
+    public void setHudController(HUDController controller) {
+        this.hudController = controller;
     }
 
     private boolean checkCollision(Box a, Box b) {

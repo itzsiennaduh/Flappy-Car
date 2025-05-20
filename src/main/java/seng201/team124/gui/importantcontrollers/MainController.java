@@ -9,12 +9,14 @@ import javafx.scene.*;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.scene.image.ImageView;
 import seng201.team124.factories.VehicleFactory;
 import seng201.team124.gui.loadingscreen.GameLoadTask;
 import seng201.team124.gui.loadingscreen.LoadingScreenController;
+import seng201.team124.gui.startingmenus.HUDController;
 import seng201.team124.models.Player;
 import seng201.team124.models.vehicleutility.Vehicle;
 import seng201.team124.services.GameManager;
@@ -88,7 +90,20 @@ public class MainController {
                     SceneAntialiasing.BALANCED
             );
 
+            FXMLLoader hudLoader = new FXMLLoader(getClass().getResource("/fxml/HudOverlay.fxml"));
+            Parent hudOverlay = null;
+            try {
+                hudOverlay = hudLoader.load();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
 
+            Region hudRegion = (Region) hudOverlay;
+            hudRegion.prefWidthProperty().bind(gameSub.widthProperty());
+            hudRegion.prefHeightProperty().bind(gameSub.heightProperty());
+
+            HUDController hudController = hudLoader.getController();
+            gameCtrl.setHudController(hudController);
 
 // 3a) Pre-warm the SubScene so shaders, meshes, and materials are compiled/uploaded
             gameSub.getRoot().applyCss();            // process any CSS
@@ -100,7 +115,6 @@ public class MainController {
             if (cam != null) gameSub.setCamera(cam);
 
 // 5) Wrap & bind size
-
             Image bgTex = new Image(
                     getClass().getResource("/assets/models/RaceTacks/Images/sunflowers_4k.jpg")
                             .toExternalForm()
@@ -113,7 +127,7 @@ public class MainController {
 
 
 // 3) stack the SubScene on top of the ImageView
-            StackPane root = new StackPane(bgView, gameSub);
+            StackPane root = new StackPane(bgView, gameSub, hudOverlay);
             gameSub.widthProperty().bind(root.widthProperty());
             gameSub.heightProperty().bind(root.heightProperty());
 

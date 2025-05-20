@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" pickOnBounds="true" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: transparent;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Label fx:id="fuelLabel" layoutY="360.0" style="-fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;" text="Fuel Gauge" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="3.0">
+         <font>
+            <Font size="10.0" />
+         </font></Label>
+      <Label fx:id="timerNum" layoutX="14.0" layoutY="27.0" style="-fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;" text="00:00:00" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="30.0" />
+      <ProgressBar fx:id="fuelProgress" layoutY="377.0" prefWidth="200.0" progress="1.0" style="-fx-accent: #ff97e9;" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="0.0" />
+      <Label fx:id="timerLabel" layoutX="3.0" layoutY="6.0" style="-fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;" text="Time Lapsed" AnchorPane.leftAnchor="3.0" AnchorPane.topAnchor="6.0" />
+      <Label fx:id="moneyLabel" layoutX="100.0" layoutY="360.0" style="-fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;" text="Money: $10000" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="90.0" />
+   </children>
+</AnchorPane>

@@ -47,11 +47,23 @@ public class TuningPartFactory {
     public static TuningParts createOffRoadTires() {
         return new TuningParts(
                 "Off Road Tires", //name
-                "Increases handling, great for races with handling debuffs.", //description
+                "Increases handling and reliability, great for races with handling debuffs.", //description
                 0,   //speed
                 4,   //handling
-                0,   //reliability
+                3,   //reliability
                 0,   //fuel eco
+                1000 //cost
+        );
+    }
+
+    public static TuningParts createTrackTires() {
+        return new TuningParts(
+                "Track Tires", //name
+                "Tires especially made for tarseal racing. Increases handling, great for races with handling buffs.", //description
+                0,   //speed
+                2,   //handling
+                0,   //reliability
+                2,   //fuel eco
                 1000 //cost
         );
     }

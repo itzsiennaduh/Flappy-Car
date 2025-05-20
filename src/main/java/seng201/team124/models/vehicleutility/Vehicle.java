@@ -263,6 +263,7 @@ public class Vehicle implements Purchasable {
     public void consumeFuel(double amount) {
         this.currentFuel = Math.max(0, this.currentFuel - amount);
         if (this.currentFuel == 0) {
+            this.currentFuel = 0;
             throw new IllegalStateException("Out of fuel!");
         }
     }
