@@ -1,4 +1,4 @@
-package seng201.team124.models;
+package seng201.team124.models.racelogic;
 
 /**
  * route class with properties.

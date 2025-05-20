@@ -1,4 +1,4 @@
-package seng201.team124.gui;
+package seng201.team124.gui.importantcontrollers;
 
 import com.interactivemesh.jfx.importer.ImportException;
 import com.interactivemesh.jfx.importer.obj.ObjModelImporter;
@@ -13,6 +13,8 @@ import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.*;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Rotate;
+import seng201.team124.gui.bots.Bots;
+import seng201.team124.gui.bots.Raycast;
 
 import java.net.URL;
 import java.util.*;

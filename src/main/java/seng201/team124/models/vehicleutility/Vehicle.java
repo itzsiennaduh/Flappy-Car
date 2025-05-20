@@ -1,6 +1,7 @@
-package seng201.team124.models;
+package seng201.team124.models.vehicleutility;
 
 import seng201.team124.factories.VehicleFactory;
+import seng201.team124.models.racelogic.Route;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -88,11 +89,11 @@ public class Vehicle implements Purchasable {
      * @return sell price of the vehicle (percentage of cost)
      */
     public double getSellPrice() {
-        double vehicleValue = (int) (this.cost * 0.70);
+        double vehicleValue = calculateSellPrice();
 
         double partsValue = 0;
         for (TuningParts part : installedParts) {
-            partsValue += part.getCost() * 0.70;
+            partsValue += calculateSellPrice();
         }
         return vehicleValue + partsValue;
     }
@@ -138,7 +139,7 @@ public class Vehicle implements Purchasable {
      * @return new speed value
      */
     public double getEffectiveSpeed() {
-        double effectiveSpeed = speed;
+        double effectiveSpeed = this.speed;
         for (TuningParts part : installedParts) {
             effectiveSpeed += part.getSpeedModifier();
         }
@@ -150,7 +151,7 @@ public class Vehicle implements Purchasable {
      * @return new handling value
      */
     public double getEffectiveHandling() {
-        double effectiveHandling = handling;
+        double effectiveHandling = this.handling;
         for (TuningParts part : installedParts) {
             effectiveHandling += part.getHandlingModifier();
         }
@@ -162,7 +163,7 @@ public class Vehicle implements Purchasable {
      * @return new reliability value
      */
     public double getEffectiveReliability() {
-        double effectiveReliability = reliability;
+        double effectiveReliability = this.reliability;
         for (TuningParts part : installedParts) {
             effectiveReliability += part.getReliabilityModifier();
         }
@@ -174,7 +175,7 @@ public class Vehicle implements Purchasable {
      * @return new fuel economy value
      */
     public double getEffectiveFuelEconomy() {
-        double effectiveFuelEconomy = fuelEconomy;
+        double effectiveFuelEconomy = this.fuelEconomy;
         for (TuningParts part : installedParts) {
             effectiveFuelEconomy += part.getFuelEconomyModifier();
         }
@@ -186,7 +187,7 @@ public class Vehicle implements Purchasable {
      * @return new total cost value
      */
     public double getTotalCost() {
-        double totalCost = cost;
+        double totalCost = this.cost;
         for (TuningParts part : installedParts) {
             totalCost += part.getCost();
         }
@@ -199,6 +200,14 @@ public class Vehicle implements Purchasable {
      */
     public double getFuelLevel() {
         return this.currentFuel;
+    }
+
+    /**
+     * get the maximum fuel level of the vehicle
+     * @return max fuel level
+     */
+    public double getMaxFuelLevel() {
+        return this.maxFuel;
     }
 
     /**

@@ -1,4 +1,4 @@
-package seng201.team124.gui;
+package seng201.team124.gui.bots;
 
 import javafx.geometry.Point3D;
 import javafx.scene.Group;

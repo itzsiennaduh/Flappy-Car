@@ -1,5 +1,6 @@
-package seng201.team124.models;
+package seng201.team124.models.racelogic;
 
+import seng201.team124.models.Player;
 import seng201.team124.services.RaceService;
 
 /**

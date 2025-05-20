@@ -1,6 +1,5 @@
-package seng201.team124.models;
+package seng201.team124.models.vehicleutility;
 
-import seng201.team124.models.Purchasable;
 import seng201.team124.factories.TuningPartFactory;
 
 /**
@@ -8,7 +7,7 @@ import seng201.team124.factories.TuningPartFactory;
  * available in the shop and can be applied to vehicles.
  * @see TuningPartFactory for the tuning parts
  */
-public class TuningParts {
+public class TuningParts implements Purchasable{
     private final String name;
     private final String description;
     private final double speedModifier;
@@ -101,7 +100,7 @@ public class TuningParts {
      * @return the sell price of the part
      */
     public double getSellPrice() {
-        return (int) (this.cost * 0.70);
+        return calculateSellPrice();
     }
 
     /**

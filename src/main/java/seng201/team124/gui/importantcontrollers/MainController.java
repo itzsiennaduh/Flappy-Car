@@ -1,4 +1,4 @@
-package seng201.team124.gui;
+package seng201.team124.gui.importantcontrollers;
 
 import javafx.application.Platform;
 import javafx.concurrent.Task;
@@ -9,11 +9,11 @@ import javafx.scene.*;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
-import javafx.scene.paint.ImagePattern;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.scene.image.ImageView;
+import seng201.team124.gui.loadingscreen.GameLoadTask;
+import seng201.team124.gui.loadingscreen.LoadingScreenController;
 
 import java.io.IOException;
 

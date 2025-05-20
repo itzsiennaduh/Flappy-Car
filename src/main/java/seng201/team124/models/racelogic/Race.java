@@ -1,4 +1,4 @@
-package seng201.team124.models;
+package seng201.team124.models.racelogic;
 
 import java.util.ArrayList;
 import java.util.List;
