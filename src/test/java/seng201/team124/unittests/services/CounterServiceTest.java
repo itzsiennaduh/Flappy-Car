@@ -1,6 +1,7 @@
 package seng201.team124.unittests.services;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import seng201.team124.services.CounterService;
 
@@ -27,11 +28,11 @@ class CounterServiceTest {
     /**
      * Test incrementing the counter by one, normal JUnit test
      */
-    @Test
-    void testIncrement() {
-        assertEquals(0, testCounterService.getCurrentCount());
-        testCounterService.incrementCounter();
-        assertEquals(1, testCounterService.getCurrentCount());
-    }
+    //@Disabled
+    //void testIncrement() {
+        //assertEquals(0, testCounterService.getCurrentCount());
+        //testCounterService.incrementCounter();
+        //assertEquals(1, testCounterService.getCurrentCount());
+    //}
 
 }

@@ -1,6 +1,17 @@
 package seng201.team124.services;
 
+import seng201.team124.factories.VehicleFactory;
 import seng201.team124.models.*;
+import seng201.team124.models.racelogic.Difficulty;
+import seng201.team124.models.racelogic.Race;
+import seng201.team124.models.racelogic.Route;
+import seng201.team124.models.vehicleutility.Shop;
+import seng201.team124.models.vehicleutility.Vehicle;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 
 /**
  * class to manage the game state
@@ -23,7 +34,16 @@ public class GameManager {
 
     private String tempName;
 
+    public String player_model;
+
+    private final List<String> tracks = new ArrayList<>();
+
     private GameManager() {
+        loadTrack();
+    }
+
+    private void loadTrack(){
+        tracks.add("Zwei Hockenheimring");
     }
 
     public static synchronized GameManager getInstance() { //AI taught me what synchronized does
@@ -31,6 +51,11 @@ public class GameManager {
             instance = new GameManager();
         }
         return instance;
+    }
+
+
+    public List<String> tracks() {
+        return Collections.unmodifiableList(tracks);
     }
 
     /**
@@ -41,14 +66,14 @@ public class GameManager {
      * @param seasonLength number of races in the season
      */
     public void initializeGame(String playerName, Difficulty difficulty, int seasonLength) {
-        validatePlayerName(playerName);
+//        validatePlayerName(playerName);
 
         double startingMoney = difficulty.calculateStartingMoney(BASE_STARTING_MONEY);
         this.player = new Player(playerName, startingMoney);
         this.difficulty = difficulty;
         this.seasonLength = seasonLength;
 
-        this.shopService = new ShopService(new Shop(), this.player, player.getVehicles() , player.getTuningParts());
+        this.shopService = new ShopService(new Shop(), this.player, player.getVehicles(), player.getTuningParts());
         this.garageService = new GarageService(this.player);
         this.counterService = new CounterService();
         this.raceService = new RaceService(this.player, this, this.counterService);
@@ -56,6 +81,7 @@ public class GameManager {
 
     /**
      * gets current player info
+     *
      * @return player info
      */
     public Player getPlayer() {
@@ -67,6 +93,7 @@ public class GameManager {
 
     /**
      * gets the name of the current player
+     *
      * @return the player's name as a string
      */
     public String getPlayerName() {
@@ -75,6 +102,7 @@ public class GameManager {
 
     /**
      * gets the selected difficulty level
+     *
      * @return selected difficulty level
      */
     public Difficulty getDifficultyLevel() {
@@ -83,6 +111,7 @@ public class GameManager {
 
     /**
      * get selected season length
+     *
      * @return selected season length
      */
     public int getSeasonLength() {
@@ -91,6 +120,7 @@ public class GameManager {
 
     /**
      * is the race in progress?
+     *
      * @return true if so, false otherwise
      */
     public boolean isRaceInProgress() {
@@ -99,6 +129,7 @@ public class GameManager {
 
     /**
      * access service shop
+     *
      * @return shop service
      */
     public ShopService getShopService() {
@@ -108,6 +139,7 @@ public class GameManager {
 
     /**
      * access service garage
+     *
      * @return garage service
      */
     public GarageService getGarageService() {
@@ -117,6 +149,7 @@ public class GameManager {
 
     /**
      * access service race
+     *
      * @return race service
      */
     public RaceService getRaceService() {
@@ -126,6 +159,7 @@ public class GameManager {
 
     /**
      * access time counter service
+     *
      * @return counter service
      */
     public CounterService getCounterService() {
@@ -152,6 +186,7 @@ public class GameManager {
 
     /**
      * completes the current race and updates game state
+     *
      * @param position final race position (1=first place, 2=second place, etc.)
      */
     public void completeRace(int position) {
@@ -176,6 +211,8 @@ public class GameManager {
         getShopService().restockShop();
     }
 
+    public String gettingModel() {return player_model;}
+
     private void validatePlayerName(String name) {
         if (name == null || name.trim().length() < 3 || name.trim().length() > 15) {
             throw new IllegalArgumentException("Player name must be between 3 and 15 characters long.");
@@ -187,16 +224,23 @@ public class GameManager {
     }
 
     public void initializeDefaults() {
-        this.player = new Player("Default Player", 10000);
+        this.player = new Player("Default Player", 100000000);
         this.difficulty = Difficulty.MEDIUM;
         this.seasonLength = 10;
-        this.shopService = new ShopService(new Shop(), this.player, player.getVehicles() , player.getTuningParts());
+        this.shopService = new ShopService(new Shop(), this.player, player.getVehicles(), player.getTuningParts());
         this.garageService = new GarageService(this.player);
         this.counterService = new CounterService();
         this.raceService = new RaceService(this.player, this, this.counterService);
-        }
-
+        this.player_model = "/assets/models/Cars/Supra.obj";
+        Vehicle defaultVehicle = VehicleFactory.createRedVehicle();
+        player.getVehicles().add(defaultVehicle);
+        player.setCurrentVehicle(defaultVehicle);
+        this.player_model = "/assets/models/Cars/Supra.obj";
+    }
 
 
     //random event handling in here
+
+
+
 }

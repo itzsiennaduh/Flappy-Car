@@ -1,6 +1,6 @@
 package seng201.team124.services;
 
-import seng201.team124.models.*;
+import seng201.team124.models.racelogic.Race;
 
 /**
  * Simple service class to interact with counters

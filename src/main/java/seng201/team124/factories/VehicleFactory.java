@@ -1,6 +1,6 @@
 package seng201.team124.factories;
 
-import seng201.team124.models.Vehicle;
+import seng201.team124.models.vehicleutility.Vehicle;
 
 /**
  * stores each vehicle available in the game.
@@ -19,7 +19,8 @@ public class VehicleFactory {
                 3,   //fuel eco
                 9000, //cost
                 100, //current fuel
-                100 //max fuel
+                100, //max fuel
+                "/assets/models/Cars/Supra.obj"
         );
     }
 
@@ -33,7 +34,8 @@ public class VehicleFactory {
                 5,   //fuel eco
                 5000, //cost
                 100,
-                100
+                100,
+                "/assets/models/Cars/Supra.obj"
         );
     }
 
@@ -47,7 +49,8 @@ public class VehicleFactory {
                 5,   //fuel eco
                 10000, //cost
                 100, //current fuel
-                100 //max fuel
+                100, //max fuel
+                "/assets/models/Cars/Supra.obj"
         );
     }
 }
