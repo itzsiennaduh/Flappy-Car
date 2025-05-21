@@ -2,6 +2,7 @@ package seng201.team124.gui.startingmenus;
 
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.VBox;
@@ -25,8 +26,10 @@ public class SelectDifficulty {
     private Label seasonLengthLabel;
     @FXML
     private Label errorMessageLabel;
+    //@FXML
+    //private VBox receSelect;
     @FXML
-    private VBox receSelect;
+    Button continueButton;
 
     private final int MIN_SEASON_LENGTH = 5;
     private final int MAX_SEASON_LENGTH = 15;

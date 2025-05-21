@@ -4,6 +4,7 @@ import seng201.team124.models.*;
 import seng201.team124.models.vehicleutility.Shop;
 import seng201.team124.models.vehicleutility.TuningParts;
 import seng201.team124.models.vehicleutility.Vehicle;
+import javafx.fxml.FXML;
 
 import java.util.ArrayList;
 import java.util.List;

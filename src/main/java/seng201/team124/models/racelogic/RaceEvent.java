@@ -102,7 +102,7 @@ public enum RaceEvent {
     public static RaceEvent getRandomEvent() {
         Random random = new Random();
         RaceEvent[] weightedEvents = {BREAKDOWN, BREAKDOWN, BREAKDOWN, BREAKDOWN, BREAKDOWN, // 5/8
-                STRANDED_TRAVELLER, STRANDED_TRAVELLER, // 3/8
+                STRANDED_TRAVELLER, STRANDED_TRAVELLER, // 2/8
                 SEVERE_WEATHER // 1/8
         };
 
