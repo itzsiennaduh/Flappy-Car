@@ -3,6 +3,7 @@ package seng201.team124.gui.startingmenus;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -16,69 +17,50 @@ import java.util.List;
 public class StartShop {
 
     @FXML
-    private ListView<Vehicle> vehicleListView;
+    private VBox vehicleButtonBox;
+    @FXML
+    private VBox previewPane;
     @FXML
     private Label nameLabel, descriptionLabel, costLabel;
     @FXML
     private ProgressBar speedBar, handlingBar, reliabilityBar, fuelEcoBar;
     @FXML
     private Button confirmButton;
-
     @FXML
     private Button continueButton;
-
     private Vehicle selectedVehicle;
 
     @FXML
     private void initialize() {
-        List<Vehicle> allVehicles = List.of(
-                VehicleFactory.createRedVehicle(),
-                VehicleFactory.createCatVehicle(),
-                VehicleFactory.createHorseChariot()
-        );
+        vehicleButtonBox.getChildren().clear();
 
-        vehicleListView.getItems().addAll(allVehicles);
+        for (Vehicle vehicle : VehicleFactory.getAllVehicles()) {
+            Button button = new Button(vehicle.getName());
+            button.setMaxWidth(Double.MAX_VALUE);
+            button.setOnAction(event -> showVehicleDetails(vehicle));
+            vehicleButtonBox.getChildren().add(button);
+        }
 
-        vehicleListView.setCellFactory(new Callback<>() {
-            @Override
-            public ListCell<Vehicle> call(ListView<Vehicle> param) {
-                return new ListCell<>() {
-                    @Override
-                    protected void updateItem(Vehicle item, boolean empty) {
-                        super.updateItem(item, empty);
-                        if (empty || item == null) {
-                            setText(null);
-                        } else {
-                            setText(item.getName() + " ($" + item.getCost() + ")");
-                        }
-                    }
-                };
-            }
-        });
-
-        vehicleListView.setOnMouseClicked(event -> {
-            Vehicle vehicle = vehicleListView.getSelectionModel().getSelectedItem();
-            if (vehicle != null) {
-                displayVehicle(vehicle);
-                selectedVehicle = vehicle;
-                confirmButton.setDisable(false);
-            }
-        });
-
-        confirmButton.setOnAction(event -> handleConfirmPurchase());
-        confirmButton.setDisable(true);
+        previewPane.setVisible(false);
     }
 
-    private void displayVehicle(Vehicle vehicle) {
+    private void showVehicleDetails(Vehicle vehicle) {
+        selectedVehicle = vehicle;
+        previewPane.setVisible(true);
+
         nameLabel.setText(vehicle.getName());
         descriptionLabel.setText(vehicle.getDescription());
-        costLabel.setText("$" + vehicle.getCost());
+        costLabel.setText("Cost: $" + vehicle.getCost());
 
         speedBar.setProgress(vehicle.getSpeed() / 10.0);
         handlingBar.setProgress(vehicle.getHandling() / 10.0);
         reliabilityBar.setProgress(vehicle.getReliability() / 10.0);
         fuelEcoBar.setProgress(vehicle.getFuelEconomy() / 10.0);
+
+        confirmButton.setDisable(false);
     }
+
+    //confirmButton.setOnAction(event -> handleConfirmPurchase());
 
     @FXML
     private void handleConfirmPurchase() {
@@ -110,7 +92,7 @@ public class StartShop {
     }
 
     @FXML
-    private void movingon(){
+    private void movingon() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/MainMenu.fxml"));
             Parent root = loader.load();
@@ -123,6 +105,7 @@ public class StartShop {
         }
 
     }
+
 
 
 }

@@ -2,11 +2,24 @@ package seng201.team124.factories;
 
 import seng201.team124.models.vehicleutility.Vehicle;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * stores each vehicle available in the game.
  * the stats excluding cost must total 20 (spread stats out).
  */
 public class VehicleFactory {
+
+    public static List<Vehicle> getAllVehicles() {
+        List<Vehicle> vehicles = new ArrayList<>();
+
+        vehicles.add(createRedVehicle());
+        vehicles.add(createCatVehicle());
+        vehicles.add(createHorseChariot());
+
+        return vehicles;
+    }
 
     //methods to create different vehicles
     public static Vehicle createRedVehicle() {
