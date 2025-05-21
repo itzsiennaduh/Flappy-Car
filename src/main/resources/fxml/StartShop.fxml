@@ -31,6 +31,7 @@
             </VBox>
          <VBox alignment="BOTTOM_CENTER" prefHeight="120.0" prefWidth="429.0">
             <children>
+               <Label fx:id="confirmLabel" text="Vehicle Successfully Purchased!" visible="false" style="-fx-font-weight: bold;" />
       
                   <Button fx:id="confirmButton" onAction="#handleConfirmPurchase" text="Confirm Purchase" />
                <Button fx:id="continueButton" mnemonicParsing="false" onAction="#movingon" text="Continue" />

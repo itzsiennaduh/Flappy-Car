@@ -1,11 +1,27 @@
 package seng201.team124.factories;
 
 import seng201.team124.models.vehicleutility.TuningParts;
+import seng201.team124.models.vehicleutility.Vehicle;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * stores each tuning part available in the game.
  */
 public class TuningPartFactory {
+
+    public static List<TuningParts> getTuningPart() {
+        List<TuningParts> tuningParts = new ArrayList<>();
+
+        tuningParts.add(createNitrousOxide());
+        tuningParts.add(createTurbocharger());
+        tuningParts.add(createSupercharger());
+        tuningParts.add(createOffRoadTires());
+        tuningParts.add(createTrackTires());
+
+        return tuningParts;
+    }
 
     //methods to create different tuning parts
     public static TuningParts createNitrousOxide() {

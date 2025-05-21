@@ -53,7 +53,7 @@ public class GameController {
 
     public Group setupGameRootNode() throws Exception {
 
-//        String musicPath = Objects.requireNonNull(getClass().getResource("/assets/models/Audio/dont-talk-315229.mp3")).toExternalForm();
+//        String musicPath = Objects.requireNonNull(getClass().getResource("/assets/models/Music/dont-talk-315229.mp3")).toExternalForm();
 //        Media bgm = new Media(musicPath);
 //        MediaPlayer player = new MediaPlayer(bgm);
 //        player.setCycleCount(MediaPlayer.INDEFINITE);

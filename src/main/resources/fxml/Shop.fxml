@@ -1,11 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Text?>
 
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng201.team124.gui.startingmenus.Shop">
+    <columnConstraints>
+        <!-- 5 equal columns = each 20% -->
+        <ColumnConstraints percentWidth="20" hgrow="ALWAYS"/>
+        <ColumnConstraints percentWidth="20" hgrow="ALWAYS"/>
+        <ColumnConstraints percentWidth="20" hgrow="ALWAYS"/>
+        <ColumnConstraints percentWidth="20" hgrow="ALWAYS"/>
+        <ColumnConstraints percentWidth="20" hgrow="ALWAYS"/>
+    </columnConstraints>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng201.team124.gui.startingmenus.Shop">
+    <rowConstraints>
+        <!-- top title row: 15% -->
+        <RowConstraints percentHeight="15" vgrow="ALWAYS"/>
+        <!-- descriptions: 60% -->
+        <RowConstraints percentHeight="60" vgrow="ALWAYS"/>
+        <!-- buttons: 15% -->
+        <RowConstraints percentHeight="15" vgrow="ALWAYS"/>
+        <!-- footer: 10% -->
+        <RowConstraints percentHeight="10" vgrow="ALWAYS"/>
+    </rowConstraints>
    <children>
-      <Button fx:id="backButton" layoutX="274.0" layoutY="188.0" mnemonicParsing="false" onAction="#handleBackButton" text="Back" />
+      <Button fx:id="buyNitrousOxide" mnemonicParsing="false" text="Buy" GridPane.rowIndex="2" />
+      <Button fx:id="buyTurbocharger" mnemonicParsing="false" text="Buy" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+      <Button fx:id="buySupercharger" mnemonicParsing="false" text="Buy" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+      <Button fx:id="buyOffRoadTires" mnemonicParsing="false" text="Buy" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+      <Button fx:id="buyOnRoadTires" mnemonicParsing="false" text="Buy" GridPane.columnIndex="4" GridPane.rowIndex="2" />
+      <Button fx:id="backButton" mnemonicParsing="false" onAction="#handleBackButton" text="Back" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+      <TextArea editable="false" prefHeight="200.0" prefWidth="200.0" text="Speed = 5&#10;Handling = 0&#10;Reliability = 0&#10;Fuel eco = -2&#10;&#10;Price = 500" GridPane.rowIndex="1" />
+      <TextArea editable="false" layoutX="10.0" layoutY="128.0" prefHeight="200.0" prefWidth="200.0" text="Speed = 5&#10;Handling = 0&#10;Reliability = -3&#10;Fuel eco = 0&#10;&#10;Price = 1500" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+      <TextArea editable="false" layoutX="130.0" layoutY="128.0" prefHeight="200.0" prefWidth="200.0" text="Speed = 5&#10;Handling = 0&#10;Reliability = -2&#10;Fuel eco = -3&#10;&#10;Price = 1500" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+      <TextArea layoutX="250.0" layoutY="128.0" prefHeight="200.0" prefWidth="200.0" text="Speed = 0&#10;Handling = 4&#10;Reliability = 3&#10;Fuel eco = 0&#10;&#10;Price = 1000" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+      <TextArea editable="false" layoutX="370.0" layoutY="128.0" prefHeight="200.0" prefWidth="200.0" text="Speed = 0&#10;Handling = 2&#10;Reliability = 0&#10;Fuel eco = 2&#10;&#10;Price = 1000" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="NitrousOxide" />
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Turbocharger" GridPane.columnIndex="1" />
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Supercharger" GridPane.columnIndex="2" />
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="OffRoadTires" GridPane.columnIndex="3" />
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="TrackTires" GridPane.columnIndex="4" />
+      <Label fx:id="moneyLabel" GridPane.rowIndex="3" />
+      <Label fx:id="noMoney" GridPane.columnIndex="2" GridPane.rowIndex="3" GridPane.valignment="TOP" />
    </children>
-</AnchorPane>
+</GridPane>
