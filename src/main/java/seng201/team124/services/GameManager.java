@@ -66,7 +66,7 @@ public class GameManager {
      * @param seasonLength number of races in the season
      */
     public void initializeGame(String playerName, Difficulty difficulty, int seasonLength) {
-//        validatePlayerName(playerName);
+        validatePlayerName(playerName);
 
         double startingMoney = difficulty.calculateStartingMoney(BASE_STARTING_MONEY);
         this.player = new Player(playerName, startingMoney);
@@ -224,7 +224,7 @@ public class GameManager {
     }
 
     public void initializeDefaults() {
-        this.player = new Player("Default Player", 100000000);
+        this.player = new Player("Default Player", 10000);
         this.difficulty = Difficulty.MEDIUM;
         this.seasonLength = 10;
         this.shopService = new ShopService(new Shop(), this.player, player.getVehicles(), player.getTuningParts());

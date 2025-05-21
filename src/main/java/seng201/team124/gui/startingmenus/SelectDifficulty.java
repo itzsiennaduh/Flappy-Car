@@ -128,10 +128,6 @@ public class SelectDifficulty {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/GameScene.fxml"));
             Parent root = loader.load();
-
-            GameController gameController = loader.getController();
-            //gameController.setupGameScene((Stage)difficultySlider.getScene().getWindow());
-
             Stage stage = (Stage) difficultySlider.getScene().getWindow();
         } catch (Exception e) {
             e.printStackTrace();

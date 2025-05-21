@@ -23,6 +23,7 @@ import seng201.team124.models.vehicleutility.Vehicle;
 import seng201.team124.services.GameManager;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import seng201.team124.services.CounterService;
 
 import java.net.URL;
 import java.util.*;
@@ -44,6 +45,7 @@ public class GameController {
     private final Raycast death = new Raycast();
     private final Raycast gasstation = new Raycast();
     private final List<Bots> bots = new ArrayList<>();
+    private final CounterService counterService = new CounterService();
 
     private double camX = 0;
     private double camY = 0;
@@ -179,6 +181,11 @@ public class GameController {
                     update(dt);
                     updateCameraFollow();
                     bots.forEach(bot -> bot.update(dt));
+
+                    if (counterService.isRaceInProgress()) {
+                        counterService.incrementRaceTime(dt);
+                        hudController.updateTime(counterService.getFormattedElapsedTime());
+                    }
                 }
                 last = now;
             }
@@ -375,6 +382,16 @@ public class GameController {
         car.setTranslateZ(car.getTranslateZ()+dz*velocity*deltaTime);
         carCollisionBox.setTranslateX(car.getTranslateX());
         carCollisionBox.setTranslateZ(car.getTranslateZ());
+
+        if (hudController != null) {
+            //long currentTime = System.currentTimeMillis();
+            //String formattedTime = CounterService.getFormattedElapsedTime(currentTime);
+            //hudController.setElapsedTime(CounterService.getElapsedHours());
+            //hudController.updateTime(formattedTime);
+
+            hudController.updateFuel(GameManager.getInstance().getCurrentVehicle().getFuelLevel());
+            hudController.setMoney(GameManager.getInstance().getPlayer().getMoney());
+        }
 
 
     }

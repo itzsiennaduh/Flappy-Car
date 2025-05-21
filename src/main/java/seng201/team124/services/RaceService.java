@@ -45,7 +45,7 @@ public class RaceService {
         Vehicle vehicle = player.getCurrentVehicle();
         vehicle.applyRouteModifiers(route);
 
-        this.counter.startRace(this.currentRace);
+        //this.counter.startRace(this.currentRace);
         this.gameManager.startRace(this.currentRace, this.currentRoute);
         return true;
     }
