@@ -2,6 +2,7 @@ package seng201.team124.gui.importantcontrollers;
 
 import com.interactivemesh.jfx.importer.ImportException;
 import com.interactivemesh.jfx.importer.obj.ObjModelImporter;
+import com.sun.scenario.effect.impl.sw.java.JSWBlend_SRC_OUTPeer;
 import javafx.animation.AnimationTimer;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point3D;
@@ -13,6 +14,7 @@ import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.*;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Rotate;
+import org.w3c.dom.ls.LSOutput;
 import seng201.team124.factories.VehicleFactory;
 import seng201.team124.gui.bots.Bots;
 import seng201.team124.gui.bots.Raycast;
@@ -353,7 +355,7 @@ public class GameController {
             try {
                 // Get current vehicle's fuel economy and adjust consumption based on it
                 Vehicle currentVehicle = GameManager.getInstance().getCurrentVehicle();
-                double fuelConsumptionRate = Math.abs(velocity) / (currentVehicle.getEffectiveFuelEconomy() * 10);
+                double fuelConsumptionRate = Math.abs(velocity) / (currentVehicle.getEffectiveFuelEconomy() * 20);
                 currentVehicle.consumeFuel(fuelConsumptionRate * deltaTime);
             } catch (IllegalStateException e) {
 
@@ -363,29 +365,25 @@ public class GameController {
         }
 
         // Handle refueling at gas station
-        if (gasstation.isRayHitting(carPos, down)) {
-            if (pressedKeys.contains(KeyCode.R)) {
-                GameManager.getInstance().getCurrentVehicle().refuel();
-                System.out.println("Vehicle refueled!");
-            } else {
-                System.out.println("Press R to refuel");
-            }
+        if (gasstation.isRayHitting(carPos, down) && velocity == 0) {
+            GameManager.getInstance().getCurrentVehicle().refuel();
         }
 
+        System.out.println(GameManager.getInstance().getCurrentVehicle().getFuelLevel() + "%" + " remaining");
 
         car.setTranslateX(car.getTranslateX()+dx*velocity*deltaTime);
         car.setTranslateZ(car.getTranslateZ()+dz*velocity*deltaTime);
         carCollisionBox.setTranslateX(car.getTranslateX());
         carCollisionBox.setTranslateZ(car.getTranslateZ());
 
-        if (gasstation.isRayHitting(carPos,down)) {
-            System.out.println("FULLING");
-        }
+
     }
 
     public void setHudController(HUDController controller) {
         this.hudController = controller;
     }
+
+
 
     private boolean checkCollision(Box a, Box b) {
         Bounds A = a.localToScene(a.getBoundsInLocal());

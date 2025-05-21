@@ -60,6 +60,8 @@ public class StartShop {
         confirmButton.setDisable(false);
     }
 
+    //confirmButton.setOnAction(event -> handleConfirmPurchase());
+
     @FXML
     private void handleConfirmPurchase() {
         if (selectedVehicle == null) return;

@@ -251,7 +251,17 @@ public class Vehicle implements Purchasable {
      * refuels vehicle back to max fuel
      */
     public void refuel() {
-        this.currentFuel = this.maxFuel;
+        if (this.currentFuel <= this.maxFuel) {
+            this.currentFuel += 10;
+            if (this.currentFuel > this.maxFuel) {
+                this.currentFuel = this.maxFuel;
+            }
+            System.out.println("Vehicle refueled!");
+        } else {
+            this.currentFuel = this.maxFuel;
+            System.out.println("Vehicle is already at max fuel level");
+        }
+
     }
 
     /**
