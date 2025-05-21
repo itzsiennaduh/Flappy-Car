@@ -28,6 +28,8 @@ public class StartShop {
     private Button confirmButton;
     @FXML
     private Button continueButton;
+    @FXML
+    private Label confirmLabel;
     private Vehicle selectedVehicle;
 
     @FXML
@@ -78,6 +80,10 @@ public class StartShop {
         gm.getPlayer().subtractMoney(selectedVehicle.getCost());
         gm.getPlayer().addVehicle(selectedVehicle);
         gm.getPlayer().setCurrentVehicle(selectedVehicle);
+
+        confirmLabel.setText("Purchased " + selectedVehicle.getName() + "!" + "\nPlease continue to the next screen.");
+        confirmLabel.setVisible(true);
+        confirmButton.setVisible(false);
 
     }
 

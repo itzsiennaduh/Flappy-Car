@@ -65,12 +65,12 @@ public class MainMenu {
         Vehicle playerVehicle = VehicleFactory.createRedVehicle();
         GameManager gm = GameManager.getInstance();
         // Make sure you've already called initializeGame(...) somewhere earlier,
-        // so gm.getPlayer() is non-null. If not, call gm.initializeDefaults() first.
+        // so gm.getPlayer() is non-null. If not, call gm.initializeWithDefaults() first.
         Player player = gm.getPlayer();
         player.getVehicles().add(playerVehicle);
         player.setCurrentVehicle(playerVehicle);
-        // Optionally, if you're still using player_model in GameManager:
-        gm.player_model = "/assets/models/Cars/Supra.obj";
+        // Optionally, if you're still using playerModel in GameManager:
+        gm.setPlayerModel("/assets/models/Cars/Supra.obj");
 
         // 1) Display loading screen
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/LoadingScreen.fxml"));

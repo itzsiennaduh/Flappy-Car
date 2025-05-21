@@ -16,7 +16,7 @@ public class VehicleFactory {
 
         vehicles.add(createRedVehicle());
         vehicles.add(createCatVehicle());
-        vehicles.add(createHorseChariot());
+        vehicles.add(createBlueVehicle());
 
         return vehicles;
     }
@@ -24,7 +24,7 @@ public class VehicleFactory {
     //methods to create different vehicles
     public static Vehicle createRedVehicle() {
         return new Vehicle(
-                "Ferrari", //name EXAMPLE
+                "Red Supra", //name EXAMPLE
                 "Fast but unreliable, will you risk it?", //description
                 10,  //speed
                 5,   //handling
@@ -52,15 +52,15 @@ public class VehicleFactory {
         );
     }
 
-    public static Vehicle createHorseChariot() {
+    public static Vehicle createBlueVehicle() {
         return new Vehicle(
-                "Horse Chariot", //name EXAMPLE
-                "Why does this exist", //description
-                9,  //speed
+                "Blue Supra", //name EXAMPLE
+                "Slower, but more reliable.", //description
+                5,  //speed
                 2,   //handling
-                4,   //reliability
+                8,   //reliability
                 5,   //fuel eco
-                10000, //cost
+                8000, //cost
                 100, //current fuel
                 100, //max fuel
                 "/assets/models/Cars/Supra.obj"
