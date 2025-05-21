@@ -14,6 +14,6 @@
       <Slider fx:id="seasonLengthSlider" blockIncrement="1" majorTickUnit="1.0" max="15" maxWidth="200" min="5" minorTickCount="0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="10.0" />
 
       <Label fx:id="errorMessageLabel" />
-      <Button onAction="#handleContinue" text="Continue" />
+      <Button fx:id="continueButton" onAction="#handleContinue" text="Continue" />
    </children>
 </VBox>

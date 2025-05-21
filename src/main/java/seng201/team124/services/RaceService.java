@@ -16,7 +16,7 @@ public class RaceService {
     private Route currentRoute;
     private final Random random = new Random();
     private int completedRaces = 0;
-    private static final double BASE_EVENT_CHANCE = 0.2;
+    private static final double BASE_EVENT_CHANCE = 1;
     private double elapsedHours; // time passed in the current race
     private double totalRaceHours; //original race duration
     private final CounterService counter;

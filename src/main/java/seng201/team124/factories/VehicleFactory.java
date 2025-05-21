@@ -17,7 +17,7 @@ public class VehicleFactory {
                 5,   //handling
                 2,   //reliability
                 3,   //fuel eco
-                9000, //cost
+                9000,//cost
                 100, //current fuel
                 100, //max fuel
                 "/assets/models/Cars/Supra.obj"
