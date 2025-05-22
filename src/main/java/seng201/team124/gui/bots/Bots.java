@@ -13,6 +13,7 @@ public class Bots {
     private final List<Point3D> waypoints; // List of waypoints to follow. Each waypoint is a 3D point in space.
     private double velocity = 0; // Current velocity 
     private double deceleration = 0.02; // How much it is going to slow down
+    private boolean finished = false;
 
     
     // Constructor for the bot class
@@ -30,7 +31,14 @@ public class Bots {
     public void update(double deltaTime) {
         // Check if there are any waypoints to follow
         if (waypoints == null || waypoints.isEmpty()) return;
-        if (currentWaypointIndex >= waypoints.size()) return;
+
+        if (currentWaypointIndex >= waypoints.size()) {
+            if (!finished) {
+                finished = true;
+                System.out.println("Bot completed all waypoints.");
+            }
+            return;
+        }
 
         double rotateSpeed = 270; // how much the bot can turn degrees per second
         double acceleration = 5; // Acceleration of the bot
@@ -85,20 +93,39 @@ public class Bots {
 
         int lookAheadDistance = Math.min(3, waypoints.size() - 1 - currentWaypointIndex);
         Point3D lookAheadTarget = null;
+
         if (lookAheadDistance > 0) {
             Point3D nextTarget = waypoints.get(currentWaypointIndex + lookAheadDistance);
             Point3D flatNextTarget = new Point3D(nextTarget.getX(), 0, nextTarget.getZ());
             Point3D directionToNext = flatNextTarget.subtract(flatCurrentTarget).normalize();
             lookAheadTarget = flatCurrentTarget.add(directionToNext.multiply(5 * lookAheadDistance));
+        } else {
+            lookAheadTarget = flatCurrentTarget;
         }
+
+        if (lookAheadTarget == null) {
+            lookAheadTarget = flatCurrentTarget;
+        }
+
         return lookAheadTarget.subtract(flatPos);
     }
+
+
+
 
     // makes sure that the angle is between -180 and 180 degrees
     private double normalizeAngle(double angle) {
         while (angle > 180) angle -= 360;
         while (angle < -180) angle += 360;
         return angle;
+    }
+
+    public boolean hasFinished() {
+        return finished;
+    }
+
+    public void setFinished(boolean finished) {
+        this.finished = finished;
     }
 
 }

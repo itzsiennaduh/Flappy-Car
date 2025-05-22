@@ -115,6 +115,9 @@ public class MainMenu {
             HUDController hudController = hudLoader.getController();
             gameCtrl.setHudController(hudController);
 
+            gameCtrl.randomEvent();
+
+
 // 3a) Pre-warm the SubScene so shaders, meshes, and materials are compiled/uploaded
             gameSub.getRoot().applyCss();            // process any CSS
             gameSub.getRoot().layout();              // lay out the scene graph

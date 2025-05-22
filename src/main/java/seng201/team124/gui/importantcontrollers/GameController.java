@@ -4,6 +4,8 @@ import com.interactivemesh.jfx.importer.ImportException;
 import com.interactivemesh.jfx.importer.obj.ObjModelImporter;
 import com.sun.scenario.effect.impl.sw.java.JSWBlend_SRC_OUTPeer;
 import javafx.animation.AnimationTimer;
+import javafx.animation.PauseTransition;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point3D;
 import javafx.scene.*;
@@ -14,17 +16,22 @@ import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.*;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Rotate;
+import javafx.stage.Stage;
+import javafx.util.Duration;
 import org.w3c.dom.ls.LSOutput;
 import seng201.team124.factories.VehicleFactory;
 import seng201.team124.gui.bots.Bots;
 import seng201.team124.gui.bots.Raycast;
+import seng201.team124.gui.endingmenus.RaceCompleteController;
 import seng201.team124.gui.startingmenus.HUDController;
+import seng201.team124.models.racelogic.RaceEvent;
 import seng201.team124.models.vehicleutility.Vehicle;
 import seng201.team124.services.GameManager;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import seng201.team124.services.CounterService;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 
@@ -44,12 +51,22 @@ public class GameController {
     private final Raycast safeRay = new Raycast();
     private final Raycast death = new Raycast();
     private final Raycast gasstation = new Raycast();
+    private final Raycast personEventRay = new Raycast();
     private final List<Bots> bots = new ArrayList<>();
     private final CounterService counterService = new CounterService();
+    private boolean raceFinished = false;
+    private int playerPlacement = 1;
+    private List<String> finishedEntities = new ArrayList<>();
 
     private double camX = 0;
     private double camY = 0;
     private double camZ = 0;
+
+    private PauseTransition oneShotEventTimer;
+    private final Random rng = new Random();
+    private static final int MIN_DELAY = 10;   // seconds
+    private static final int MAX_DELAY = 20;
+    private MeshView personEvent;
 
     public Group setupGameRootNode() throws Exception {
 
@@ -124,6 +141,10 @@ public class GameController {
                     case "floor":
                         floor = mesh;
                         break;
+                    case "PersonEvent":
+                        personEvent = mesh;
+                        personEvent.setVisible(false);
+                        break;
                     default:
                         mesh.setMaterial(checkpointMat);
                         mesh.setTranslateY(mesh.getTranslateY() + 10);
@@ -139,6 +160,7 @@ public class GameController {
         if (wall != null) death.MeshRaycaster(wall);
         if (gasstation2 != null) gasstation.MeshRaycaster(gasstation2);
         if (GasStation != null) gasstation.MeshRaycaster(GasStation);
+        if (personEvent != null) personEventRay.MeshRaycaster(personEvent);
 
         // Compute waypoints in background without Platform.runLater
         List<Point3D> waypoints = new ArrayList<>();
@@ -180,7 +202,22 @@ public class GameController {
                     double dt = (now - last) / 1e9;
                     update(dt);
                     updateCameraFollow();
-                    bots.forEach(bot -> bot.update(dt));
+
+                    bots.forEach(bot -> {
+                        bot.update(dt);
+
+                        Point3D botPosition = new Point3D(
+                                bot.getModel().getTranslateX(),
+                                bot.getModel().getTranslateY(),
+                                bot.getModel().getTranslateZ()
+                        );
+                        Point3D down = new Point3D(0, 1, 0);
+
+                        if (finishRay.isRayHitting(botPosition, down) && !bot.hasFinished()) {
+                            bot.setFinished(true);
+                            System.out.println("Bot finished the race!");
+                        }
+                    });
 
                     if (counterService.isRaceInProgress()) {
                         counterService.incrementRaceTime(dt);
@@ -346,7 +383,10 @@ public class GameController {
         if (velocity< -maxVel/2) velocity=-maxVel/2;
 
 
-        if (finishRay.isRayHitting(carPos, down)) System.out.println("Finished!");
+        if (finishRay.isRayHitting(carPos, down) && !raceFinished) {
+            finishRace();
+            System.out.println("You finished the race!");
+        }
 
 
         for (Box obs : obstacles) {
@@ -376,7 +416,7 @@ public class GameController {
             GameManager.getInstance().getCurrentVehicle().refuel();
         }
 
-        System.out.println(GameManager.getInstance().getCurrentVehicle().getFuelLevel() + "%" + " remaining");
+//        System.out.println(GameManager.getInstance().getCurrentVehicle().getFuelLevel() + "%" + " remaining");
 
         car.setTranslateX(car.getTranslateX()+dx*velocity*deltaTime);
         car.setTranslateZ(car.getTranslateZ()+dz*velocity*deltaTime);
@@ -400,12 +440,98 @@ public class GameController {
         this.hudController = controller;
     }
 
+    private void finishRace() {
+        raceFinished = true;
 
+        for (Bots bot : bots) {
+            if (bot.hasFinished()) {
+                playerPlacement++;
+            }
+        }
+
+        counterService.stopRace();
+        showRaceCompleteScreen();
+    }
+
+    private void showRaceCompleteScreen() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/RaceCompleteScreen.fxml"));
+            Parent root = loader.load();
+            RaceCompleteController controller = loader.getController();
+            controller.setPlacement(playerPlacement);
+            controller.setMainMenuReference(this);
+            Scene currentScene = camera.getScene();
+            currentScene.setRoot(root);
+            Stage stage = (Stage) currentScene.getWindow();
+            stage.setFullScreen(true);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     private boolean checkCollision(Box a, Box b) {
         Bounds A = a.localToScene(a.getBoundsInLocal());
         Bounds B = b.localToScene(b.getBoundsInLocal());
         return A.intersects(B);
+    }
+
+    public void randomEvent() {
+        RaceEvent event = RaceEvent.getRandomEvent();
+        // show it immediately
+        if (hudController != null) {
+//            hudController.showEvent(event.getDescription());
+            System.out.println(event.getDescription());
+        }
+        // apply auto effects
+        GameManager.getInstance().getPlayer().addMoney(event.getMoneyChange());
+
+        if (event == RaceEvent.STRANDED_TRAVELLER && personEvent != null) {
+            personEvent.setVisible(true);
+        } else if (event.isPleaseChoose() && hudController != null) {
+            scheduleOneTimedEvent();
+        }
+
+
+    }
+
+    public void scheduleOneTimedEvent() {
+        int seconds = rng.nextInt(MAX_DELAY - MIN_DELAY + 1) + MIN_DELAY;
+        System.out.println("Scheduling non-traveller event in " + seconds + "s");
+
+        // cancel any previous just in case
+        if (oneShotEventTimer != null) oneShotEventTimer.stop();
+
+        oneShotEventTimer = new PauseTransition(Duration.seconds(seconds));
+        oneShotEventTimer.setOnFinished(e -> fireRandomNonTravellerEvent());
+        oneShotEventTimer.play();
+    }
+
+
+    private void fireRandomNonTravellerEvent() {
+        RaceEvent event;
+        do {
+            event = RaceEvent.getRandomEvent();
+        } while (event == RaceEvent.STRANDED_TRAVELLER);
+
+        // show it
+        if (hudController != null) {
+//            hudController.showEvent(event.getDescription());
+            System.out.println();
+        }
+        GameManager.getInstance().getPlayer().addMoney(event.getMoneyChange());
+
+        if (hudController != null && event.isPleaseChoose()) {
+            hudController.promptChoices(
+                    event.getChoice1(),
+                    event.getChoice2(),
+                    choice -> {
+                        if (choice == 1) System.out.println("Chose 1");
+                        else            System.out.println("Chose 2");
+                        hudController.updateTime(counterService.getFormattedElapsedTime());
+                        hudController.setMoney(GameManager.getInstance().getPlayer().getMoney());
+                    }
+            );
+        }
     }
 
 

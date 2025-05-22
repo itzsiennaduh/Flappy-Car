@@ -76,4 +76,8 @@ public class CounterService {
         return raceInProgress;
     }
 
+    public void stopRace() {
+        raceInProgress = false;
+    }
+
 }
