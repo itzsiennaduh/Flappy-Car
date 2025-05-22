@@ -4,6 +4,7 @@ import com.interactivemesh.jfx.importer.ImportException;
 import com.interactivemesh.jfx.importer.obj.ObjModelImporter;
 import com.sun.scenario.effect.impl.sw.java.JSWBlend_SRC_OUTPeer;
 import javafx.animation.AnimationTimer;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point3D;
 import javafx.scene.*;
@@ -14,10 +15,12 @@ import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.*;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Rotate;
+import javafx.stage.Stage;
 import org.w3c.dom.ls.LSOutput;
 import seng201.team124.factories.VehicleFactory;
 import seng201.team124.gui.bots.Bots;
 import seng201.team124.gui.bots.Raycast;
+import seng201.team124.gui.endingmenus.RaceCompleteController;
 import seng201.team124.gui.startingmenus.HUDController;
 import seng201.team124.models.vehicleutility.Vehicle;
 import seng201.team124.services.GameManager;
@@ -25,6 +28,7 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import seng201.team124.services.CounterService;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 
@@ -46,6 +50,9 @@ public class GameController {
     private final Raycast gasstation = new Raycast();
     private final List<Bots> bots = new ArrayList<>();
     private final CounterService counterService = new CounterService();
+    private boolean raceFinished = false;
+    private int playerPlacement = 1;
+    private List<String> finishedEntities = new ArrayList<>();
 
     private double camX = 0;
     private double camY = 0;
@@ -180,7 +187,22 @@ public class GameController {
                     double dt = (now - last) / 1e9;
                     update(dt);
                     updateCameraFollow();
-                    bots.forEach(bot -> bot.update(dt));
+
+                    bots.forEach(bot -> {
+                        bot.update(dt);
+
+                        Point3D botPosition = new Point3D(
+                                bot.getModel().getTranslateX(),
+                                bot.getModel().getTranslateY(),
+                                bot.getModel().getTranslateZ()
+                        );
+                        Point3D down = new Point3D(0, 1, 0);
+
+                        if (finishRay.isRayHitting(botPosition, down) && !bot.hasFinished()) {
+                            bot.setFinished(true);
+                            System.out.println("Bot finished the race!");
+                        }
+                    });
 
                     if (counterService.isRaceInProgress()) {
                         counterService.incrementRaceTime(dt);
@@ -346,7 +368,10 @@ public class GameController {
         if (velocity< -maxVel/2) velocity=-maxVel/2;
 
 
-        if (finishRay.isRayHitting(carPos, down)) System.out.println("Finished!");
+        if (finishRay.isRayHitting(carPos, down) && !raceFinished) {
+            finishRace();
+            System.out.println("You finished the race!");
+        }
 
 
         for (Box obs : obstacles) {
@@ -400,7 +425,34 @@ public class GameController {
         this.hudController = controller;
     }
 
+    private void finishRace() {
+        raceFinished = true;
 
+        for (Bots bot : bots) {
+            if (bot.hasFinished()) {
+                playerPlacement++;
+            }
+        }
+
+        counterService.stopRace();
+        showRaceCompleteScreen();
+    }
+
+    private void showRaceCompleteScreen() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/RaceCompleteScreen.fxml"));
+            Parent root = loader.load();
+            RaceCompleteController controller = loader.getController();
+            controller.setPlacement(playerPlacement);
+            controller.setMainMenuReference(this);
+            Scene currentScene = camera.getScene();
+            currentScene.setRoot(root);
+            Stage stage = (Stage) currentScene.getWindow();
+            stage.setFullScreen(true);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     private boolean checkCollision(Box a, Box b) {
         Bounds A = a.localToScene(a.getBoundsInLocal());
