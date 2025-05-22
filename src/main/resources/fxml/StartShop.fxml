@@ -1,43 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ProgressBar?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.VBox?>
-
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng201.team124.gui.startingmenus.StartShop">
 
     <left>
-      <VBox fx:id="vehicleButtonBox" alignment="CENTER" prefHeight="400.0" prefWidth="293.0">
+      <StackPane BorderPane.alignment="CENTER">
+         <children>
+            <VBox fx:id="vehicleButtonBox" alignment="CENTER" prefHeight="400.0" prefWidth="293.0" spacing="30.0" StackPane.alignment="CENTER">
       </VBox>
+         </children>
+      </StackPane>
     </left>
-
-    <center>
-        <VBox fx:id="previewPane" spacing="10">
-            <Label fx:id="nameLabel" style="-fx-font-size: 20px; -fx-font-weight: bold;" />
-            <Label fx:id="descriptionLabel" wrapText="true" />
-            <Label fx:id="costLabel" />
-
-            <VBox alignment="CENTER" spacing="5">
-                <Label text="Speed" />
-                <ProgressBar fx:id="speedBar" maxWidth="200" />
-                <Label text="Handling" />
-                <ProgressBar fx:id="handlingBar" maxWidth="200" />
-                <Label text="Reliability" />
-                <ProgressBar fx:id="reliabilityBar" maxWidth="200" />
-                <Label text="Fuel Efficiency" />
-                <ProgressBar fx:id="fuelEcoBar" maxWidth="200" />
-            </VBox>
-         <VBox alignment="BOTTOM_CENTER" prefHeight="120.0" prefWidth="429.0">
-            <children>
-               <Label fx:id="confirmLabel" text="Vehicle Successfully Purchased!" visible="false" style="-fx-font-weight: bold;" />
+   <right>
+      <StackPane prefHeight="360.0" prefWidth="281.0" BorderPane.alignment="CENTER">
+         <children>
+              <VBox fx:id="previewPane" alignment="CENTER" prefWidth="600.0" spacing="15.0" StackPane.alignment="CENTER">
+                  <Label fx:id="nameLabel" alignment="CENTER" prefHeight="30.0" prefWidth="298.0" style="-fx-font-size: 20px; -fx-font-weight: bold;" />
+                  <Label fx:id="descriptionLabel" alignment="CENTER" maxWidth="500.0" wrapText="true" />
+                  <Label fx:id="costLabel" alignment="CENTER" prefHeight="17.0" prefWidth="299.0" />
       
-                  <Button fx:id="confirmButton" onAction="#handleConfirmPurchase" text="Confirm Purchase" />
-               <Button fx:id="continueButton" mnemonicParsing="false" onAction="#movingon" text="Continue" />
-            </children>
-         </VBox>
-        </VBox>
-    </center>
+                              <VBox alignment="CENTER" spacing="5.0">
+                      <Label text="Speed" />
+                      <ProgressBar fx:id="speedBar" maxWidth="200" />
+                      <Label text="Handling" />
+                      <ProgressBar fx:id="handlingBar" maxWidth="200" />
+                      <Label text="Reliability" />
+                      <ProgressBar fx:id="reliabilityBar" maxWidth="200" />
+                      <Label text="Fuel Efficiency" />
+                      <ProgressBar fx:id="fuelEcoBar" maxWidth="200" />
+                  </VBox>
+               <VBox alignment="BOTTOM_CENTER" prefHeight="120.0" prefWidth="429.0">
+                  <children>
+                     <Label fx:id="confirmLabel" style="-fx-font-weight: bold;" text="Vehicle Successfully Purchased!" visible="false">
+                        <font>
+                           <Font name="System Bold" size="12.0" />
+                        </font>
+                     </Label>
+      
+                                    <Button fx:id="confirmButton" onAction="#handleConfirmPurchase" text="Confirm Purchase" />
+                     <Button fx:id="continueButton" mnemonicParsing="false" onAction="#handleContinue" text="Continue" visible="false" />
+                  </children>
+               </VBox>
+              </VBox>
+         </children>
+      </StackPane>
+   </right>
 
 </BorderPane>

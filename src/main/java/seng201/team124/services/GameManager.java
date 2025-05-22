@@ -1,9 +1,8 @@
 package seng201.team124.services;
 
 import seng201.team124.factories.RaceFactory;
-import seng201.team124.factories.TuningPartFactory;
 import seng201.team124.factories.VehicleFactory;
-import seng201.team124.models.*;
+import seng201.team124.models.Player;
 import seng201.team124.models.racelogic.Difficulty;
 import seng201.team124.models.racelogic.Race;
 import seng201.team124.models.racelogic.Route;
@@ -54,7 +53,6 @@ public class GameManager {
      * loads available tracks
      */
     private void loadTrack(){
-        return ;
     }
 
     public List<Race> getAvailableRaces() {
@@ -156,6 +154,10 @@ public class GameManager {
             getPlayer();
         }
         return this.seasonLength;
+    }
+
+    public double getTimeLimit() {
+        return getRaceService().getTotalRaceHours();
     }
 
     /**
@@ -316,11 +318,6 @@ public class GameManager {
     public Vehicle getCurrentVehicle() {
         return player.getCurrentVehicle();
     }
-
-
-
-
-    //random event handling in here
 
 
 

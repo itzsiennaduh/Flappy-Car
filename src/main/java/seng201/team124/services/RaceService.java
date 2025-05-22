@@ -1,6 +1,6 @@
 package seng201.team124.services;
 
-import seng201.team124.models.*;
+import seng201.team124.models.Player;
 import seng201.team124.models.racelogic.*;
 import seng201.team124.models.vehicleutility.Vehicle;
 
@@ -17,7 +17,7 @@ public class RaceService {
     private final Random random = new Random();
     private int completedRaces = 0;
     private static final double BASE_EVENT_CHANCE = 1;
-    private double elapsedHours; // time passed in the current race
+    private double elapsedSeconds; // time passed in the current race
     private double totalRaceHours; //original race duration
     private final CounterService counter;
 
@@ -40,14 +40,21 @@ public class RaceService {
         this.currentRace = race;
         this.currentRoute = route;
         this.totalRaceHours = race.getHours();
-        this.elapsedHours = 0;
+        this.elapsedSeconds = 0;
 
         Vehicle vehicle = player.getCurrentVehicle();
         vehicle.applyRouteModifiers(route);
 
-        //this.counter.startRace(this.currentRace);
+        counter.setRaceTimeLimit(race.getHours());
         this.gameManager.startRace(this.currentRace, this.currentRoute);
+
+        System.out.println("Starting race: " + race.getHours() + " hours, ");
+
         return true;
+    }
+
+    public double getTotalRaceHours() {
+        return this.totalRaceHours;
     }
 
     /**
@@ -56,9 +63,9 @@ public class RaceService {
      * @return true if the race is still ongoing
      */
     public boolean incrementRaceTime(double deltaHours) {
-        elapsedHours += deltaHours;
+        elapsedSeconds += deltaHours;
 
-        if (elapsedHours >= totalRaceHours) {
+        if (elapsedSeconds >= totalRaceHours) {
             completeRace(0); //DNF, out of time
             return false;
         }
@@ -80,11 +87,15 @@ public class RaceService {
         }
 
         completedRaces++;
-        double prizeMoney = calculatePrizeMoney(position);
-        player.addMoney(prizeMoney);
+
+        if (position > 0) {
+            double prizeMoney = calculatePrizeMoney(position);
+            player.addMoney(prizeMoney);
+        }
         gameManager.completeRace(position);
         currentRace = null;
         currentRoute = null;
+        counter.stopRace();
     }
 
     public int getCompletedRacesCount() {
@@ -141,7 +152,7 @@ public class RaceService {
             this.counter.modifyTime(1.0);
             return "Your vehicle has been repaired. A time penalty of 1.0 hr has been applied to your race.";
         } else {
-            this.counter.modifyTime(-counter.getRemainingHours());
+            this.counter.modifyTime(-counter.getRemainingTime());
             completeRace(0);
             return "Your vehicle has been written off. Retire from the race, you did not finish.";
         }
@@ -167,7 +178,7 @@ public class RaceService {
      */
     public boolean shouldRandomEventOccur(Difficulty difficulty) {
         Random random = new Random();
-        double baseChance = 0.2;
+        double baseChance = 1.0;
         double adjustedChance = baseChance * difficulty.getEventChanceMultiplier();
         return random.nextDouble() < adjustedChance;
     }

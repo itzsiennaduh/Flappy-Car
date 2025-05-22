@@ -1,18 +1,18 @@
 package seng201.team124.gui.startingmenus;
 
 import javafx.fxml.FXML;
-import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.util.Callback;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import seng201.team124.factories.VehicleFactory;
 import seng201.team124.models.vehicleutility.Vehicle;
 import seng201.team124.services.GameManager;
-
-import java.util.List;
 
 public class StartShop {
 
@@ -84,11 +84,12 @@ public class StartShop {
         confirmLabel.setText("Purchased " + selectedVehicle.getName() + "!" + "\nPlease continue to the next screen.");
         confirmLabel.setVisible(true);
         confirmButton.setVisible(false);
+        continueButton.setVisible(true);
 
     }
 
     @FXML
-    private void movingon() {
+    private void handleContinue() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/MainMenu.fxml"));
             Parent root = loader.load();

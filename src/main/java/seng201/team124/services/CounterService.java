@@ -1,7 +1,5 @@
 package seng201.team124.services;
 
-import seng201.team124.models.racelogic.Race;
-
 /**
  * Simple service class to interact with counters
  * @author seng201 teaching team and team124
@@ -9,15 +7,9 @@ import seng201.team124.models.racelogic.Race;
 public class CounterService {
     private double elapsedSeconds = 0;
     private double totalRaceHours;
-    private boolean raceInProgress = true;
-
-    /**
-     * increases race time
-     * @param deltaSeconds time increasing in seconds
-     */
-    public void incrementRaceTime(double deltaSeconds) {
-        elapsedSeconds += deltaSeconds;
-    }
+    private boolean raceInProgress = false;
+    private double raceTimeLimit = -1;
+    private double currentRaceTime = 0;
 
     public String getFormattedElapsedTime() {
         int totalSeconds = (int) elapsedSeconds;
@@ -29,10 +21,10 @@ public class CounterService {
 
     /**
      * modifies the time
-     * @param hours hours to add or subtract
+     * @param seconds hours to add or subtract
      */
-    public void modifyTime(double hours) {
-        elapsedSeconds += hours;
+    public void modifyTime(double seconds) {
+        elapsedSeconds += seconds;
         elapsedSeconds = Math.max(0, elapsedSeconds); //doesnt go negative
     }
 
@@ -53,19 +45,20 @@ public class CounterService {
     }
 
     /**
-     * gets elapsed hours
-     * @return elapsed hours
+     * gets elapsed seconds
+     * @return elapsed seconds
      */
-    public double getElapsedHours() {
+    public double getElapsedSeconds() {
         return this.elapsedSeconds;
     }
 
     /**
-     * calculates remaining hours
-     * @return the remaining hours of the race
+     * calculates remaining time
+     * @return the remaining time of the race
      */
-    public double getRemainingHours() {
-        return this.totalRaceHours - this.elapsedSeconds;
+    public double getRemainingTime() {
+        if (raceTimeLimit <= 0) return Double.MAX_VALUE;
+        return Math.max(0, raceTimeLimit - currentRaceTime);
     }
 
     /**
@@ -76,8 +69,48 @@ public class CounterService {
         return raceInProgress;
     }
 
+    public void startRace() {
+        raceInProgress = true;
+        currentRaceTime = 0;
+        System.out.println("Starting race. Time limit: " + raceTimeLimit);
+    }
+
     public void stopRace() {
         raceInProgress = false;
+        System.out.println("Stopping race");
     }
+
+    public void setRaceTimeLimit(double limit) {
+        this.raceTimeLimit = limit;
+        this.currentRaceTime = 0;
+        System.out.println("Setting race time limit to " + limit + " hours");
+    }
+
+    public boolean hasRaceTimeExpired() {
+        return raceTimeLimit > 0 && isRaceInProgress() && currentRaceTime >= raceTimeLimit;
+    }
+
+    public void incrementRaceTime(double deltaTime) {
+        if (isRaceInProgress()) {
+            currentRaceTime += deltaTime;
+            elapsedSeconds += deltaTime;
+        }
+    }
+
+    /**
+     * gets race time limit
+     * @return total hours in the race
+     */
+    public double getTotalRaceHours() {
+        GameManager gm = GameManager.getInstance();
+        totalRaceHours = gm.getTimeLimit();
+        return totalRaceHours;
+    }
+
+    public double getCurrentRaceTime() {
+        return currentRaceTime;
+    }
+
+
 
 }

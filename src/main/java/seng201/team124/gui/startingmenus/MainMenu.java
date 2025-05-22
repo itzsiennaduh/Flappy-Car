@@ -172,6 +172,7 @@ public class MainMenu {
 
 // 4) use THAT as your Scene’s root
             currentScene.setRoot(root);
+            gameCtrl.setGameScene(currentScene);
             currentScene.setOnKeyPressed(gameCtrl::handleKeyPressed);
             currentScene.setOnKeyReleased(gameCtrl::handleKeyReleased);
 

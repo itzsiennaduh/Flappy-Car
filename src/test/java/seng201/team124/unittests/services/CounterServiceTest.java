@@ -1,7 +1,6 @@
 package seng201.team124.unittests.services;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import seng201.team124.services.CounterService;
 
@@ -23,6 +22,11 @@ class CounterServiceTest {
     public void setupTest() {
         // Use CounterService directly
         testCounterService = new CounterService();
+    }
+
+    @Test
+    void getRemainingTime() {
+        assertEquals(0, testCounterService.getRemainingTime());
     }
 
     /**
