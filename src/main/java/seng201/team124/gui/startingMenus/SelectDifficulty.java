@@ -26,8 +26,6 @@ public class SelectDifficulty {
     private Label seasonLengthLabel;
     @FXML
     private Label errorMessageLabel;
-    //@FXML
-    //private VBox receSelect;
     @FXML
     Button continueButton;
 
@@ -37,63 +35,28 @@ public class SelectDifficulty {
     @FXML
     public void initialize() {
         //difficulty initialisation why is javafx AMERICAN
-        difficultySlider.setSnapToTicks(true);
-        difficultySlider.setBlockIncrement(1);
-        difficultySlider.setMajorTickUnit(1);
-        difficultySlider.setMinorTickCount(0);
-        difficultySlider.setMin(1);
-        difficultySlider.setMax(3);
 
-        //initialise season length slider
-        seasonLengthSlider.setSnapToTicks(true);
-        seasonLengthSlider.setBlockIncrement(1);
-        seasonLengthSlider.setMin(MIN_SEASON_LENGTH);
-        seasonLengthSlider.setMax(MAX_SEASON_LENGTH);
-
-        updateDifficultyLabel((int) difficultySlider.getValue());
-        updateSeasonLengthLabel((int) seasonLengthSlider.getValue());
 
         difficultySlider.valueProperty().addListener((obs, oldVal, newVal) -> {
             updateDifficultyLabel(newVal.intValue());
+
+
         });
 
         seasonLengthSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
+            GameManager.getInstance().setSeasonLength((int) newVal.intValue());
+            System.out.println(GameManager.getInstance().getSeasonLength());
             updateSeasonLengthLabel(newVal.intValue());
+
         });
-
-//        seasonLengthSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
-//            int races = newVal.intValue();
-//            updateSeasonLengthLabel(races);
-//            populateRaceSelections(races);
-//        });
-
-//        populateRaceSelections((int)seasonLengthSlider.getValue());
 
         errorMessageLabel.setText("");
         errorMessageLabel.setStyle("-fx-text-fill: red;");
     }
 
-//    private void populateRaceSelections(int races) {
-//        receSelect.getChildren().clear();
-//
-//        List<String> allTracks = GameManager.getInstance().tracks();
-//
-//        for (int i = 1; i <= races; i++) {
-//            Label lbl = new Label("Race " + i + ":");
-//            ComboBox<String> combo = new ComboBox<>();
-//            combo.getItems().setAll(allTracks);
-//            combo.setPromptText("Choose track…");
-//            combo.setMaxWidth(Double.MAX_VALUE);
-//
-//            if (!allTracks.isEmpty()) combo.getSelectionModel().select(0);
-//
-//            receSelect.getChildren().addAll(lbl, combo);
-//        }
-//
-//    }
-
 
     private void updateDifficultyLabel(int value) {
+        GameManager.getInstance().setSeasonLength(value);
         Difficulty difficulty = Difficulty.values()[value - 1]; //convert 1-3 to enum
         difficultyLabel.setText("Difficulty: " + difficulty.toString());
 
@@ -104,35 +67,16 @@ public class SelectDifficulty {
         };
 
         difficultyLabel.setText(difficultyLabel.getText() + " - " + description);
+        GameManager.getInstance().setSeasonLength(value);
+
     }
 
     private void updateSeasonLengthLabel(int value) {
+        GameManager.getInstance().setSeasonLength(value);
         seasonLengthLabel.setText("Season Length: " + value + " races");
+
     }
 
-    @FXML
-    private void garage() {
-        int difficultyValue = (int)difficultySlider.getValue();
-        Difficulty difficulty = Difficulty.values()[difficultyValue - 1];
-        int seasonLength = (int)seasonLengthSlider.getValue();
-
-        GameManager gm = GameManager.getInstance();
-        gm.initializeGame(
-                gm.getTempName(), //from temp storage
-                difficulty,
-                seasonLength
-        );
-
-        gm.clearTempData();
-
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/GameScene.fxml"));
-            Parent root = loader.load();
-            Stage stage = (Stage) difficultySlider.getScene().getWindow();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     @FXML
     private void handleContinue() throws IOException {

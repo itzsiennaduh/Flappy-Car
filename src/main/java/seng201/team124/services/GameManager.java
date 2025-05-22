@@ -113,7 +113,7 @@ public class GameManager {
      * initialises a new game with default values if not already initialised
      */
     public void initializeWithDefaults() {
-        initializeGame("Default Player", Difficulty.MEDIUM, 20000);
+        initializeGame("Default Player", Difficulty.MEDIUM, 10);
         Vehicle defaultVehicle = VehicleFactory.createRedVehicle();
         player.getVehicles().add(defaultVehicle);
         player.setCurrentVehicle(defaultVehicle);
@@ -139,6 +139,8 @@ public class GameManager {
         return getPlayer().getName();
     }
 
+
+
     /**
      * gets the selected difficulty level
      * @return selected difficulty level
@@ -150,6 +152,9 @@ public class GameManager {
         return this.difficulty;
     }
 
+    public void setSeasonLength(int seasonLength) {
+        this.seasonLength = seasonLength;
+    }
     /**
      * get selected season length
      * @return selected season length
@@ -160,6 +165,8 @@ public class GameManager {
         }
         return this.seasonLength;
     }
+
+
 
     public double getTimeLimit() {
         return getRaceService().getTotalRaceHours();

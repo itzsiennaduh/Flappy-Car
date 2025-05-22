@@ -43,6 +43,9 @@ public class MainMenu {
     private List<Race> races;
     private Race selectedRace;
 
+    @FXML private Label moneyLabel;
+    @FXML private Label seasonLength;
+
     @FXML
     private void initialize() {
         races = GameManager.getInstance().getAvailableRaces();
@@ -55,6 +58,9 @@ public class MainMenu {
                 descriptionLabel.setText(selectedRace.getRoute().getDescription());
             }
         });
+
+        moneyLabel.setText("$" + GameManager.getInstance().getPlayer().getMoney());
+        seasonLength.setText("Races left:" + GameManager.getInstance().getSeasonLength());
 
         // default to first
         chooseRace.getSelectionModel().select(0);
