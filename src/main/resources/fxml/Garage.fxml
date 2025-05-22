@@ -28,5 +28,6 @@
       <Button fx:id="installNitroButton" mnemonicParsing="false" text="Apply" GridPane.columnIndex="2" GridPane.valignment="BOTTOM" />
       <Button fx:id="installWheelsButton" mnemonicParsing="false" text="Apply" GridPane.rowIndex="2" GridPane.valignment="BOTTOM" />
       <Label fx:id="installFeedbackLabel" GridPane.columnIndex="1" GridPane.rowIndex="2" GridPane.valignment="TOP" />
+      <ChoiceBox fx:id="DropdownCars" prefWidth="150.0" GridPane.columnIndex="1" />
    </children>
 </GridPane>

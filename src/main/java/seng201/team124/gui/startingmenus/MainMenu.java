@@ -9,6 +9,7 @@ import javafx.scene.*;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Region;
@@ -37,6 +38,8 @@ public class MainMenu {
     @FXML
     private Button startGameButton;
 
+    @FXML private Label descriptionLabel;
+
     @FXML
     private ChoiceBox<String> chooseRace;
     private List<Race> races;
@@ -51,12 +54,14 @@ public class MainMenu {
             if (newI.intValue() >= 0) {
                 selectedRace = races.get(newI.intValue());
                 GameManager.getInstance().setSelectedRace(selectedRace);
+                descriptionLabel.setText(selectedRace.getRoute().getDescription());
             }
         });
 
         // default to first
         chooseRace.getSelectionModel().select(0);
         GameManager.getInstance().setSelectedRace(selectedRace);
+        descriptionLabel.setText(selectedRace.getRoute().getDescription());
 
     }
 
