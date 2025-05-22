@@ -362,7 +362,7 @@ public class GameController {
             try {
                 // Get current vehicle's fuel economy and adjust consumption based on it
                 Vehicle currentVehicle = GameManager.getInstance().getCurrentVehicle();
-                double fuelConsumptionRate = Math.abs(velocity) / (currentVehicle.getEffectiveFuelEconomy() * 20);
+                double fuelConsumptionRate = Math.abs(velocity) / (currentVehicle.getEffectiveFuelEconomy() * 25);
                 currentVehicle.consumeFuel(fuelConsumptionRate * deltaTime);
             } catch (IllegalStateException e) {
 

@@ -226,7 +226,34 @@ public class Vehicle implements Purchasable {
      * @return successful installation message
      * @throws IllegalStateException if part is already installed
      */
+
+    private TuningParts engine;
+    private TuningParts wheels;
+    private TuningParts nitro;
     public String installPart(TuningParts part) {
+
+        switch (part.getType()) {
+            case ENGINE:
+                if (engine != null) {
+                    throw new IllegalStateException("Engine already installed!");
+                }
+                engine = part;
+                break;
+            case NITRO:
+                if (nitro != null) {
+                    throw new IllegalStateException("Nitro already installed!");
+                }
+                nitro = part;
+                break;
+            case WHEEL:
+                if (wheels != null) {
+                    throw new IllegalStateException("Wheels already installed!");
+                }
+                wheels = part;
+                break;
+        }
+
+
         if (installedParts.contains(part)) {
             throw new IllegalStateException(String.format("%s already installed.", part.getName()));
         }
@@ -240,12 +267,21 @@ public class Vehicle implements Purchasable {
      * @throws IllegalStateException if there is no part to remove
      */
     public String removePart(TuningParts part) {
+        if (part.equals(engine)) {engine = null;}
+        else if (part.equals(nitro)) {nitro = null;}
+        else if (part.equals(wheels)) {wheels = null;}
+        else throw new IllegalStateException("No such part installed!");
+
         if (installedParts.contains(part)) {
             installedParts.remove(part);
             return String.format("%s successfully removed!", part.getName());
         }
         throw new IllegalStateException(String.format("%s is not installed, so can't be removed.", part.getName()));
     }
+
+    public TuningParts getInstalledEngine() { return engine; }
+    public TuningParts getInstalledNitro()  { return nitro;  }
+    public TuningParts getInstalledWheels() { return wheels; }
 
     /**
      * refuels vehicle back to max fuel

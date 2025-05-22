@@ -20,7 +20,7 @@
       <RowConstraints maxHeight="95.0" minHeight="0.0" prefHeight="0.0" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
-      <Button fx:id="backButton" mnemonicParsing="false" onAction="#handleBackButton" text="Back" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+      <Button fx:id="backButton" mnemonicParsing="false" text="Back" GridPane.columnIndex="1" GridPane.rowIndex="2" />
       <ChoiceBox fx:id="DropdownEngine" prefWidth="150.0" />
       <ChoiceBox fx:id="DropdownWheels" prefWidth="150.0" GridPane.rowIndex="2" />
       <ChoiceBox fx:id="DropdownNitris" prefWidth="150.0" GridPane.columnIndex="2" />

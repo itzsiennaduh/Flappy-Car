@@ -1,7 +1,7 @@
 package seng201.team124.factories;
 
 import seng201.team124.models.vehicleutility.TuningParts;
-import seng201.team124.models.vehicleutility.Vehicle;
+import seng201.team124.models.vehicleutility.TuningParts.Type;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +10,8 @@ import java.util.List;
  * stores each tuning part available in the game.
  */
 public class TuningPartFactory {
+
+
 
     public static List<TuningParts> getTuningPart() {
         List<TuningParts> tuningParts = new ArrayList<>();
@@ -32,7 +34,8 @@ public class TuningPartFactory {
                 0,   //handling
                 0,   //reliability
                 -2,  //fuel eco
-                500  //cost
+                500,  //cost
+                Type.NITRO
         );
     }
 
@@ -44,7 +47,8 @@ public class TuningPartFactory {
                 0,   //handling
                 -3,  //reliability
                 0,   //fuel eco
-                1500 //cost
+                1500, //cost
+                Type.ENGINE
         );
     }
 
@@ -56,7 +60,8 @@ public class TuningPartFactory {
                 0,   //handling
                 -2,  //reliability
                 -3,  //fuel eco
-                1000 //cost
+                1000, //cost
+                Type.ENGINE
         );
     }
 
@@ -68,7 +73,8 @@ public class TuningPartFactory {
                 4,   //handling
                 3,   //reliability
                 0,   //fuel eco
-                1000 //cost
+                1000, //cost
+                Type.WHEEL
         );
     }
 
@@ -80,7 +86,8 @@ public class TuningPartFactory {
                 2,   //handling
                 0,   //reliability
                 2,   //fuel eco
-                1000 //cost
+                1000, //cost
+                Type.WHEEL
         );
     }
 }

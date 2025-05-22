@@ -8,6 +8,13 @@ import seng201.team124.factories.TuningPartFactory;
  * @see TuningPartFactory for the tuning parts
  */
 public class TuningParts implements Purchasable{
+
+    public enum Type {
+        ENGINE,
+        NITRO,
+        WHEEL
+    }
+
     private final String name;
     private final String description;
     private final double speedModifier;
@@ -15,6 +22,7 @@ public class TuningParts implements Purchasable{
     private final double reliabilityModifier;
     private final double fuelEconomyModifier;
     private final double cost;
+    private final Type type;
 
     /**
      * constructor for tuning parts class.
@@ -29,7 +37,7 @@ public class TuningParts implements Purchasable{
      */
     public TuningParts(String name, String description, double speedModifier,
                        double handlingModifier, double reliabilityModifier,
-                       double fuelEconomyModifier, double cost) {
+                       double fuelEconomyModifier, double cost, Type type) {
         this.name = name;
         this.description = description;
         this.speedModifier = speedModifier;
@@ -37,6 +45,7 @@ public class TuningParts implements Purchasable{
         this.reliabilityModifier = reliabilityModifier;
         this.fuelEconomyModifier = fuelEconomyModifier;
         this.cost = cost;
+        this.type = type;
     }
 
     /**
@@ -94,6 +103,8 @@ public class TuningParts implements Purchasable{
     public double getCost() {
         return this.cost;
     }
+
+    public Type getType() {return this.type;}
 
     /**
      * calculates the sell price of the part.
