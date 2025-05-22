@@ -1,8 +1,8 @@
 package seng201.team124.services;
 
 import seng201.team124.models.*;
-import seng201.team124.models.vehicleutility.TuningParts;
-import seng201.team124.models.vehicleutility.Vehicle;
+import seng201.team124.models.vehicleUtility.TuningParts;
+import seng201.team124.models.vehicleUtility.Vehicle;
 
 /**
  * handles all garage-related operations and logic

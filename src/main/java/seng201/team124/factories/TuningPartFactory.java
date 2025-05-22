@@ -1,7 +1,7 @@
 package seng201.team124.factories;
 
-import seng201.team124.models.vehicleutility.TuningParts;
-import seng201.team124.models.vehicleutility.TuningParts.Type;
+import seng201.team124.models.vehicleUtility.TuningParts;
+import seng201.team124.models.vehicleUtility.TuningParts.Type;
 
 import java.util.ArrayList;
 import java.util.List;

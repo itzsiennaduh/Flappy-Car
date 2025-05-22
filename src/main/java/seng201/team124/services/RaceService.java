@@ -1,9 +1,11 @@
 package seng201.team124.services;
 
 import seng201.team124.models.Player;
-import seng201.team124.models.racelogic.*;
-import seng201.team124.models.vehicleutility.Vehicle;
+import seng201.team124.models.raceLogic.*;
+import seng201.team124.models.vehicleUtility.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -20,6 +22,7 @@ public class RaceService {
     private double elapsedSeconds; // time passed in the current race
     private double totalRaceHours; //original race duration
     private final CounterService counter;
+    private List<Integer> raceResults = new ArrayList<>();
 
     public RaceService(Player player, GameManager gameManager, CounterService counterService) {
         this.player = player;
@@ -79,6 +82,10 @@ public class RaceService {
      * @param position final race position (1 = first place)
      */
     public void completeRace(int position) {
+        if (position > 0) {
+            raceResults.add(position);
+        }
+
         if (currentRace == null) return;
 
         Vehicle vehicle = player.getCurrentVehicle();
@@ -135,7 +142,7 @@ public class RaceService {
         RaceEvent[] weightedEvents = new RaceEvent[] {RaceEvent.getRandomEvent()};
         RaceEvent selectedEvent = weightedEvents[random.nextInt(weightedEvents.length)];
 
-        return new EventResult(selectedEvent);
+        return new seng201.team124.models.raceLogic.EventResult(selectedEvent);
     }
 
     /**
@@ -204,6 +211,12 @@ public class RaceService {
             completeRace(0);
         }
     }
+
+    public double getAveragePlacing() {
+        return raceResults.stream().mapToInt(Integer::intValue).average().orElse(0);
+    }
+
+
 
 
 }

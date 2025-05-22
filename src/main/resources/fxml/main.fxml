@@ -4,15 +4,15 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-      prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="seng201.team124.gui.importantcontrollers.MainController">
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" spacing="30.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng201.team124.gui.importantControllers.MainController">
    <children>
-      <Button fx:id="defaultButton" onAction="#CharacterName" text="Start Game ">
+      <Button fx:id="startGameButton" alignment="CENTER" contentDisplay="CENTER" onAction="#CharacterName" text="Start Game ">
          <font>
             <Font name="Century Schoolbook" size="25.0" />
          </font></Button>
-      <Button mnemonicParsing="false" text="Settings" />
-      <Button mnemonicParsing="false" onAction="#Exit" text="Exit" />
+      <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#Exit" text="Exit">
+         <font>
+            <Font name="Century Schoolbook" size="12.0" />
+         </font></Button>
    </children>
 </VBox>

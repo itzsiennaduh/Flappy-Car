@@ -4,11 +4,20 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" spacing="10" style="-fx-padding: 40;" xmlns="http://javafx.com/javafx/23.0.1"
-      xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng201.team124.gui.startingmenus.ChooseName">
-    <Label text="Enter your character name"/>
-    <TextField fx:id="nameField" promptText="Character Name" maxWidth="200"/>
-    <Label fx:id="Checker"/>
-    <Button onAction="#handleContinue" text="Continue"/>
+<VBox alignment="CENTER" spacing="10" style="-fx-padding: 40;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng201.team124.gui.startingMenus.ChooseName">
+    <Label text="Enter your character name">
+      <font>
+         <Font name="Century Schoolbook" size="14.0" />
+      </font></Label>
+    <TextField fx:id="nameField" maxWidth="200" promptText="Character Name">
+      <font>
+         <Font name="Century Schoolbook" size="12.0" />
+      </font></TextField>
+    <Label fx:id="Checker" />
+    <Button alignment="CENTER" contentDisplay="CENTER" onAction="#handleContinue" text="Continue" textAlignment="CENTER">
+      <font>
+         <Font name="Century Schoolbook" size="12.0" />
+      </font></Button>
 </VBox>

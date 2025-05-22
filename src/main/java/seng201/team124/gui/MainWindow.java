@@ -4,9 +4,8 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import seng201.team124.gui.importantcontrollers.MainController;
+import seng201.team124.gui.importantControllers.MainController;
 
 import java.io.IOException;
 
@@ -26,7 +25,7 @@ public class MainWindow extends Application {
         FXMLLoader baseLoader = new FXMLLoader(getClass().getResource("/fxml/main.fxml"));
         Parent root = baseLoader.load();
 
-        primaryStage.setTitle("RomanRacing"); // sets the title of the stage
+        primaryStage.setTitle("Flappy Car"); // sets the title of the stage
         MainController ctrl = baseLoader.getController();
         Scene scene = new Scene(root, 600, 400); // creates a scene with the root node and dimensions
         ctrl.setScene(scene);

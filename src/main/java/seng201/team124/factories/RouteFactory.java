@@ -1,6 +1,6 @@
 package seng201.team124.factories;
 
-import seng201.team124.models.racelogic.Route;
+import seng201.team124.models.raceLogic.Route;
 
 import java.util.ArrayList;
 import java.util.List;

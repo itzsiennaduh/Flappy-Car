@@ -1,6 +1,6 @@
 package seng201.team124.factories;
 
-import seng201.team124.models.vehicleutility.Vehicle;
+import seng201.team124.models.vehicleUtility.Vehicle;
 
 import java.util.ArrayList;
 import java.util.List;
