@@ -45,7 +45,8 @@ public class Shop {
      */
     public Vehicle purchaseVehicle(Vehicle vehicle) {
         if (!availableVehicles.contains(vehicle)) {
-            throw new IllegalArgumentException("Vehicle not available for purchase.");
+//            throw new IllegalArgumentException("Vehicle not available for purchase.");
+            System.out.println("Vehicle not available for purchase.");
         }
         availableVehicles.remove(vehicle);
         return vehicle;
@@ -59,7 +60,8 @@ public class Shop {
      */
     public TuningParts purchasePart(TuningParts part) {
         if (!availableParts.contains(part)) {
-            throw new IllegalArgumentException("Tuning part not available for purchase.");
+//            throw new IllegalArgumentException("Tuning part not available for purchase.");
+            System.out.println("this isn't an error ");
         }
         availableParts.remove(part);
         return part;

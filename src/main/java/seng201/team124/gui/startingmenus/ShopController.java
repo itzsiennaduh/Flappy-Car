@@ -12,10 +12,11 @@ import seng201.team124.services.GameManager;
 import seng201.team124.services.ShopService;
 
 import java.io.IOException;
+import java.util.List;
 
 import static seng201.team124.factories.TuningPartFactory.*;
 
-public class Shop {
+public class ShopController {
 
     @FXML
     private Button backButton;
@@ -53,22 +54,29 @@ public class Shop {
     private ShopService shopService;
 
 
+    private final Vehicle redCar   = VehicleFactory.createRedVehicle();
+    private final Vehicle catCar   = VehicleFactory.createCatVehicle();
+    private final Vehicle blueCar  = VehicleFactory.createBlueVehicle();
+
     @FXML
     private void initialize() {
-
         shopService = GameManager.getInstance().getShopService();
         updateMoneyLabel();
 
+        buyRedVehicle.setOnAction(e -> buyVehicle(redCar, buyRedVehicle));
+        buyCatVehicle.setOnAction(e -> buyVehicle(catCar, buyCatVehicle));
+        buyBlueVehicle.setOnAction(e -> buyVehicle(blueCar, buyBlueVehicle));
 
-        buyVehicle(buyRedVehicle, VehicleFactory.createRedVehicle());
-        buyVehicle(buyCatVehicle, VehicleFactory.createCatVehicle());
-        buyVehicle(buyBlueVehicle, VehicleFactory.createBlueVehicle());
 
-        for (Vehicle vehicle : VehicleFactory.getAllVehicles()) {
-            if (vehicle.getName().equals("Red Car")) buyRedVehicle.setDisable(false);
-            else if (vehicle.getName().equals("Cat Car")) buyCatVehicle.setDisable(false);
-            else if (vehicle.getName().equals("Blue Car")) buyBlueVehicle.setDisable(false);
-        }
+        GameManager gm = GameManager.getInstance();
+        gm.getVehicles().stream()
+                .map(Vehicle::getName)
+                .forEach(name -> {
+                    if (name.equals("Red Supra"))  buyRedVehicle.setDisable(true);
+                    if (name.equals("Kittyyyyy"))    buyCatVehicle.setDisable(true);
+                    if (name.equals("Blue Supra"))    buyBlueVehicle.setDisable(true);
+                });
+
 
         buyNitrousOxide.setOnAction(e -> buyItemTuning(createNitrousOxide(), buyNitrousOxide));
         buyTurbocharger.setOnAction(e -> buyItemTuning(createTurbocharger(), buyTurbocharger));
@@ -76,7 +84,6 @@ public class Shop {
         buyOffRoadTires.setOnAction(e -> buyItemTuning(createOffRoadTires(), buyOffRoadTires));
         buyOnRoadTires.setOnAction(e -> buyItemTuning(createTrackTires(), buyOnRoadTires));
 
-        GameManager gm = GameManager.getInstance();
         gm.getTuningParts().stream()
                 .map(TuningParts::getName)
                 .forEach(name -> {
@@ -95,31 +102,22 @@ public class Shop {
     }
 
     private void buyItemTuning(TuningParts part, Button btn) {
-        GameManager gm = GameManager.getInstance();
-        double cost = part.getCost();
-        if (gm.getPlayer().getMoney() >= cost) {
-            gm.getPlayer().subtractMoney(cost);
-            gm.getPlayer().addTuningPart(part);
-
+        String result = shopService.purchasePart(part);
+        noMoney.setText(result);
+        updateMoneyLabel();
+        if (result.startsWith("Purchase successful")) {
             btn.setDisable(true);
-            updateMoneyLabel();
-            noMoney.setText("Purchased");
-        } else {
-            noMoney.setText("Not enough money!");
         }
     }
 
-    private void buyVehicle(Button btn,Vehicle car) {
-        btn.setOnAction(evt -> {
-            String result = shopService.purchaseVehicle(car);
-            noMoney.setText(result);
-            updateMoneyLabel();
-            if (result.startsWith("Purchase successful")) {
-                updateMoneyLabel();
-                btn.setDisable(true);
-
-            }
-        });
+    private void buyVehicle(Vehicle car, Button btn) {
+        String result = shopService.purchaseVehicle(car);
+        noMoney.setText(result);
+        System.out.println(result);
+        updateMoneyLabel();
+        if (result.startsWith("Purchase successful")) {
+            btn.setDisable(true);
+        }
     }
 
     @FXML

@@ -35,9 +35,6 @@ public class ShopService {
         if (player.getMoney() < vehicle.getCost()) {
             return "You do not have enough money to purchase this vehicle.";
         }
-        if (!shop.getAvailableVehicles().contains(vehicle)) {
-            return "This vehicle is not available for purchase.";
-        }
         if (player.getVehicles().size() >= 5) {
             return "You have already purchased 5 vehicles.";
         }
@@ -49,7 +46,6 @@ public class ShopService {
         Vehicle purchasedVehicle = shop.purchaseVehicle(vehicle);
         return "Purchase successful. %s added to your inventory.".formatted(purchasedVehicle.getName());
     }
-
     /**
      * purchase a tuning part from the shop
      * @param part tuning part to purchase
@@ -58,9 +54,6 @@ public class ShopService {
     public String purchasePart(TuningParts part) {
         if (player.getMoney() < part.getCost()) {
             return "You do not have enough money to purchase this tuning part.";
-        }
-        if (!shop.getAvailableParts().contains(part)) {
-            return "This tuning part is not available for purchase.";
         }
         if (player.getTuningParts().contains(part)) {
             return "You already own this tuning part.";

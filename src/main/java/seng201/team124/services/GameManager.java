@@ -194,6 +194,10 @@ public class GameManager {
         return getPlayer().getTuningParts();
     }
 
+
+    public List<Vehicle> getVehicles() {
+        return getPlayer().getVehicles();
+    }
     /**
      * sets a temporary player name during setup
      * @param name the temp player name
