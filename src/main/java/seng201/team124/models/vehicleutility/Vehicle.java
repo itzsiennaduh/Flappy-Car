@@ -33,6 +33,7 @@ public class Vehicle implements Purchasable {
     private final double reliability;
     private final double fuelEconomy;
     private final double cost;
+    private double accleration;
 
     private double currentFuel;
     private final double maxFuel;
@@ -41,6 +42,7 @@ public class Vehicle implements Purchasable {
     private double routeHandlingModifier = 1.0;
     private double routeReliabilityModifier = 1.0;
     private double routeFuelEconomyModifier = 1.0;
+
 
     private final List<TuningParts> installedParts;
 
@@ -59,10 +61,11 @@ public class Vehicle implements Purchasable {
      * @param currentFuel the fuel level of the vehicle
      * @param maxFuel max fuel the vehicle may have
      */
-    public Vehicle(String name, String description, double speed, double handling, double reliability, double fuelEconomy, double cost, double currentFuel, double maxFuel, String modelName) {
+    public Vehicle(String name, String description, double speed, double accleration, double handling, double reliability, double fuelEconomy, double cost, double currentFuel, double maxFuel, String modelName) {
         this.name = name;
         this.description = description;
         this.speed = speed;
+        this.accleration = accleration;
         this.handling = handling;
         this.reliability = reliability;
         this.fuelEconomy = fuelEconomy;
@@ -72,6 +75,10 @@ public class Vehicle implements Purchasable {
         this.installedParts = new ArrayList<>();
         this.model = modelName;
     }
+
+    public String getModelName() {return this.model;}
+
+    public double getAccleration() {return this.accleration;}
 
     /**
      * @return vehicle name

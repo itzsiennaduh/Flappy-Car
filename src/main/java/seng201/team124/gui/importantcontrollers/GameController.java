@@ -2,10 +2,8 @@ package seng201.team124.gui.importantcontrollers;
 
 import com.interactivemesh.jfx.importer.ImportException;
 import com.interactivemesh.jfx.importer.obj.ObjModelImporter;
-import com.sun.scenario.effect.impl.sw.java.JSWBlend_SRC_OUTPeer;
 import javafx.animation.AnimationTimer;
 import javafx.animation.PauseTransition;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point3D;
@@ -14,24 +12,24 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
-import javafx.scene.shape.*;
+import javafx.scene.shape.Box;
+import javafx.scene.shape.CullFace;
+import javafx.scene.shape.MeshView;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import javafx.stage.Stage;
-import org.w3c.dom.ls.LSOutput;
 import seng201.team124.factories.VehicleFactory;
 import seng201.team124.gui.bots.Bots;
 import seng201.team124.gui.bots.Raycast;
+import seng201.team124.gui.endingmenus.DNFController;
 import seng201.team124.gui.endingmenus.RaceCompleteController;
 import seng201.team124.gui.startingmenus.HUDController;
+import seng201.team124.models.Player;
 import seng201.team124.models.racelogic.RaceEvent;
 import seng201.team124.models.vehicleutility.Vehicle;
-import seng201.team124.services.GameManager;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import seng201.team124.services.CounterService;
+import seng201.team124.services.GameManager;
 
 import java.io.IOException;
 import java.net.URL;
@@ -45,6 +43,8 @@ public class GameController {
     private double targetCarAngle = 0;
     private double velocity = 0;
     private HUDController hudController;
+    private Scene gameScene;
+    private boolean dnfShown = false;
 
     private Box carCollisionBox;
     private final List<Box> obstacles = new ArrayList<>();
@@ -58,7 +58,7 @@ public class GameController {
     private final CounterService counterService = new CounterService();
     private boolean raceFinished = false;
     private int playerPlacement = 1;
-    private List<String> finishedEntities = new ArrayList<>();
+    private final List<String> finishedEntities = new ArrayList<>();
 
     private double camX = 0;
     private double camY = 0;
@@ -79,11 +79,11 @@ public class GameController {
 //        player.setVolume(0.3);
 //        player.play();
 
-          Group root3D = new Group();
+        Group root3D = new Group();
 
-//        car = loadModel(getClass().getResource("/assets/models/Supra.obj"));
-        Vehicle playerVehicle = VehicleFactory.createRedVehicle();
-        car = playerVehicle.getModel();
+        String carURL = GameManager.getInstance().getCurrentVehicle().getModelName();
+
+        car = loadModel(getClass().getResource(carURL));
         car.setTranslateX(5);
         float size = 0.75F;
         car.setScaleX(size);
@@ -97,7 +97,10 @@ public class GameController {
         root3D.getChildren().add(carCollisionBox);
 
         // Load track & checkpoints
-        Group modelGroup = loadModel(getClass().getResource("/assets/models/RaceTacks/racetrackplease_v0.3.obj"));
+
+
+        String raceTarckURL = GameManager.getInstance().getSelectedRace().getRaceURL();
+        Group modelGroup = loadModel(getClass().getResource(raceTarckURL));
         MeshView racetrack = null;
         MeshView racetrack2 = null;
         MeshView finishMesh = null;
@@ -199,7 +202,13 @@ public class GameController {
         // Game loop
         new AnimationTimer() {
             private long last = -1;
-            @Override public void handle(long now) {
+            @Override
+            public void handle(long now) {
+                if (dnfShown || raceFinished) {
+                    this.stop();
+                    return;
+                }
+
                 if (last > 0) {
                     double dt = (now - last) / 1e9;
                     update(dt);
@@ -224,6 +233,11 @@ public class GameController {
                     if (counterService.isRaceInProgress()) {
                         counterService.incrementRaceTime(dt);
                         hudController.updateTime(counterService.getFormattedElapsedTime());
+
+                        if (counterService.hasRaceTimeExpired() && !raceFinished && counterService.getTotalRaceHours() > 0) {
+                            handleDNF("Time limit exceeded! You did not finish within the race duration.");
+                            return;
+                        }
                     }
                 }
                 last = now;
@@ -322,11 +336,18 @@ public class GameController {
 
     private void update(double deltaTime) {
 
+        if (raceFinished || dnfShown) {
+            return;
+        }
+
+        Vehicle currentVehicle = GameManager.getInstance().getCurrentVehicle();
+
+
         double rotateSpeed = 50,
                 smoothing = 0.15,
-                acceleration = 50;
+                acceleration = currentVehicle.getAccleration();
         double decel = 80,
-                maxVel = 73,
+                maxVel = currentVehicle.getSpeed(),
                 friction = 40;
 
 
@@ -396,20 +417,26 @@ public class GameController {
         }
 
         if (death.isRayHitting(carPos, down)) {
+            if (!raceFinished && !dnfShown) {
+                handleDNF("Crashed into wall! Be more careful next time.");
+                System.out.println("You Crashed");
+            }
 //            velocity = 0;
-            System.out.println("You Crashed");
+            return;
+
         }
 
         if (Math.abs(velocity) > 0) {
             try {
                 // Get current vehicle's fuel economy and adjust consumption based on it
-                Vehicle currentVehicle = GameManager.getInstance().getCurrentVehicle();
                 double fuelConsumptionRate = Math.abs(velocity) / (currentVehicle.getEffectiveFuelEconomy() * 25);
                 currentVehicle.consumeFuel(fuelConsumptionRate * deltaTime);
             } catch (IllegalStateException e) {
-
+                if (!raceFinished && !dnfShown) {
+                    handleDNF("Out of fuel! You did not reach a gas station in time.");
+                }
                 velocity = 0;
-                System.out.println("Out of fuel! Find a gas station.");
+                return;
             }
         }
 
@@ -462,10 +489,14 @@ public class GameController {
             RaceCompleteController controller = loader.getController();
             controller.setPlacement(playerPlacement);
             controller.setMainMenuReference(this);
-            Scene currentScene = camera.getScene();
-            currentScene.setRoot(root);
-            Stage stage = (Stage) currentScene.getWindow();
-            stage.setFullScreen(true);
+
+            if (gameScene != null) {
+                gameScene.setRoot(root);
+                Stage stage = (Stage) gameScene.getWindow();
+                stage.setFullScreen(true);
+            } else {
+                System.err.println("Game scene is null, cannot show race complete screen!");
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -527,12 +558,74 @@ public class GameController {
                     event.getChoice1(),
                     event.getChoice2(),
                     choice -> {
-                        if (choice == 1) System.out.println("Chose 1");
-                        else            System.out.println("Chose 2");
+                        if (choice == 1) System.out.println("Choose 1");
+                        else            System.out.println("Choose 2");
                         hudController.updateTime(counterService.getFormattedElapsedTime());
                         hudController.setMoney(GameManager.getInstance().getPlayer().getMoney());
                     }
             );
+        }
+    }
+
+    private void handleDNF(String reason) {
+        if (dnfShown || raceFinished) {
+            return;
+        }
+
+        dnfShown = true;
+        raceFinished = true;
+        counterService.stopRace();
+
+        GameManager.getInstance().completeRace(0);
+        showDNFScreen(reason);
+    }
+
+    private void showDNFScreen(String reason) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/DNFRaceScreen.fxml"));
+            Parent root = loader.load();
+            DNFController controller = loader.getController();
+            controller.setReason(reason);
+
+            if (gameScene != null) {
+                gameScene.setRoot(root);
+                Stage stage = (Stage) gameScene.getWindow();
+                stage.setFullScreen(true);
+            } else {
+                System.err.println("Game scene is null, cannot show DNF screen");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void setGameScene(Scene scene) {
+        this.gameScene = scene;
+    }
+
+    private void showDNFScreenAlternative(String reason) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/DNFRaceScreen.fxml"));
+            Parent root = loader.load();
+            DNFController controller = loader.getController();
+            controller.setReason(reason);
+
+            Scene currentScene = null;
+            if (car != null && car.getScene() != null) {
+                currentScene = car.getScene();
+            } else if (camera != null && camera.getScene() != null) {
+                currentScene = camera.getScene();
+            }
+
+            if (currentScene != null) {
+                currentScene.setRoot(root);
+                Stage stage = (Stage) currentScene.getWindow();
+                stage.setFullScreen(true);
+            } else {
+                System.err.println("Cannot find scene to show DNF screen");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

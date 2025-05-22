@@ -102,6 +102,8 @@ public class Race {
         return this.prizeMoney;
     }
 
+    public String getRaceURL() {return this.raceURL;}
+
     /**
      * calculates the time penalty for a specific number of hours.
      * @param penalty the number of hours to apply the penalty to.

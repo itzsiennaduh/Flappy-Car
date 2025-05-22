@@ -60,7 +60,6 @@ public class Route {
         return this.fuelEconomyModifier;
     }
 
-    //fuel stops distance?
 
     /**
      * @return a string with the route's description, distance, fuel stops, and difficulty (detailed)

@@ -50,12 +50,13 @@ public class MainMenu {
         chooseRace.getSelectionModel().selectedIndexProperty().addListener((obs, oldI, newI) -> {
             if (newI.intValue() >= 0) {
                 selectedRace = races.get(newI.intValue());
+                GameManager.getInstance().setSelectedRace(selectedRace);
             }
         });
 
         // default to first
         chooseRace.getSelectionModel().select(0);
-        selectedRace = races.get(0);
+        GameManager.getInstance().setSelectedRace(selectedRace);
 
     }
 
@@ -86,17 +87,6 @@ public class MainMenu {
         Node sourceNode  = (Node)event.getSource();
         Scene currentScene = sourceNode.getScene();
         Stage stage = (Stage) currentScene.getWindow();
-
-
-        Vehicle playerVehicle = VehicleFactory.createRedVehicle();
-        GameManager gm = GameManager.getInstance();
-        // Make sure you've already called initializeGame(...) somewhere earlier,
-        // so gm.getPlayer() is non-null. If not, call gm.initializeWithDefaults() first.
-        Player player = gm.getPlayer();
-        player.getVehicles().add(playerVehicle);
-        player.setCurrentVehicle(playerVehicle);
-        // Optionally, if you're still using playerModel in GameManager:
-        gm.setPlayerModel("/assets/models/Cars/Supra.obj");
 
         // 1) Display loading screen
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/LoadingScreen.fxml"));
@@ -172,6 +162,7 @@ public class MainMenu {
 
 // 4) use THAT as your Scene’s root
             currentScene.setRoot(root);
+            gameCtrl.setGameScene(currentScene);
             currentScene.setOnKeyPressed(gameCtrl::handleKeyPressed);
             currentScene.setOnKeyReleased(gameCtrl::handleKeyReleased);
 

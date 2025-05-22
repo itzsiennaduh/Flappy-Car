@@ -26,7 +26,8 @@ public class VehicleFactory {
         return new Vehicle(
                 "Red Supra", //name EXAMPLE
                 "Fast but unreliable, will you risk it?", //description
-                10,  //speed
+                73,  //speed
+                20,
                 5,   //handling
                 2,   //reliability
                 3,   //fuel eco
@@ -41,7 +42,8 @@ public class VehicleFactory {
         return new Vehicle(
                 "Kittyyyyy", //name EXAMPLE
                 "All rounder, but not the fastest.", //description
-                5,  //speed
+                50,  //speed
+                40,
                 5,   //handling
                 5,   //reliability
                 5,   //fuel eco
@@ -56,7 +58,8 @@ public class VehicleFactory {
         return new Vehicle(
                 "Blue Supra", //name EXAMPLE
                 "Slower, but more reliable.", //description
-                5,  //speed
+                60,  //speed
+                20,
                 2,   //handling
                 8,   //reliability
                 5,   //fuel eco

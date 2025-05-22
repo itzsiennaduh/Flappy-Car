@@ -1,9 +1,8 @@
 package seng201.team124.services;
 
 import seng201.team124.factories.RaceFactory;
-import seng201.team124.factories.TuningPartFactory;
 import seng201.team124.factories.VehicleFactory;
-import seng201.team124.models.*;
+import seng201.team124.models.Player;
 import seng201.team124.models.racelogic.Difficulty;
 import seng201.team124.models.racelogic.Race;
 import seng201.team124.models.racelogic.Route;
@@ -36,7 +35,6 @@ public class GameManager {
     private static final double BASE_STARTING_MONEY = 10000;
 
     private String tempName;
-    private String playerModel;
 
     private final List<Race> tracks = new ArrayList<>();
 
@@ -54,7 +52,6 @@ public class GameManager {
      * loads available tracks
      */
     private void loadTrack(){
-        return ;
     }
 
     public List<Race> getAvailableRaces() {
@@ -65,6 +62,13 @@ public class GameManager {
         tracks.add(track);
     }
 
+    public void setSelectedRace(Race race) {
+        this.selectedRace = race;
+    }
+
+    public Race getSelectedRace() {
+        return this.selectedRace;
+    }
     /**
      * gets the singeton instance of the game manager
      * @return the game manager instance, or creates a new one if it doesn't exist yet.
@@ -113,7 +117,6 @@ public class GameManager {
         Vehicle defaultVehicle = VehicleFactory.createRedVehicle();
         player.getVehicles().add(defaultVehicle);
         player.setCurrentVehicle(defaultVehicle);
-        this.playerModel = "/assets/models/Cars/Supra.obj";
     }
 
     /**
@@ -156,6 +159,10 @@ public class GameManager {
             getPlayer();
         }
         return this.seasonLength;
+    }
+
+    public double getTimeLimit() {
+        return getRaceService().getTotalRaceHours();
     }
 
     /**
@@ -286,17 +293,6 @@ public class GameManager {
         getShopService().restockShop();
     }
 
-    /**
-     * gets player model path
-     * @return player model path
-     */
-    public String getPlayerModel() {return playerModel;}
-
-    /**
-     * sets player model path
-     * @param model player model path
-     */
-    public void setPlayerModel(String model) {this.playerModel = model;}
 
     /**
      * validates a player name
@@ -316,11 +312,6 @@ public class GameManager {
     public Vehicle getCurrentVehicle() {
         return player.getCurrentVehicle();
     }
-
-
-
-
-    //random event handling in here
 
 
 
