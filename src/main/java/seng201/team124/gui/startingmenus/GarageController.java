@@ -26,6 +26,7 @@ public class GarageController {
     @FXML private ChoiceBox<String> DropdownEngine;
     @FXML private ChoiceBox<String> DropdownNitris;
     @FXML private ChoiceBox<String> DropdownWheels;
+    @FXML private ChoiceBox<String> DropdownCars;
     @FXML private Button installEngineButton;
     @FXML private Button installNitroButton;
     @FXML private Button installWheelsButton;
@@ -34,12 +35,26 @@ public class GarageController {
     private Player player;
     private Vehicle currentVehicle;
     private List<TuningParts> inventory;
+    private List<Vehicle> allVehicles;
 
     @FXML
     public void initialize() {
         player = GameManager.getInstance().getPlayer();
         currentVehicle = player.getCurrentVehicle();
+        allVehicles = player.getVehicles();
         refreshAllDropdowns();
+
+        DropdownCars.setItems(FXCollections.observableArrayList(allVehicles.stream().map(Vehicle::getName).collect(Collectors.toList())));
+
+        DropdownCars.getSelectionModel().selectedIndexProperty().addListener((obs, oldI, newI) -> {
+            if (newI.intValue() >= 0) {
+                currentVehicle = allVehicles.get(newI.intValue());
+                player.setCurrentVehicle(currentVehicle);
+
+            }
+        });
+
+        DropdownCars.getSelectionModel().select(allVehicles.indexOf(currentVehicle));
 
         installEngineButton.setOnAction(e -> swapPart(TuningParts.Type.ENGINE, DropdownEngine));
         installNitroButton .setOnAction(e -> swapPart(TuningParts.Type.NITRO,  DropdownNitris));
