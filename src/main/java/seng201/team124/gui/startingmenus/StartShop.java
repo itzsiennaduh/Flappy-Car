@@ -1,4 +1,4 @@
-package seng201.team124.gui.startingmenus;
+package seng201.team124.gui.startingMenus;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -11,7 +11,7 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import seng201.team124.factories.VehicleFactory;
-import seng201.team124.models.vehicleutility.Vehicle;
+import seng201.team124.models.vehicleUtility.Vehicle;
 import seng201.team124.services.GameManager;
 
 public class StartShop {

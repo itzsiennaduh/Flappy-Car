@@ -1,4 +1,4 @@
-package seng201.team124.gui.startingmenus;
+package seng201.team124.gui.startingMenus;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -6,8 +6,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import seng201.team124.factories.VehicleFactory;
-import seng201.team124.models.vehicleutility.TuningParts;
-import seng201.team124.models.vehicleutility.Vehicle;
+import seng201.team124.models.vehicleUtility.TuningParts;
+import seng201.team124.models.vehicleUtility.Vehicle;
 import seng201.team124.services.GameManager;
 import seng201.team124.services.ShopService;
 

@@ -1,4 +1,4 @@
-package seng201.team124.gui.startingmenus;
+package seng201.team124.gui.startingMenus;
 
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -10,8 +10,8 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import seng201.team124.models.Player;
-import seng201.team124.models.vehicleutility.TuningParts;
-import seng201.team124.models.vehicleutility.Vehicle;
+import seng201.team124.models.vehicleUtility.TuningParts;
+import seng201.team124.models.vehicleUtility.Vehicle;
 import seng201.team124.services.GameManager;
 
 import java.io.IOException;

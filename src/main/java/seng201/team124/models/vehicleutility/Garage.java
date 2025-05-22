@@ -1,7 +1,9 @@
-package seng201.team124.models.vehicleutility;
+package seng201.team124.models.vehicleUtility;
 
 import java.util.ArrayList;
 import java.util.List;
+import seng201.team124.models.vehicleUtility.TuningParts;
+
 
 /**
  * player's garage containing their vehicles and tuning parts.

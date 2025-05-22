@@ -1,4 +1,4 @@
-package seng201.team124.models.vehicleutility;
+package seng201.team124.models.vehicleUtility;
 
 import com.interactivemesh.jfx.importer.ImportException;
 import com.interactivemesh.jfx.importer.obj.ObjModelImporter;
@@ -6,8 +6,7 @@ import javafx.scene.Group;
 import javafx.scene.shape.CullFace;
 import javafx.scene.shape.MeshView;
 import seng201.team124.factories.VehicleFactory;
-import seng201.team124.models.racelogic.Route;
-import seng201.team124.services.GameManager;
+import seng201.team124.models.raceLogic.Route;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -44,7 +43,7 @@ public class Vehicle implements Purchasable {
     private double routeFuelEconomyModifier = 1.0;
 
 
-    private final List<TuningParts> installedParts;
+    private final List<seng201.team124.models.vehicleUtility.TuningParts> installedParts;
 
     private String model;
 
@@ -109,7 +108,7 @@ public class Vehicle implements Purchasable {
         double vehicleValue = calculateSellPrice();
 
         double partsValue = 0;
-        for (TuningParts part : installedParts) {
+        for (seng201.team124.models.vehicleutility.TuningParts part : installedParts) {
             partsValue += calculateSellPrice();
         }
         return vehicleValue + partsValue;
@@ -147,7 +146,7 @@ public class Vehicle implements Purchasable {
     /**
      * @return list of installed parts
      */
-    public List<TuningParts> getInstalledParts() {
+    public List<seng201.team124.models.vehicleutility.TuningParts> getInstalledParts() {
         return new ArrayList<>(installedParts); //copy
     }
 
@@ -157,7 +156,7 @@ public class Vehicle implements Purchasable {
      */
     public double getEffectiveSpeed() {
         double effectiveSpeed = this.speed;
-        for (TuningParts part : installedParts) {
+        for (seng201.team124.models.vehicleutility.TuningParts part : installedParts) {
             effectiveSpeed += part.getSpeedModifier();
         }
         return effectiveSpeed * routeSpeedModifier;
@@ -169,7 +168,7 @@ public class Vehicle implements Purchasable {
      */
     public double getEffectiveHandling() {
         double effectiveHandling = this.handling;
-        for (TuningParts part : installedParts) {
+        for (seng201.team124.models.vehicleutility.TuningParts part : installedParts) {
             effectiveHandling += part.getHandlingModifier();
         }
         return effectiveHandling * routeHandlingModifier;
@@ -181,7 +180,7 @@ public class Vehicle implements Purchasable {
      */
     public double getEffectiveReliability() {
         double effectiveReliability = this.reliability;
-        for (TuningParts part : installedParts) {
+        for (seng201.team124.models.vehicleutility.TuningParts part : installedParts) {
             effectiveReliability += part.getReliabilityModifier();
         }
         return effectiveReliability * routeReliabilityModifier;
@@ -193,7 +192,7 @@ public class Vehicle implements Purchasable {
      */
     public double getEffectiveFuelEconomy() {
         double effectiveFuelEconomy = this.fuelEconomy;
-        for (TuningParts part : installedParts) {
+        for (seng201.team124.models.vehicleutility.TuningParts part : installedParts) {
             effectiveFuelEconomy += part.getFuelEconomyModifier();
         }
         return effectiveFuelEconomy * routeFuelEconomyModifier;
@@ -205,7 +204,7 @@ public class Vehicle implements Purchasable {
      */
     public double getTotalCost() {
         double totalCost = this.cost;
-        for (TuningParts part : installedParts) {
+        for (seng201.team124.models.vehicleutility.TuningParts part : installedParts) {
             totalCost += part.getCost();
         }
         return totalCost;
@@ -234,10 +233,10 @@ public class Vehicle implements Purchasable {
      * @throws IllegalStateException if part is already installed
      */
 
-    private TuningParts engine;
-    private TuningParts wheels;
-    private TuningParts nitro;
-    public String installPart(TuningParts part) {
+    private seng201.team124.models.vehicleutility.TuningParts engine;
+    private seng201.team124.models.vehicleutility.TuningParts wheels;
+    private seng201.team124.models.vehicleutility.TuningParts nitro;
+    public String installPart(seng201.team124.models.vehicleutility.TuningParts part) {
 
         switch (part.getType()) {
             case ENGINE:
@@ -273,7 +272,7 @@ public class Vehicle implements Purchasable {
      * @return successful removal message
      * @throws IllegalStateException if there is no part to remove
      */
-    public String removePart(TuningParts part) {
+    public String removePart(seng201.team124.models.vehicleutility.TuningParts part) {
         if (part.equals(engine)) {engine = null;}
         else if (part.equals(nitro)) {nitro = null;}
         else if (part.equals(wheels)) {wheels = null;}
@@ -286,9 +285,9 @@ public class Vehicle implements Purchasable {
         throw new IllegalStateException(String.format("%s is not installed, so can't be removed.", part.getName()));
     }
 
-    public TuningParts getInstalledEngine() { return engine; }
-    public TuningParts getInstalledNitro()  { return nitro;  }
-    public TuningParts getInstalledWheels() { return wheels; }
+    public seng201.team124.models.vehicleutility.TuningParts getInstalledEngine() { return engine; }
+    public seng201.team124.models.vehicleutility.TuningParts getInstalledNitro()  { return nitro;  }
+    public seng201.team124.models.vehicleutility.TuningParts getInstalledWheels() { return wheels; }
 
     /**
      * refuels vehicle back to max fuel

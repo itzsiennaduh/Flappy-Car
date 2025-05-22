@@ -1,4 +1,4 @@
-package seng201.team124.gui.startingmenus;
+package seng201.team124.gui.startingMenus;
 
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
@@ -9,8 +9,8 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import seng201.team124.gui.importantcontrollers.GameController;
-import seng201.team124.models.racelogic.Difficulty;
+import seng201.team124.gui.importantControllers.GameController;
+import seng201.team124.models.raceLogic.Difficulty;
 import seng201.team124.services.GameManager;
 
 import java.io.IOException;

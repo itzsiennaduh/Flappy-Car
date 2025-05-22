@@ -1,4 +1,4 @@
-package seng201.team124.gui.startingmenus;
+package seng201.team124.gui.startingMenus;
 
 import javafx.collections.FXCollections;
 import javafx.concurrent.Task;
@@ -15,13 +15,11 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import seng201.team124.factories.VehicleFactory;
-import seng201.team124.gui.importantcontrollers.GameController;
-import seng201.team124.gui.loadingscreen.GameLoadTask;
-import seng201.team124.gui.loadingscreen.LoadingScreenController;
-import seng201.team124.models.Player;
-import seng201.team124.models.racelogic.Race;
-import seng201.team124.models.vehicleutility.Vehicle;
+import seng201.team124.gui.importantControllers.GameController;
+import seng201.team124.gui.loadingScreen.GameLoadTask;
+import seng201.team124.gui.loadingScreen.LoadingScreenController;
+import seng201.team124.models.raceLogic.Race;
+import seng201.team124.models.vehicleUtility.Vehicle;
 import seng201.team124.services.GameManager;
 
 import java.io.IOException;
@@ -94,7 +92,7 @@ public class MainMenu {
         Stage stage = (Stage) currentScene.getWindow();
 
         // 1) Display loading screen
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/LoadingScreen.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/loadingScreen.fxml"));
         Parent loadingRoot = loader.load();
         LoadingScreenController loadCtrl = loader.getController();
         currentScene.setRoot(loadingRoot);

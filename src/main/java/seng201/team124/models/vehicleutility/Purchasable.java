@@ -1,4 +1,4 @@
-package seng201.team124.models.vehicleutility;
+package seng201.team124.models.vehicleUtility;
 
 /**
  * represents any item that can be purchased or sold in the game.

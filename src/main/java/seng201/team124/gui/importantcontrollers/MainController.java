@@ -1,4 +1,4 @@
-package seng201.team124.gui.importantcontrollers;
+package seng201.team124.gui.importantControllers;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;

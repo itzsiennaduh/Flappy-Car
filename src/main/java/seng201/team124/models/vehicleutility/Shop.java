@@ -1,4 +1,4 @@
-package seng201.team124.models.vehicleutility;
+package seng201.team124.models.vehicleUtility;
 
 import java.util.ArrayList;
 import java.util.List;

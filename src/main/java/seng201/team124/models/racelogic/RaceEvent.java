@@ -1,4 +1,4 @@
-package seng201.team124.models.racelogic;
+package seng201.team124.models.raceLogic;
 
 import java.util.Random;
 

@@ -1,4 +1,4 @@
-package seng201.team124.gui.endingmenus;
+package seng201.team124.gui.endingMenus;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -6,7 +6,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import seng201.team124.gui.importantcontrollers.GameController;
+import seng201.team124.gui.importantControllers.GameController;
 
 import java.io.IOException;
 

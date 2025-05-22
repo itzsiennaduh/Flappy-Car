@@ -1,4 +1,4 @@
-package seng201.team124.gui.loadingscreen;
+package seng201.team124.gui.loadingScreen;
 
 import javafx.concurrent.Task;
 import javafx.scene.Group;

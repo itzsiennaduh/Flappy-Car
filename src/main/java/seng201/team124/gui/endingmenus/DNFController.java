@@ -1,4 +1,4 @@
-package seng201.team124.gui.endingmenus;
+package seng201.team124.gui.endingMenus;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
