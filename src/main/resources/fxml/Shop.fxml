@@ -32,22 +32,22 @@
         <RowConstraints percentHeight="10.0" vgrow="ALWAYS" />
     </rowConstraints>
    <children>
-      <Button fx:id="buyNitrousOxide" mnemonicParsing="false" text="Buy" GridPane.rowIndex="5" />
-      <Button fx:id="buyTurbocharger" mnemonicParsing="false" text="Buy" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-      <Button fx:id="buySupercharger" mnemonicParsing="false" text="Buy" GridPane.columnIndex="2" GridPane.rowIndex="5" />
-      <Button fx:id="buyOffRoadTires" mnemonicParsing="false" text="Buy" GridPane.columnIndex="3" GridPane.rowIndex="5" />
-      <Button fx:id="buyOnRoadTires" mnemonicParsing="false" text="Buy" GridPane.columnIndex="4" GridPane.rowIndex="5" />
+      <Button fx:id="buyNitrousOxide" mnemonicParsing="false" text="Buy" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER" />
+      <Button fx:id="buyTurbocharger" mnemonicParsing="false" text="Buy" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER" />
+      <Button fx:id="buySupercharger" mnemonicParsing="false" text="Buy" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER" />
+      <Button fx:id="buyOffRoadTires" mnemonicParsing="false" text="Buy" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER" />
+      <Button fx:id="buyOnRoadTires" mnemonicParsing="false" text="Buy" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER" />
       <Button fx:id="backButton" mnemonicParsing="false" onAction="#handleBackButton" text="Back" GridPane.columnIndex="2" GridPane.rowIndex="6" />
       <TextArea editable="false" prefHeight="200.0" prefWidth="200.0" text="Speed = 5&#10;Handling = 0&#10;Reliability = 0&#10;Fuel eco = -2&#10;&#10;Price = 500" GridPane.rowIndex="4" />
       <TextArea editable="false" layoutX="10.0" layoutY="128.0" prefHeight="200.0" prefWidth="200.0" text="Speed = 5&#10;Handling = 0&#10;Reliability = -3&#10;Fuel eco = 0&#10;&#10;Price = 1500" GridPane.columnIndex="1" GridPane.rowIndex="4" />
       <TextArea editable="false" layoutX="130.0" layoutY="128.0" prefHeight="200.0" prefWidth="200.0" text="Speed = 5&#10;Handling = 0&#10;Reliability = -2&#10;Fuel eco = -3&#10;&#10;Price = 1500" GridPane.columnIndex="2" GridPane.rowIndex="4" />
       <TextArea layoutX="250.0" layoutY="128.0" prefHeight="200.0" prefWidth="200.0" text="Speed = 0&#10;Handling = 4&#10;Reliability = 3&#10;Fuel eco = 0&#10;&#10;Price = 1000" GridPane.columnIndex="3" GridPane.rowIndex="4" />
       <TextArea editable="false" layoutX="370.0" layoutY="128.0" prefHeight="156.0" prefWidth="120.0" text="Speed = 0&#10;Handling = 2&#10;Reliability = 0&#10;Fuel eco = 2&#10;&#10;Price = 1000" GridPane.columnIndex="4" GridPane.rowIndex="4" />
-      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="NitrousOxide" GridPane.rowIndex="3" />
-      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Turbocharger" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Supercharger" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="OffRoadTires" GridPane.columnIndex="3" GridPane.rowIndex="3" />
-      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="TrackTires" GridPane.columnIndex="4" GridPane.rowIndex="3" />
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Nitrous Oxide" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Turbocharger" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Supercharger" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Off Road Tires" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Track Tires" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
       <Label fx:id="moneyLabel" GridPane.rowIndex="6" />
       <Label fx:id="noMoney" GridPane.columnIndex="2" GridPane.rowIndex="6" GridPane.valignment="TOP" />
       <Text strokeType="OUTSIDE" strokeWidth="0.0" text="image of car 1" GridPane.columnIndex="1" />
