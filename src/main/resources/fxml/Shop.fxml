@@ -11,7 +11,7 @@
 <GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng201.team124.gui.startingMenus.ShopController">
     <columnConstraints>
         <!-- 5 equal columns = each 20% -->
-        <ColumnConstraints hgrow="ALWAYS" percentWidth="20" />
+        <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" percentWidth="20" />
         <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" percentWidth="20" />
         <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" percentWidth="20" />
         <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" percentWidth="20" />
@@ -19,8 +19,8 @@
     </columnConstraints>
 
     <rowConstraints>
-      <RowConstraints minHeight="10.0" percentHeight="40.0" prefHeight="30.0" vgrow="ALWAYS" />
-      <RowConstraints maxHeight="41.0" minHeight="10.0" percentHeight="30.0" prefHeight="30.0" vgrow="ALWAYS" />
+      <RowConstraints maxHeight="100.5" minHeight="10.0" percentHeight="40.0" prefHeight="75.0" vgrow="ALWAYS" />
+      <RowConstraints maxHeight="106.0" minHeight="10.0" percentHeight="30.0" prefHeight="106.0" vgrow="ALWAYS" />
       <RowConstraints maxHeight="41.0" minHeight="10.0" percentHeight="15.0" prefHeight="15.0" vgrow="ALWAYS" />
         <!-- top title row: 15% -->
         <RowConstraints maxHeight="117.0" minHeight="51.0" percentHeight="15.0" prefHeight="116.0" vgrow="ALWAYS" />
@@ -59,5 +59,13 @@
       <TextArea prefHeight="200.0" prefWidth="200.0" text="Spped = 10&#10;Handling = 5&#10;Reliability = 2&#10;Fuel eco = 3&#10;&#10;Price = 9000" GridPane.columnIndex="1" GridPane.rowIndex="1" />
       <TextArea layoutX="130.0" layoutY="124.0" prefHeight="200.0" prefWidth="200.0" text="Spped = 5&#10;Handling = 5&#10;Reliability = 5&#10;Fuel eco = 5&#10;&#10;Price = 5000" GridPane.columnIndex="2" GridPane.rowIndex="1" />
       <TextArea layoutX="250.0" layoutY="124.0" prefHeight="200.0" prefWidth="200.0" text="Spped = 5&#10;Handling = 2&#10;Reliability = 8&#10;Fuel eco = 5&#10;&#10;Price = 8000" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+      <Button fx:id="sellRedVehicle" mnemonicParsing="false" text="Sell" GridPane.columnIndex="1" GridPane.rowIndex="2" GridPane.valignment="TOP" />
+      <Button fx:id="sellCatVehicle" layoutX="173.0" layoutY="191.0" mnemonicParsing="false" text="Sell" GridPane.columnIndex="2" GridPane.rowIndex="2" GridPane.valignment="TOP" />
+      <Button fx:id="sellBlueVehicle" layoutX="293.0" layoutY="191.0" mnemonicParsing="false" text="Sell" GridPane.columnIndex="3" GridPane.rowIndex="2" GridPane.valignment="TOP" />
+      <Button fx:id="sellNitrousOxide" layoutX="173.0" layoutY="191.0" mnemonicParsing="false" text="Sell" GridPane.rowIndex="5" GridPane.valignment="TOP" />
+      <Button fx:id="sellTurbocharger" layoutX="53.0" layoutY="345.0" mnemonicParsing="false" text="Sell" GridPane.columnIndex="1" GridPane.rowIndex="5" GridPane.valignment="TOP" />
+      <Button fx:id="sellSupercharger" layoutX="173.0" layoutY="345.0" mnemonicParsing="false" text="Sell" GridPane.columnIndex="2" GridPane.rowIndex="5" GridPane.valignment="TOP" />
+      <Button fx:id="sellOffRoadTires" layoutX="293.0" layoutY="345.0" mnemonicParsing="false" text="Sell" GridPane.columnIndex="3" GridPane.rowIndex="5" GridPane.valignment="TOP" />
+      <Button fx:id="sellOnRoadTires" layoutX="413.0" layoutY="345.0" mnemonicParsing="false" text="Sell" GridPane.columnIndex="4" GridPane.rowIndex="5" GridPane.valignment="TOP" />
    </children>
 </GridPane>

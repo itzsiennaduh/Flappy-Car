@@ -92,12 +92,14 @@ public class ShopService {
      * @return success message if sell was successful, error message otherwise
      */
     public String sellVehicle(Vehicle vehicle) {
-        if (!player.getVehicles().contains(vehicle)) {
-            return "You do not own this vehicle.";
-        }
         if (player.getVehicles().size() <= 1) {
             return "You cannot sell your last vehicle.";
         }
+        if (!player.getVehicles().contains(vehicle)) {
+            System.out.println(player.getVehicles());
+            return "You do not own this vehicle.";
+        }
+
         player.removeVehicle(vehicle);
         player.addMoney(vehicle.getSellPrice());
         return "Vehicle sold back to the shop. %s removed from your inventory.".formatted(vehicle.getName());

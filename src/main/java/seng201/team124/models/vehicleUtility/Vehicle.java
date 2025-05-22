@@ -114,6 +114,18 @@ public class Vehicle implements Purchasable {
         return vehicleValue + partsValue;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        Vehicle other = (Vehicle) obj;
+        return other.getName().equals(this.getName());
+    }
+
 
     /**
      * @return vehicle's base speed

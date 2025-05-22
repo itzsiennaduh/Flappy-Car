@@ -6,131 +6,146 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import seng201.team124.factories.VehicleFactory;
+import seng201.team124.models.Player;
 import seng201.team124.models.vehicleUtility.TuningParts;
 import seng201.team124.models.vehicleUtility.Vehicle;
 import seng201.team124.services.GameManager;
 import seng201.team124.services.ShopService;
 
 import java.io.IOException;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import static seng201.team124.factories.TuningPartFactory.*;
 
 public class ShopController {
 
-    @FXML
-    private Button backButton;
+    @FXML private Button backButton;
+    @FXML private Label moneyLabel, noMoney;
 
-    @FXML
-    private Button buyNitrousOxide;
+    // TUNING buttons
+    @FXML private Button buyNitrousOxide, buyTurbocharger, buySupercharger,
+            buyOffRoadTires, buyOnRoadTires;
+    @FXML private Button sellNitrousOxide, sellTurbocharger, sellSupercharger,
+            sellOffRoadTires, sellOnRoadTires;
 
-    @FXML
-    private Button buyTurbocharger;
-
-    @FXML
-    private Button buySupercharger;
-
-    @FXML
-    private Button buyOffRoadTires;
-
-    @FXML
-    private Button buyOnRoadTires;
-
-    @FXML
-    private Label moneyLabel;
-
-    @FXML
-    private Label noMoney;
-
-    @FXML
-    private Button buyRedVehicle;
-    
-    @FXML
-    private Button buyCatVehicle;
-    
-    @FXML
-    private Button buyBlueVehicle;
+    // VEHICLE buttons
+    @FXML private Button buyRedVehicle,   buyCatVehicle,   buyBlueVehicle;
+    @FXML private Button sellRedVehicle,  sellCatVehicle,  sellBlueVehicle;
 
     private ShopService shopService;
+    private Player player;
 
+    // Maps for name → [buyBtn, sellBtn]
+    private final Map<String, Button[]> tuningButtons  = new HashMap<>();
+    private final Map<String, Button[]> vehicleButtons = new HashMap<>();
 
-    private final Vehicle redCar   = VehicleFactory.createRedVehicle();
-    private final Vehicle catCar   = VehicleFactory.createCatVehicle();
-    private final Vehicle blueCar  = VehicleFactory.createBlueVehicle();
+    // Pre-create your vehicle instances once
+    private final Vehicle redCar  = VehicleFactory.createRedVehicle();
+    private final Vehicle catCar  = VehicleFactory.createCatVehicle();
+    private final Vehicle blueCar = VehicleFactory.createBlueVehicle();
 
     @FXML
     private void initialize() {
         shopService = GameManager.getInstance().getShopService();
-        updateMoneyLabel();
+        player      = GameManager.getInstance().getPlayer();
 
-        buyRedVehicle.setOnAction(e -> buyVehicle(redCar, buyRedVehicle));
-        buyCatVehicle.setOnAction(e -> buyVehicle(catCar, buyCatVehicle));
-        buyBlueVehicle.setOnAction(e -> buyVehicle(blueCar, buyBlueVehicle));
+        // 1) Wire up the tuning-parts map
+        tuningButtons.put("Nitrous Oxide", new Button[]{ buyNitrousOxide, sellNitrousOxide });
+        tuningButtons.put("Turbocharger",   new Button[]{ buyTurbocharger,   sellTurbocharger });
+        tuningButtons.put("Supercharger",   new Button[]{ buySupercharger,   sellSupercharger });
+        tuningButtons.put("Off Road Tires", new Button[]{ buyOffRoadTires,   sellOffRoadTires });
+        tuningButtons.put("Track Tires",    new Button[]{ buyOnRoadTires,     sellOnRoadTires    });
 
+        // 2) Wire up the vehicle map
+        vehicleButtons.put("Red Supra",     new Button[]{ buyRedVehicle,   sellRedVehicle });
+        vehicleButtons.put("Kittyyyyy",     new Button[]{ buyCatVehicle,   sellCatVehicle });
+        vehicleButtons.put("Blue Supra",    new Button[]{ buyBlueVehicle,  sellBlueVehicle });
 
-        GameManager gm = GameManager.getInstance();
-        gm.getVehicles().stream()
-                .map(Vehicle::getName)
-                .forEach(name -> {
-                    if (name.equals("Red Supra"))  buyRedVehicle.setDisable(true);
-                    if (name.equals("Kittyyyyy"))    buyCatVehicle.setDisable(true);
-                    if (name.equals("Blue Supra"))    buyBlueVehicle.setDisable(true);
-                });
+        // 3) Hook up your buy/sell handlers for tuning
+        buyNitrousOxide.  setOnAction(e -> handleBuyPart(createNitrousOxide(),   buyNitrousOxide));
+        buyTurbocharger.  setOnAction(e -> handleBuyPart(createTurbocharger(),    buyTurbocharger));
+        buySupercharger.  setOnAction(e -> handleBuyPart(createSupercharger(),    buySupercharger));
+        buyOffRoadTires.  setOnAction(e -> handleBuyPart(createOffRoadTires(),    buyOffRoadTires));
+        buyOnRoadTires.   setOnAction(e -> handleBuyPart(createTrackTires(),      buyOnRoadTires));
 
+        sellNitrousOxide. setOnAction(e -> handleSellPart(createNitrousOxide(),  sellNitrousOxide));
+        sellTurbocharger. setOnAction(e -> handleSellPart(createTurbocharger(),   sellTurbocharger));
+        sellSupercharger. setOnAction(e -> handleSellPart(createSupercharger(),   sellSupercharger));
+        sellOffRoadTires. setOnAction(e -> handleSellPart(createOffRoadTires(),   sellOffRoadTires));
+        sellOnRoadTires.  setOnAction(e -> handleSellPart(createTrackTires(),     sellOnRoadTires));
 
-        buyNitrousOxide.setOnAction(e -> buyItemTuning(createNitrousOxide(), buyNitrousOxide));
-        buyTurbocharger.setOnAction(e -> buyItemTuning(createTurbocharger(), buyTurbocharger));
-        buySupercharger.setOnAction(e -> buyItemTuning(createSupercharger(), buySupercharger));
-        buyOffRoadTires.setOnAction(e -> buyItemTuning(createOffRoadTires(), buyOffRoadTires));
-        buyOnRoadTires.setOnAction(e -> buyItemTuning(createTrackTires(), buyOnRoadTires));
+        // 4) Hook up your buy/sell handlers for vehicles
+        buyRedVehicle.    setOnAction(e -> handleBuyVehicle(redCar,  buyRedVehicle));
+        buyCatVehicle.    setOnAction(e -> handleBuyVehicle(catCar,  buyCatVehicle));
+        buyBlueVehicle.   setOnAction(e -> handleBuyVehicle(blueCar, buyBlueVehicle));
 
-        gm.getTuningParts().stream()
-                .map(TuningParts::getName)
-                .forEach(name -> {
-                    if (name.equals("Nitrous Oxide"))  buyNitrousOxide.setDisable(true);
-                    if (name.equals("Turbocharger"))    buyTurbocharger.setDisable(true);
-                    if (name.equals("Supercharger"))    buySupercharger.setDisable(true);
-                    if (name.equals("Off Road Tires"))  buyOffRoadTires.setDisable(true);
-                    if (name.equals("Track Tires"))     buyOnRoadTires.setDisable(true);
-                });
+        sellRedVehicle.   setOnAction(e -> handleSellVehicle(redCar,  sellRedVehicle));
+        sellCatVehicle.   setOnAction(e -> handleSellVehicle(catCar,  sellCatVehicle));
+        sellBlueVehicle.  setOnAction(e -> handleSellVehicle(blueCar, sellBlueVehicle));
 
+        // 5) Initial UI sync
+        updateButtons();
     }
 
     private void updateMoneyLabel() {
-        double money = GameManager.getInstance().getPlayer().getMoney();
-        moneyLabel.setText("Balance: $" + money);
+        moneyLabel.setText("Balance: $" + player.getMoney());
     }
 
-    private void buyItemTuning(TuningParts part, Button btn) {
-        String result = shopService.purchasePart(part);
-        noMoney.setText(result);
+    private void handleBuyPart(TuningParts part, Button buyBtn) {
+        noMoney.setText(shopService.purchasePart(part));
         updateMoneyLabel();
-        if (result.startsWith("Purchase successful")) {
-            btn.setDisable(true);
-        }
+        updateButtons();
     }
 
-    private void buyVehicle(Vehicle car, Button btn) {
-        String result = shopService.purchaseVehicle(car);
-        noMoney.setText(result);
-        System.out.println(result);
+    private void handleSellPart(TuningParts part, Button sellBtn) {
+        noMoney.setText(shopService.sellPart(part));
         updateMoneyLabel();
-        if (result.startsWith("Purchase successful")) {
-            btn.setDisable(true);
-        }
+        updateButtons();
+    }
+
+    private void handleBuyVehicle(Vehicle car, Button buyBtn) {
+        noMoney.setText(shopService.purchaseVehicle(car));
+        updateMoneyLabel();
+        updateButtons();
+    }
+
+    private void handleSellVehicle(Vehicle car, Button sellBtn) {
+        noMoney.setText(shopService.sellVehicle(car));
+        updateMoneyLabel();
+        updateButtons();
+    }
+
+    private void updateButtons() {
+        // 1) Tuning-parts
+        tuningButtons.forEach((name, btns) -> {
+            boolean owned = player.getTuningParts().stream()
+                    .anyMatch(p -> p.getName().equals(name));
+            btns[0].setDisable(owned);      // buy
+            btns[1].setDisable(!owned);     // sell
+        });
+
+        // 2) Vehicles
+        vehicleButtons.forEach((name, btns) -> {
+            boolean owned = player.getVehicles().stream()
+                    .map(Vehicle::getName)
+                    .anyMatch(n -> n.equals(name));
+            btns[0].setDisable(owned);      // buy
+            btns[1].setDisable(!owned);     // sell
+        });
+
+        updateMoneyLabel();
     }
 
     @FXML
     private void handleBackButton() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/MainMenu.fxml"));
+            Scene scene = backButton.getScene();
             loader.load();
-            Scene currentScene = backButton.getScene();
-            currentScene.setRoot(loader.getRoot());
+            scene.setRoot(loader.getRoot());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
     }
-
 }
