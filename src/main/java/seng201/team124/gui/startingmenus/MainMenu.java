@@ -1,5 +1,6 @@
 package seng201.team124.gui.startingmenus;
 
+import javafx.collections.FXCollections;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -7,6 +8,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.*;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Region;
@@ -17,10 +19,12 @@ import seng201.team124.gui.importantcontrollers.GameController;
 import seng201.team124.gui.loadingscreen.GameLoadTask;
 import seng201.team124.gui.loadingscreen.LoadingScreenController;
 import seng201.team124.models.Player;
+import seng201.team124.models.racelogic.Race;
 import seng201.team124.models.vehicleutility.Vehicle;
 import seng201.team124.services.GameManager;
 
 import java.io.IOException;
+import java.util.List;
 
 public class MainMenu {
 
@@ -32,6 +36,28 @@ public class MainMenu {
 
     @FXML
     private Button startGameButton;
+
+    @FXML
+    private ChoiceBox<String> chooseRace;
+    private List<Race> races;
+    private Race selectedRace;
+
+    @FXML
+    private void initialize() {
+        races = GameManager.getInstance().getAvailableRaces();
+        chooseRace.setItems(FXCollections.observableArrayList(races.stream().map(Race::getName).toList()));
+
+        chooseRace.getSelectionModel().selectedIndexProperty().addListener((obs, oldI, newI) -> {
+            if (newI.intValue() >= 0) {
+                selectedRace = races.get(newI.intValue());
+            }
+        });
+
+        // default to first
+        chooseRace.getSelectionModel().select(0);
+        selectedRace = races.get(0);
+
+    }
 
 
 

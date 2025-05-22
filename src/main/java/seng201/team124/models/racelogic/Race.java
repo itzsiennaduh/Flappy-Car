@@ -1,5 +1,8 @@
 package seng201.team124.models.racelogic;
 
+import seng201.team124.factories.RaceFactory;
+import seng201.team124.factories.RouteFactory;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,9 +63,17 @@ public class Race {
 
     /**
      * gets a specific route from the race.
-     * @param index the index of the route to get.
+     *
      * @return the route at the specified index.
      */
+    public Route getRoute(){
+        return routes.get(0);
+    }
+
+    public List<Route> getRoutes(int index) {
+        return List.copyOf(routes);
+    }
+
     public Route getRoute(int index) {
         return routes.get(index);
     }

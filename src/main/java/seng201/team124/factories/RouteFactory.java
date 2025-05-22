@@ -9,14 +9,14 @@ public class RouteFactory {
     public static List<Route> getRoute() {
         List<Route> routes = new ArrayList<>();
 
-        routes.add(raodRoute());
+        routes.add(roadRoute());
         routes.add(mudRoute());
         routes.add(iceRoute());
 
         return routes;
     }
 
-    public static Route raodRoute() {
+    public static Route roadRoute() {
         return new Route(
                 "This is a flat road route",
                 8,

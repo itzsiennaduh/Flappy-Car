@@ -1,5 +1,6 @@
 package seng201.team124.services;
 
+import seng201.team124.factories.RaceFactory;
 import seng201.team124.factories.TuningPartFactory;
 import seng201.team124.factories.VehicleFactory;
 import seng201.team124.models.*;
@@ -37,7 +38,10 @@ public class GameManager {
     private String tempName;
     private String playerModel;
 
-    private final List<String> tracks = new ArrayList<>();
+    private final List<Race> tracks = new ArrayList<>();
+
+    private Race selectedRace;
+
 
     /**
      * constructor for singleton class
@@ -50,7 +54,15 @@ public class GameManager {
      * loads available tracks
      */
     private void loadTrack(){
-        tracks.add("Zwei Hockenheimring");
+        return ;
+    }
+
+    public List<Race> getAvailableRaces() {
+        return RaceFactory.getRaces();
+    }
+
+    private void getTrack(Race track){
+        tracks.add(track);
     }
 
     /**
@@ -68,7 +80,7 @@ public class GameManager {
      * gets a list of available tracks
      * @return unmodifiable list of available tracks.
      */
-    public List<String> tracks() {
+    public List<Race> tracks() {
         return Collections.unmodifiableList(tracks);
     }
 
