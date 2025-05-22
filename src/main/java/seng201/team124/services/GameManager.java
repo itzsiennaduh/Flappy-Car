@@ -3,12 +3,12 @@ package seng201.team124.services;
 import seng201.team124.factories.RaceFactory;
 import seng201.team124.factories.VehicleFactory;
 import seng201.team124.models.Player;
-import seng201.team124.models.racelogic.Difficulty;
-import seng201.team124.models.racelogic.Race;
-import seng201.team124.models.racelogic.Route;
-import seng201.team124.models.vehicleutility.Shop;
-import seng201.team124.models.vehicleutility.TuningParts;
-import seng201.team124.models.vehicleutility.Vehicle;
+import seng201.team124.models.raceLogic.Difficulty;
+import seng201.team124.models.raceLogic.Race;
+import seng201.team124.models.raceLogic.Route;
+import seng201.team124.models.vehicleUtility.Shop;
+import seng201.team124.models.vehicleUtility.TuningParts;
+import seng201.team124.models.vehicleUtility.Vehicle;
 
 import java.util.ArrayList;
 import java.util.Collections;

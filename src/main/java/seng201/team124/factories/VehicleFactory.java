@@ -50,7 +50,7 @@ public class VehicleFactory {
                 10, //cost
                 100,
                 100,
-                "/assets/models/Cars/Supra.obj"
+                "/assets/models/Cars/catt.obj"
         );
     }
 
