@@ -13,6 +13,7 @@ public class Race {
     private final List<Route> routes; //select race route, at least 1
     private final int entries; //number of competitors
     private final double prizeMoney; //amount of prize money for first place
+    private final String raceURL;
 
     /**
      * constructor for the race class.
@@ -23,12 +24,13 @@ public class Race {
      * @param entries number of competitors excluding the player.
      * @param prizeMoney amount of prize money for first place.
      */
-    public Race(String name, double hours, List<Route> routes, int entries, double prizeMoney) {
+    public Race(String name, double hours, List<Route> routes, int entries, double prizeMoney, String raceURL) {
         this.name = name;
         this.hours = hours;
         this.routes = new ArrayList<>(routes);
         this.entries = entries;
         this.prizeMoney = prizeMoney;
+        this.raceURL = raceURL;
     }
 
     //getters

@@ -21,7 +21,8 @@ public class RaceFactory {
                 5,
                 RouteFactory.getRoute(),
                 6,
-                10000
+                10000,
+                "/assets/models/RaceTacks/racetrackplease_v0.3.obj"
                 );
     }
 
@@ -31,7 +32,8 @@ public class RaceFactory {
                 5,
                 RouteFactory.getRoute(),
                 8,
-                10000
+                10000,
+                "/assets/models/RaceTacks/racetrackplease1_v0.3.obj"
                 );
     }
     public static Race heimringhocken() {
@@ -40,7 +42,8 @@ public class RaceFactory {
                 5,
                 RouteFactory.getRoute(),
                 8,
-                1000
+                10000,
+                "/assets/models/RaceTacks/racetrackplease2_v0.3.obj"
                 );
     }
 }
