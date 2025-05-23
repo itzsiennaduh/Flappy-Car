@@ -120,7 +120,7 @@ public class GameManager {
      * initialises a new game with default values if not already initialised
      */
     public void initializeWithDefaults() {
-        initializeGame("Default Player", Difficulty.MEDIUM, 20000);
+        initializeGame("Default Player", Difficulty.MEDIUM, 10);
         Vehicle defaultVehicle = VehicleFactory.createRedVehicle();
         player.getVehicles().add(defaultVehicle);
         player.setCurrentVehicle(defaultVehicle);
