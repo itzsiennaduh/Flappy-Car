@@ -119,6 +119,7 @@ public class GarageController {
         TuningParts oldPart = switch (slotType) {
             case ENGINE -> currentVehicle.getInstalledEngine();
             case NITRO  -> currentVehicle.getInstalledNitro();
+            case BODY -> null;
             case WHEEL -> currentVehicle.getInstalledWheels();
         };
 

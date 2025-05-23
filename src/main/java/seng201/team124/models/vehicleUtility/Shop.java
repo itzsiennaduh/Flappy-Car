@@ -139,16 +139,4 @@ public class Shop {
             }
         }
     }
-
-
-    //List<Car> shopCars = new ArrayList<>();
-    //shopCars.add(VehicleFactory.createRedVehicle());
-    //shopCars.add(VehicleFactory.createCatVehicle());
-    //shopCars.add(VehicleFactory.createBlueVehicle());
-
-    //List<TuningPart> shopParts = new ArrayList<>();
-    //shopParts.add(TuningPartFactory.createTurbocharger());
-    //shopParts.add(TuningPartFactory.createOffRoadTires());
-    //shopParts.add(TuningPartFactory.createSupercharger());
-    //shopParts.add(TuningPartFactory.createNitrousOxide());
 }

@@ -8,6 +8,10 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import seng201.team124.factories.VehicleFactory;
@@ -31,6 +35,7 @@ public class StartShop {
     @FXML
     private Label confirmLabel;
     private Vehicle selectedVehicle;
+    @FXML private ImageView stack;
 
     @FXML
     private void initialize() {
@@ -47,7 +52,17 @@ public class StartShop {
     }
 
     private void showVehicleDetails(Vehicle vehicle) {
+
         selectedVehicle = vehicle;
+        String img = vehicle.getPreviewImagePath();
+
+        stack.setStyle(
+                "-fx-background-image: url('/FXML/Images/mainmenu.png');" +
+                        "-fx-background-size: cover;" +
+                        "-fx-background-position: center center;" +
+                        "-fx-background-repeat: no-repeat;"
+        );
+
         previewPane.setVisible(true);
 
         nameLabel.setText(vehicle.getName());

@@ -34,7 +34,8 @@ public class VehicleFactory {
                 9000,//cost
                 100, //current fuel
                 100, //max fuel
-                "/assets/models/Cars/Supra.obj"
+                "/assets/models/Cars/Supra.obj",
+                "/FXML/Images/supra1.png"
         );
     }
 
@@ -50,7 +51,8 @@ public class VehicleFactory {
                 10, //cost
                 100,
                 100,
-                "/assets/models/Cars/catt.obj"
+                "/assets/models/Cars/catt.obj",
+                "/FXML/Images/kitty.png"
         );
     }
 
@@ -66,7 +68,8 @@ public class VehicleFactory {
                 8000, //cost
                 100, //current fuel
                 100, //max fuel
-                "/assets/models/Cars/Supra.obj"
+                "/assets/models/Cars/Suprab.obj",
+                "/FXML/Images/supra2.png"
         );
     }
 }

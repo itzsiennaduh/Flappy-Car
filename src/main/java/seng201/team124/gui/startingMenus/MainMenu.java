@@ -19,7 +19,6 @@ import seng201.team124.gui.importantControllers.GameController;
 import seng201.team124.gui.loadingScreen.GameLoadTask;
 import seng201.team124.gui.loadingScreen.LoadingScreenController;
 import seng201.team124.models.raceLogic.Race;
-import seng201.team124.models.vehicleUtility.Vehicle;
 import seng201.team124.services.GameManager;
 
 import java.io.IOException;
@@ -142,6 +141,8 @@ public class MainMenu {
 
             HUDController hudController = hudLoader.getController();
             gameCtrl.setHudController(hudController);
+            gameCtrl.startGameloop();
+
 
             gameCtrl.randomEvent();
 
@@ -157,7 +158,7 @@ public class MainMenu {
 
 // 5) Wrap & bind size
             Image bgTex = new Image(
-                    getClass().getResource("/assets/models/RaceTacks/Images/sunflowers_4k.jpg")
+                    getClass().getResource("/assets/models/RaceTacks/sunflowers_4k.jpg")
                             .toExternalForm()
             );
 

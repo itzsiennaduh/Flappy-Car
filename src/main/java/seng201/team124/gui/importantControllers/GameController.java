@@ -1,7 +1,6 @@
 package seng201.team124.gui.importantControllers;
 
-import com.interactivemesh.jfx.importer.ImportException;
-import com.interactivemesh.jfx.importer.obj.ObjModelImporter;
+
 import javafx.animation.AnimationTimer;
 import javafx.animation.PauseTransition;
 import javafx.fxml.FXMLLoader;
@@ -10,34 +9,31 @@ import javafx.geometry.Point3D;
 import javafx.scene.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
-import javafx.scene.shape.CullFace;
 import javafx.scene.shape.MeshView;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import seng201.team124.factories.VehicleFactory;
 import seng201.team124.gui.bots.Bots;
 import seng201.team124.gui.bots.Raycast;
 import seng201.team124.gui.endingMenus.*;
 import seng201.team124.gui.startingMenus.HUDController;
-import seng201.team124.models.Player;
 import seng201.team124.models.raceLogic.RaceEvent;
 import seng201.team124.models.vehicleUtility.Vehicle;
 import seng201.team124.gui.endingMenus.DNFController;
 import seng201.team124.gui.endingMenus.RaceCompleteController;
-import seng201.team124.gui.startingMenus.HUDController;
-import seng201.team124.models.raceLogic.RaceEvent;
-import seng201.team124.models.vehicleUtility.Vehicle;
 import seng201.team124.services.CounterService;
 import seng201.team124.services.GameManager;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
+
+import static seng201.team124.models.vehicleUtility.ModelLoader.getGroup;
 
 public class GameController {
     private static GameController instance;
@@ -52,12 +48,11 @@ public class GameController {
     private boolean dnfShown = false;
 
     private Box carCollisionBox;
-    private final List<Box> obstacles = new ArrayList<>();
     private final Raycast raycast = new Raycast();
     private final Raycast finishRay = new Raycast();
     private final Raycast safeRay = new Raycast();
     private final Raycast death = new Raycast();
-    private final Raycast gasstation = new Raycast();
+    private final Raycast gasStation = new Raycast();
     private final Raycast personEventRay = new Raycast();
     private final List<Bots> bots = new ArrayList<>();
     private final CounterService counterService = new CounterService();
@@ -71,9 +66,13 @@ public class GameController {
 
     private PauseTransition oneShotEventTimer;
     private final Random rng = new Random();
-    private static final int MIN_DELAY = 0;   // seconds
-    private static final int MAX_DELAY = 10;
+    private static final int MIN_DELAY = 20;
+    private static final int MAX_DELAY = 180;
     private MeshView personEvent;
+
+
+    private boolean brokenDown = false;
+    private static final double BREAKDOWN_DECEL = 20;
 
     public GameController() {
         instance = this;
@@ -83,14 +82,12 @@ public class GameController {
         return instance;
     }
 
-    public Group setupGameRootNode() throws Exception {
+    public Group setupGameRootNode()  {
 
-//        String musicPath = Objects.requireNonNull(getClass().getResource("/assets/models/Music/dont-talk-315229.mp3")).toExternalForm();
-//        Media bgm = new Media(musicPath);
-//        MediaPlayer player = new MediaPlayer(bgm);
-//        player.setCycleCount(MediaPlayer.INDEFINITE);
-//        player.setVolume(0.3);
-//        player.play();
+
+        musicPlayer(true);
+        int value = GameManager.getInstance().getSeasonLength();
+        GameManager.getInstance().setSeasonLength(value - 1);
 
         Group root3D = new Group();
 
@@ -112,16 +109,15 @@ public class GameController {
         // Load track & checkpoints
 
 
-        String raceTarckURL = GameManager.getInstance().getSelectedRace().getRaceURL();
-        Group modelGroup = loadModel(getClass().getResource(raceTarckURL));
+        String raceTrackURL = GameManager.getInstance().getSelectedRace().getRaceURL();
+        Group modelGroup = loadModel(getClass().getResource(raceTrackURL));
         MeshView racetrack = null;
-        MeshView racetrack2 = null;
         MeshView finishMesh = null;
         MeshView wall = null;
         MeshView safe = null;
         MeshView Tree = null;
         MeshView GasStation = null;
-        MeshView gasstation2 = null;
+        MeshView gasStation2 = null;
         MeshView floor = null;
         List<MeshView> checkpointMeshes = new ArrayList<>();
         PhongMaterial checkpointMat = new PhongMaterial(Color.LIMEGREEN);
@@ -135,8 +131,6 @@ public class GameController {
                 switch (mesh.getId()) {
                     case "Track":
                         racetrack = mesh;
-                    case "Track.001":
-                        racetrack2 = mesh;
                         break;
                     case "Finish":
                         finishMesh = mesh;
@@ -151,7 +145,7 @@ public class GameController {
                         Tree = mesh;
                         break;
                     case "GasStation2":
-                        gasstation2 = mesh;
+                        gasStation2 = mesh;
                         break;
                     case "GasStation1":
                         GasStation = mesh;
@@ -159,7 +153,7 @@ public class GameController {
                     case "floor":
                         floor = mesh;
                         break;
-                    case "PersonEvent":
+                    case "baake":
                         personEvent = mesh;
                         personEvent.setVisible(false);
                         break;
@@ -176,8 +170,8 @@ public class GameController {
         if (finishMesh != null) finishRay.MeshRaycaster(finishMesh);
         if (safe != null) safeRay.MeshRaycaster(safe);
         if (wall != null) death.MeshRaycaster(wall);
-        if (gasstation2 != null) gasstation.MeshRaycaster(gasstation2);
-        if (GasStation != null) gasstation.MeshRaycaster(GasStation);
+        if (gasStation2 != null) gasStation.MeshRaycaster(gasStation2);
+        if (GasStation != null) gasStation.MeshRaycaster(GasStation);
         if (personEvent != null) personEventRay.MeshRaycaster(personEvent);
 
         // Compute waypoints in background without Platform.runLater
@@ -213,6 +207,11 @@ public class GameController {
         updateCameraFollow(); // initial placement
 
         // Game loop
+
+        return root3D;
+    }
+
+    public void startGameloop(){
         new AnimationTimer() {
             private long last = -1;
             @Override
@@ -224,11 +223,13 @@ public class GameController {
 
                 if (last > 0) {
                     double dt = (now - last) / 1e9;
+
                     update(dt);
                     updateCameraFollow();
 
                     bots.forEach(bot -> {
                         bot.update(dt);
+
 
                         Point3D botPosition = new Point3D(
                                 bot.getModel().getTranslateX(),
@@ -243,10 +244,11 @@ public class GameController {
                         }
                     });
 
-                    if (counterService.isRaceInProgress()) {
-                        counterService.incrementRaceTime(dt);
-                        hudController.updateTime(counterService.getFormattedElapsedTime());
 
+                    if (hudController != null) {
+                        counterService.incrementRaceTime(dt);
+                        System.out.println(counterService.getElapsedSeconds());
+                        hudController.updateTime(counterService.getElapsedSeconds());
                         if (counterService.hasRaceTimeExpired() && !raceFinished && counterService.getTotalRaceHours() > 0) {
                             handleDNF("Time limit exceeded! You did not finish within the race duration.");
                             return;
@@ -256,9 +258,6 @@ public class GameController {
                 last = now;
             }
         }.start();
-
-
-        return root3D;
     }
 
 
@@ -326,22 +325,7 @@ public class GameController {
     }
 
     private Group loadModel(URL url) {
-        Group modelroot = new Group();
-        ObjModelImporter importer = new ObjModelImporter();
-        try {
-            importer.read(url);
-            for (MeshView view : importer.getImport()) {
-                view.setCullFace(CullFace.BACK);
-                modelroot.getChildren().add(view);
-            }
-        } catch (ImportException e) {
-            // if the only problem is a missing material, log and continue
-            System.err.println("Warning: OBJ referenced missing material: " + e.getMessage());
-            // optionally try a second pass without materials, or assign a default PhongMaterial here
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return modelroot;
+        return getGroup(url);
     }
 
     public void handleKeyPressed(KeyEvent event) { pressedKeys.add(event.getCode()); }
@@ -353,12 +337,22 @@ public class GameController {
             return;
         }
 
+        if (brokenDown) {
+            if (velocity > 0) {
+                velocity -= BREAKDOWN_DECEL * deltaTime;
+                if (velocity < 0) velocity = 0;
+            }
+            applyMovement(deltaTime);
+
+            return;
+        }
+
         Vehicle currentVehicle = GameManager.getInstance().getCurrentVehicle();
 
 
         double rotateSpeed = 50,
                 smoothing = 0.15,
-                acceleration = currentVehicle.getAccleration();
+                acceleration = currentVehicle.getAcceleration();
         double decel = 80,
                 maxVel = currentVehicle.getSpeed(),
                 friction = 40;
@@ -425,9 +419,7 @@ public class GameController {
         }
 
 
-        for (Box obs : obstacles) {
-            if (checkCollision(carCollisionBox, obs)) { System.out.println("Collision!"); break; }
-        }
+
 
         if (death.isRayHitting(carPos, down)) {
             if (!raceFinished && !dnfShown) {
@@ -454,7 +446,7 @@ public class GameController {
         }
 
         // Handle refueling at gas station
-        if (gasstation.isRayHitting(carPos, down) && velocity == 0) {
+        if (gasStation.isRayHitting(carPos, down) && velocity == 0) {
             GameManager.getInstance().getCurrentVehicle().refuel();
         }
 
@@ -466,16 +458,22 @@ public class GameController {
         carCollisionBox.setTranslateZ(car.getTranslateZ());
 
         if (hudController != null) {
-            //long currentTime = System.currentTimeMillis();
-            //String formattedTime = CounterService.getFormattedElapsedTime(currentTime);
-            //hudController.setElapsedTime(CounterService.getElapsedHours());
-            //hudController.updateTime(formattedTime);
+            hudController.updateTime(counterService.getElapsedSeconds());
 
             hudController.updateFuel(GameManager.getInstance().getCurrentVehicle().getFuelLevel());
             hudController.setMoney(GameManager.getInstance().getPlayer().getMoney());
         }
 
 
+    }
+
+    private void applyMovement(double dt) {
+        double angleRad = Math.toRadians(carAngle);
+        double dx = Math.sin(angleRad), dz = Math.cos(angleRad);
+        car.setTranslateX(car.getTranslateX() + dx * velocity * dt);
+        car.setTranslateZ(car.getTranslateZ() + dz * velocity * dt);
+        carCollisionBox.setTranslateX(car.getTranslateX());
+        carCollisionBox.setTranslateZ(car.getTranslateZ());
     }
 
     public void setHudController(HUDController controller) {
@@ -498,6 +496,8 @@ public class GameController {
     }
 
     private void showRaceCompleteScreen() {
+        musicPlayer(false);
+
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/RaceCompleteScreen.fxml"));
             Parent root = loader.load();
@@ -562,6 +562,8 @@ public class GameController {
         // show it
 
         if (event == RaceEvent.SEVERE_WEATHER){
+            musicPlayer(false);
+
 
             handleDNF("A storm advances from seemingly no where. You are forced to ditch the vehicle and take shelter. You must retire from the race.");
         }
@@ -573,14 +575,20 @@ public class GameController {
         GameManager.getInstance().getPlayer().addMoney(event.getMoneyChange());
 
         if (hudController != null && event.isPleaseChoose()) {
+            brokenDown = true;      // <<-- car will now coast to stop
             hudController.promptChoices(
                     event.getChoice1(),
                     event.getChoice2(),
                     choice -> {
-                        if (choice == 1) System.out.println("Choose 1");
-                        else            System.out.println("Choose 2");
-                        hudController.updateTime(counterService.getFormattedElapsedTime());
-                        hudController.setMoney(GameManager.getInstance().getPlayer().getMoney());
+                        // handle the choice...
+                        if (choice == 1) {
+                            // e.g. pay repair fee:
+                            GameManager.getInstance().getPlayer().subtractMoney(1000);
+                            // maybe add time penalty here...
+                        } else {
+                            handleDNF("You retired after breakdown");
+                        }
+                        brokenDown = false;  // <<-- resume driving
                     }
             );
         }
@@ -594,6 +602,8 @@ public class GameController {
         dnfShown = true;
         raceFinished = true;
         counterService.stopRace();
+        musicPlayer(false);
+
 
         GameManager.getInstance().completeRace(0);
         showDNFScreen(reason);
@@ -649,6 +659,7 @@ public class GameController {
     }
 
     public void showGameEndScreen(String username, int seasonLength, int racesCompleted, double averagePlacing, double totalWinnings, boolean gameWon) {
+
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(gameWon ? "/fxml/GameWon.fxml" : "/fxml/GameOver.fxml"));
             Parent root = loader.load();
@@ -669,7 +680,18 @@ public class GameController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+
     }
 
 
+    public void musicPlayer(Boolean on){
+        String musicPath = Objects.requireNonNull(getClass().getResource("/Music/dont-talk-315229.mp3")).toExternalForm();
+        javafx.scene.media.Media bgm = new javafx.scene.media.Media(musicPath);
+        MediaPlayer player = new MediaPlayer(bgm);
+        player.setCycleCount(MediaPlayer.INDEFINITE);
+        player.setVolume(0.3);
+        if (on) player.play();
+        if (!on) player.stop();
+    }
 }

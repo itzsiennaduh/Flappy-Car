@@ -57,7 +57,7 @@ public class CounterService {
      * @return the remaining time of the race
      */
     public double getRemainingTime() {
-        if (raceTimeLimit <= 0) return Double.MAX_VALUE;
+        if (raceTimeLimit <= 0) return 0;
         return Math.max(0, raceTimeLimit - currentRaceTime);
     }
 
@@ -72,6 +72,7 @@ public class CounterService {
     public void startRace() {
         raceInProgress = true;
         currentRaceTime = 0;
+        elapsedSeconds = 0;
         System.out.println("Starting race. Time limit: " + raceTimeLimit);
     }
 
@@ -81,9 +82,14 @@ public class CounterService {
     }
 
     public void setRaceTimeLimit(double limit) {
-        this.raceTimeLimit = limit;
-        this.currentRaceTime = 0;
+        this.raceTimeLimit = limit * 3600; //limit in hrs, change to minutes
+        this.currentRaceTime = 0; //current race time in seconds
         System.out.println("Setting race time limit to " + limit + " hours");
+    }
+
+    public double getRaceTimeLimit() {
+        System.out.println("Race time limit is " + raceTimeLimit + " hours");
+        return raceTimeLimit;
     }
 
     public boolean hasRaceTimeExpired() {
@@ -91,10 +97,11 @@ public class CounterService {
     }
 
     public void incrementRaceTime(double deltaTime) {
-        if (isRaceInProgress()) {
-            currentRaceTime += deltaTime;
-            elapsedSeconds += deltaTime;
-        }
+
+        currentRaceTime += deltaTime;
+        elapsedSeconds += deltaTime;
+//        System.out.println("Time: " + elapsedSeconds + " seconds. Current time: " + currentRaceTime);
+
     }
 
     /**

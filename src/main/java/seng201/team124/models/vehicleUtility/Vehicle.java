@@ -12,6 +12,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+
 /**
  * Represents a vehicle with stats mutable with tuning parts.
  * @see VehicleFactory for the initialisation of the different vehicles.
@@ -32,7 +33,8 @@ public class Vehicle implements Purchasable {
     private final double reliability;
     private final double fuelEconomy;
     private final double cost;
-    private double accleration;
+    private String previewImagePath;
+    private double acceleration;
 
     private double currentFuel;
     private final double maxFuel;
@@ -42,6 +44,9 @@ public class Vehicle implements Purchasable {
     private double routeReliabilityModifier = 1.0;
     private double routeFuelEconomyModifier = 1.0;
 
+    private TuningParts engine;
+    private TuningParts wheels;
+    private TuningParts nitro;
 
     private final List<TuningParts> installedParts;
 
@@ -60,11 +65,11 @@ public class Vehicle implements Purchasable {
      * @param currentFuel the fuel level of the vehicle
      * @param maxFuel max fuel the vehicle may have
      */
-    public Vehicle(String name, String description, double speed, double accleration, double handling, double reliability, double fuelEconomy, double cost, double currentFuel, double maxFuel, String modelName) {
+    public Vehicle(String name, String description, double speed, double accleration, double handling, double reliability, double fuelEconomy, double cost, double currentFuel, double maxFuel, String modelName, String previewImagePath) {
         this.name = name;
         this.description = description;
         this.speed = speed;
-        this.accleration = accleration;
+        this.acceleration = accleration;
         this.handling = handling;
         this.reliability = reliability;
         this.fuelEconomy = fuelEconomy;
@@ -73,11 +78,12 @@ public class Vehicle implements Purchasable {
         this.maxFuel = maxFuel;
         this.installedParts = new ArrayList<>();
         this.model = modelName;
+        this.previewImagePath = previewImagePath;
     }
 
     public String getModelName() {return this.model;}
 
-    public double getAccleration() {return this.accleration;}
+    public double getAcceleration() {return this.acceleration;}
 
     /**
      * @return vehicle name
@@ -244,10 +250,6 @@ public class Vehicle implements Purchasable {
      * @return successful installation message
      * @throws IllegalStateException if part is already installed
      */
-
-    private TuningParts engine;
-    private TuningParts wheels;
-    private TuningParts nitro;
     public String installPart(TuningParts part) {
 
         switch (part.getType()) {
@@ -411,4 +413,7 @@ public class Vehicle implements Purchasable {
         return modelroot;
     }
 
+    public String getPreviewImagePath() {
+        return previewImagePath;
+    }
 }

@@ -11,6 +11,16 @@ Ni 1.500000
 d 1.000000
 illum 2
 
+newmtl Material.003
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd body.png
+
 newmtl Material.008
 Ns 250.000000
 Ka 1.000000 1.000000 1.000000
@@ -19,7 +29,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 2
-map_Kd C:/Users/User/Pictures/TextureMadeByme/Material_BaseColor.png
+map_Kd Material_BaseColor.png
 
 newmtl Material.010
 Ns 250.000000
@@ -47,8 +57,5 @@ Ks 0.500000 0.500000 0.500000
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 illum 2
-map_Kd C:/Users/User/Pictures/TextureMadeByme/Tree/Material.012_BaseColor.png
-map_Ns C:/Users/User/Pictures/TextureMadeByme/Tree/Material.012_Roughness.png
-map_refl C:/Users/User/Pictures/TextureMadeByme/Tree/Material.012_Metallic.png
-map_d C:/Users/User/Pictures/TextureMadeByme/Tree/Material.012_Alpha.png
-map_Bump -bm 1.000000 C:/Users/User/Pictures/TextureMadeByme/Tree/Material.012_Normal.png
+map_Kd treeMaterial.012_BaseColor.png
+

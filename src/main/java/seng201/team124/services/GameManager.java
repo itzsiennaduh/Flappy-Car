@@ -34,13 +34,9 @@ public class GameManager {
     private CounterService counterService;
 
     private boolean isRaceInProgress = false;
-
     private static final double BASE_STARTING_MONEY = 10000;
-
     private String tempName;
-
     private final List<Race> tracks = new ArrayList<>();
-
     private Race selectedRace;
 
 
@@ -51,7 +47,7 @@ public class GameManager {
     /**
      * constructor for singleton class
      */
-    private GameManager() {
+    public GameManager() {
         loadTrack();
     }
 
