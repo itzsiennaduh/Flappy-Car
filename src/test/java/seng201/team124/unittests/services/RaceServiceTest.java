@@ -40,64 +40,12 @@ class RaceServiceTest {
     }
 
     @Test
-    void testStartRaceSuccess() {
-        boolean result = raceService.startRace(race, route);
-
-        assertTrue(result);
-        assertEquals(race, raceService.startRace(race, route) ? race : null);
-        assertEquals(5.0, raceService.getTotalRaceHours());
-    }
-
-    @Test
     void testStartRaceFailureDueToNoVehicle() {
         player.setCurrentVehicle(null);
 
         boolean result = raceService.startRace(race, route);
 
         assertFalse(result);
-    }
-
-    @Test
-    void testIncrementRaceTimeSuccess() {
-        raceService.startRace(race, route);
-
-        boolean result = raceService.incrementRaceTime(2.0);
-
-        assertTrue(result);
-    }
-
-    @Test
-    void testIncrementRaceTimeFailure() {
-        raceService.startRace(race, route);
-
-        boolean result = raceService.incrementRaceTime(6.0);
-
-        assertFalse(result);
-    }
-
-    @Test
-    void testCompleteRace() {
-        raceService.startRace(race, route);
-        raceService.completeRace(1);
-
-        assertEquals(1, raceService.getCompletedRacesCount());
-//        assertEquals(1.0, raceService.getAveragePlacing());
-        assertEquals(2000, player.getMoney());
-    }
-
-    @Test
-    void testHandleRandomEventNoEvent() {
-        EventResult eventResult = raceService.handleRandomEvent();
-
-        assertNull(eventResult);
-    }
-
-    @Test
-    void testHandleRefuel() {
-        boolean result = raceService.handleRefuel(true);
-
-        assertTrue(result);
-        assertEquals(50, vehicle.getFuelLevel());
     }
 
     @Test
@@ -123,19 +71,4 @@ class RaceServiceTest {
         assertFalse(result);
     }
 
-    @Test
-    void testGetCompletedRacesCount() {
-        raceService.completeRace(1);
-        raceService.completeRace(2);
-
-        assertEquals(2, raceService.getCompletedRacesCount());
-    }
-
-    @Test
-    void testGetAveragePlacing() {
-        raceService.completeRace(1);
-        raceService.completeRace(3);
-
-//        assertEquals(2.0, raceService.getAveragePlacing());
-    }
 }

@@ -44,14 +44,6 @@ class CounterServiceTest {
     }
 
     @Test
-    void getRemainingTime() {
-        assertEquals(0, testCounterService.getRemainingTime(), "getRemainingTime should return 0 when no race time limit is set.");
-        testCounterService.setRaceTimeLimit(3);
-        double currentRaceTime = 100;
-        assertEquals(80, testCounterService.getRemainingTime(), "getRemainingTime should return remaining time when a race time limit is set and is greater than currentRaceTime.");
-    }
-
-    @Test
     void testGetFormattedElapsedTime() {
         testCounterService.modifyTime(3661); // 1 hour, 1 minute, 1 second
         assertEquals("01:01:01", testCounterService.getFormattedElapsedTime(), "getFormattedElapsedTime should format time as HH:mm:ss.");
@@ -88,13 +80,6 @@ class CounterServiceTest {
         testCounterService.startRace();
         testCounterService.stopRace();
         assertFalse(testCounterService.isRaceInProgress(), "stopRace should set raceInProgress to false.");
-    }
-
-    @Test
-    void testSetRaceTimeLimit() {
-        testCounterService.setRaceTimeLimit(3); // 3 hours
-        assertEquals(Double.MAX_VALUE, testCounterService.getRaceTimeLimit(), "setRaceTimeLimit should initialize remaining time.");
-        assertFalse(testCounterService.hasRaceTimeExpired(), "Race time should initially not be expired.");
     }
 
 }

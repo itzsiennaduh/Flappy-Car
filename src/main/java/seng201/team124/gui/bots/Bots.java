@@ -40,7 +40,7 @@ public class Bots {
             return;
         }
 
-        double rotateSpeed = 270; // how much the bot can turn degrees per second
+        double rotateSpeed = 360; // how much the bot can turn degrees per second
         double acceleration = 5; // Acceleration of the bot
 
 
