@@ -11,6 +11,10 @@ public class CounterService {
     private double raceTimeLimit = -1;
     private double currentRaceTime = 0;
 
+    /**
+     * Gets the formatted elapsed time in the format HH:MM:SS (makes time look pretty)
+     * @return formatted time
+     */
     public String getFormattedElapsedTime() {
         int totalSeconds = (int) elapsedSeconds;
         int hours = totalSeconds / 3600;
@@ -29,17 +33,9 @@ public class CounterService {
     }
 
     /**
-     * make time look pretty :)
-     *
-     * @return pretty time
+     * sets the race in progress flag
+     * @param inProgress true if the race is in progress, false otherwise
      */
-    public static String getFormattedTime(long millis) {
-        long seconds = millis / 1000;
-        long minutes = seconds / 60;
-        long hours = minutes / 60;
-        return String.format("%02d:%02d:%02d", hours % 24, minutes % 60, seconds % 60);
-    }
-
     public void setRaceInProgress(boolean inProgress) {
         this.raceInProgress = inProgress;
     }
@@ -69,6 +65,9 @@ public class CounterService {
         return raceInProgress;
     }
 
+    /**
+     * starts the race, sets the race in progress flag to true and resets the elapsed seconds and race time limit
+     */
     public void startRace() {
         raceInProgress = true;
         currentRaceTime = 0;
@@ -76,32 +75,49 @@ public class CounterService {
         System.out.println("Starting race. Time limit: " + raceTimeLimit);
     }
 
+    /**
+     * stops the race, sets the race in progress flag to false and resets the elapsed seconds and race time limit
+     */
     public void stopRace() {
         raceInProgress = false;
         System.out.println("Stopping race");
     }
 
+    /**
+     * sets the race time limit to the given limit
+     * @param limit the limit to set
+     */
     public void setRaceTimeLimit(double limit) {
         this.raceTimeLimit = limit * 3600; //limit in hrs, change to minutes
         this.currentRaceTime = 0; //current race time in seconds
         System.out.println("Setting race time limit to " + limit + " hours");
     }
 
+    /**
+     * gets the race time limit
+     * @return race time limit
+     */
     public double getRaceTimeLimit() {
         System.out.println("Race time limit is " + raceTimeLimit + " hours");
         return raceTimeLimit;
     }
 
+    /**
+     * checks if the race has expired, meaning the race time limit has been reached
+     * @return true if the race has expired, false otherwise.
+     */
     public boolean hasRaceTimeExpired() {
         return raceTimeLimit > 0 && isRaceInProgress() && currentRaceTime >= raceTimeLimit;
     }
 
+    /**
+     * increments the current race time by the given delta time.
+     * @param deltaTime the amount of time to increment the current race time by.
+     */
     public void incrementRaceTime(double deltaTime) {
 
         currentRaceTime += deltaTime;
         elapsedSeconds += deltaTime;
-//        System.out.println("Time: " + elapsedSeconds + " seconds. Current time: " + currentRaceTime);
-
     }
 
     /**
@@ -114,6 +130,10 @@ public class CounterService {
         return totalRaceHours;
     }
 
+    /**
+     * gets the current race time in seconds
+     * @return current race time in seconds.
+     */
     public double getCurrentRaceTime() {
         return currentRaceTime;
     }

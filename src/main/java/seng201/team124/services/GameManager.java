@@ -57,21 +57,38 @@ public class GameManager {
     private void loadTrack(){
     }
 
+    /**
+     * gets a list of available tracks
+     * @return list of available tracks
+     */
     public List<Race> getAvailableRaces() {
         return RaceFactory.getRaces();
     }
 
+    /**
+     * gets a track by name
+     * @param track the name of the track to get
+     */
     private void getTrack(Race track){
         tracks.add(track);
     }
 
+    /**
+     * sets the selected race for the game.
+     * @param race the race to select.
+     */
     public void setSelectedRace(Race race) {
         this.selectedRace = race;
     }
 
+    /**
+     * gets the selected race for the game.
+     * @return the selected race
+     */
     public Race getSelectedRace() {
         return this.selectedRace;
     }
+
     /**
      * gets the singeton instance of the game manager
      * @return the game manager instance, or creates a new one if it doesn't exist yet.
@@ -124,7 +141,6 @@ public class GameManager {
 
     /**
      * gets current player info
-     *
      * @return player info
      */
     public Player getPlayer() {
@@ -142,8 +158,6 @@ public class GameManager {
         return getPlayer().getName();
     }
 
-
-
     /**
      * gets the selected difficulty level
      * @return selected difficulty level
@@ -155,9 +169,14 @@ public class GameManager {
         return this.difficulty;
     }
 
+    /**
+     * sets the selected season length
+     * @param seasonLength the number of races in the season
+     */
     public void setSeasonLength(int seasonLength) {
         this.seasonLength = seasonLength;
     }
+
     /**
      * get selected season length
      * @return selected season length
@@ -169,8 +188,10 @@ public class GameManager {
         return this.seasonLength;
     }
 
-
-
+    /**
+     * gets the time limit for the current race
+     * @return time limit
+     */
     public double getTimeLimit() {
         return getRaceService().getTotalRaceHours();
     }
@@ -219,14 +240,23 @@ public class GameManager {
         return this.counterService;
     }
 
+    /**
+     * gets the players tuning parts in inventory
+     * @return tuning parts list
+     */
     public List<TuningParts> getTuningParts() {
         return getPlayer().getTuningParts();
     }
 
 
+    /**
+     * gets the players vehicles in inventory
+     * @return vehicle list
+     */
     public List<Vehicle> getVehicles() {
         return getPlayer().getVehicles();
     }
+
     /**
      * sets a temporary player name during setup
      * @param name the temp player name
@@ -263,7 +293,6 @@ public class GameManager {
 
     /**
      * completes the current race and updates game state
-     *
      * @param position final race position (1=first place, 2=second place, etc.)
      */
     public void completeRace(int position) {
@@ -272,6 +301,9 @@ public class GameManager {
         getShopService().restockShop();
     }
 
+    /**
+     * checks if the current race has been completed
+     */
     public void onRaceCompleted() {
         checkGameEndConditions();
     }
@@ -339,6 +371,10 @@ public class GameManager {
         }
     }
 
+    /**
+     * checks if the player can continue playing the game
+     * @return true if the player can continue playing, false otherwise.
+     */
     public boolean playerCanContinue() {
         return !getPlayer().isBrokeAndUnrepairable() || isRaceInProgress() || !isSeasonComplete();
     }

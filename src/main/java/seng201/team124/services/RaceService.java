@@ -24,6 +24,12 @@ public class RaceService {
     private final CounterService counter;
     private List<Integer> raceResults = new ArrayList<>();
 
+    /**
+     * Constructor for the RaceService class.
+     * @param player player who is in the race
+     * @param gameManager instance
+     * @param counterService service class for the counter
+     */
     public RaceService(Player player, GameManager gameManager, CounterService counterService) {
         this.player = player;
         this.gameManager = gameManager;
@@ -61,23 +67,6 @@ public class RaceService {
     }
 
     /**
-     * increments race time and checks for completion
-     * @param deltaHours time to increase
-     * @return true if the race is still ongoing
-     */
-    public boolean incrementRaceTime(double deltaHours) {
-        elapsedSeconds += deltaHours;
-
-        if (elapsedSeconds >= totalRaceHours) {
-            completeRace(0); //DNF, out of time
-            return false;
-        }
-
-        //implement check if the finish line crossed
-        return true;
-    }
-
-    /**
      * completes the current race
      * @param position final race position (1 = first place)
      */
@@ -103,6 +92,10 @@ public class RaceService {
         gameManager.onRaceCompleted();
     }
 
+    /**
+     * gets the current race count
+     * @return the number of races complete
+     */
     public int getCompletedRacesCount() {
         return completedRaces;
     }
@@ -120,27 +113,6 @@ public class RaceService {
         double positionMultiplier = 1.0 / position;
         double difficultyMultiplier = gameManager.getDifficultyLevel().getRaceDifficultyMultiplier();
         return (basePrize * positionMultiplier * difficultyMultiplier);
-    }
-
-    /**
-     * handles random events during the race
-     * @return event description
-     */
-    public EventResult handleRandomEvent() {
-        Difficulty difficulty = gameManager.getDifficultyLevel();
-        Vehicle vehicle = player.getCurrentVehicle();
-
-        double eventChance = BASE_EVENT_CHANCE * difficulty.getEventChanceMultiplier() *
-                (1 - (vehicle.getEffectiveReliability() / 100.0));
-
-        if (random.nextDouble() >= eventChance) {
-            return null; //no event
-        }
-
-        RaceEvent[] weightedEvents = new RaceEvent[] {RaceEvent.getRandomEvent()};
-        RaceEvent selectedEvent = weightedEvents[random.nextInt(weightedEvents.length)];
-
-        return new seng201.team124.models.raceLogic.EventResult(selectedEvent);
     }
 
     /**
@@ -163,6 +135,11 @@ public class RaceService {
         }
     }
 
+    /**
+     * refuels the player's vehicle if they should
+     * @param shouldRefuel true if the player should refuel, false otherwise
+     * @return true if the player was refueled, false otherwise
+     */
     public boolean handleRefuel(boolean shouldRefuel) {
         if (shouldRefuel) {
             this.counter.modifyTime(1.0);
@@ -172,21 +149,17 @@ public class RaceService {
         return false;
     }
 
+    /**
+     * checks if the player has enough fuel to continue the race
+     * @param vehicle vehicle to check fuel level for
+     * @param route route to check fuel level for
+     * @return true if the player has enough fuel, false otherwise
+     */
     public boolean checkFuelLevel(Vehicle vehicle, Route route) {
         double effectiveFuelEconomy = vehicle.getEffectiveFuelEconomy();
         return vehicle.getFuelLevel() >= (route.getDistance() / effectiveFuelEconomy);
     }
 
-    /** determines if random even should take place according to selected difficulty
-     * @param difficulty the current game difficulty
-     * @return true if a random event should occur
-     */
-    public boolean shouldRandomEventOccur(Difficulty difficulty) {
-        Random random = new Random();
-        double baseChance = 1.0;
-        double adjustedChance = baseChance * difficulty.getEventChanceMultiplier();
-        return random.nextDouble() < adjustedChance;
-    }
 
 
 

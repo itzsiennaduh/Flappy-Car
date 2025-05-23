@@ -81,11 +81,20 @@ public class Vehicle implements Purchasable {
         this.previewImagePath = previewImagePath;
     }
 
+    /**
+     * gets the model name of the vehicle
+     * @return the model name of the vehicle (string)
+     */
     public String getModelName() {return this.model;}
 
+    /**
+     * gets the acceleration of the vehicle
+     * @return acceleration
+     */
     public double getAcceleration() {return this.acceleration;}
 
     /**
+     * gets vehicle name
      * @return vehicle name
      */
     public String getName() {
@@ -93,6 +102,7 @@ public class Vehicle implements Purchasable {
     }
 
     /**
+     * gets vehicle description
      * @return vehicle description
      */
     public String getDescription() {
@@ -100,6 +110,7 @@ public class Vehicle implements Purchasable {
     }
 
     /**
+     * gets vehicles base cost
      * @return vehicle's base cost
      */
     public double getCost() {
@@ -120,6 +131,11 @@ public class Vehicle implements Purchasable {
         return vehicleValue + partsValue;
     }
 
+    /**
+     * checks if object equals object
+     * @param obj the other object to compare to this one
+     * @return true if the names are the same, false otherwise
+     */
     @Override
     public boolean equals(Object obj) {
         if (obj == this) {
@@ -395,22 +411,7 @@ public class Vehicle implements Purchasable {
     }
 
     private Group loadModel(URL url) {
-        Group modelroot = new Group();
-        ObjModelImporter importer = new ObjModelImporter();
-        try {
-            importer.read(url);
-            for (MeshView view : importer.getImport()) {
-                view.setCullFace(CullFace.BACK);
-                modelroot.getChildren().add(view);
-            }
-        } catch (ImportException e) {
-            // if the only problem is a missing material, log and continue
-            System.err.println("Warning: OBJ referenced missing material: " + e.getMessage());
-            // optionally try a second pass without materials, or assign a default PhongMaterial here
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return modelroot;
+        return ModelLoader.getGroup(url);
     }
 
     public String getPreviewImagePath() {

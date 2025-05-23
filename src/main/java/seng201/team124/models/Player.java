@@ -231,20 +231,37 @@ public class Player {
         }
     }
 
+    /**
+     * adds a race result to the player's stats
+     * @param position the position the player scored in the race (1-5)
+     * @param winnings the amount of money won in the race (in dollars)
+     */
     public void addRaceResult(int position, double winnings) {
         racesCompleted++;
         totalWinnings += winnings;
         totalPlacings += position;
     }
 
+    /**
+     * gets the number of races completed by the player
+     * @return number of races completed by the player
+     */
     public int getRacesCompleted() {
         return racesCompleted;
     }
 
+    /**
+     * gets the total winnings earned by the player in the season
+     * @return total winnings earned by the player in the season, as a double value in dollars
+     */
     public double getTotalWinnings() {
         return totalWinnings;
     }
 
+    /**
+     * gets the average placing achieved by the player in the season
+     * @return average placing achieved by the player in the season
+     */
     public double getAveragePlacing() {
         if (racesCompleted > 0) {
             return totalPlacings / racesCompleted;
@@ -253,16 +270,21 @@ public class Player {
         }
     }
 
+    /**
+     * checks if the player has completed the season
+     * @return true if the player has completed the season, false otherwise.
+     */
     public boolean hasCompletedSeason() {
         return racesCompleted >= GameManager.getInstance().getSeasonLength();
     }
 
+    /**
+     * checks if the player has broken and unrepairable vehicles and cant continue
+     * @return true if the player has broken and unrepairable vehicles, false otherwise.
+     */
     public boolean isBrokeAndUnrepairable() {
         if (vehicles.isEmpty()) return true;
         double repairCost = RaceEvent.getRepairCost();
         return money < repairCost;
     }
-
-
-
 }
