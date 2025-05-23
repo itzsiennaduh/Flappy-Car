@@ -82,10 +82,6 @@ public class RaceService {
      * @param position final race position (1 = first place)
      */
     public void completeRace(int position) {
-        if (position > 0) {
-            raceResults.add(position);
-        }
-
         if (currentRace == null) return;
 
         Vehicle vehicle = player.getCurrentVehicle();
@@ -94,15 +90,17 @@ public class RaceService {
         }
 
         completedRaces++;
+        raceResults.add(position);
 
-        if (position > 0) {
-            double prizeMoney = calculatePrizeMoney(position);
-            player.addMoney(prizeMoney);
-        }
-        gameManager.completeRace(position);
+        double prizeMoney = calculatePrizeMoney(position);
+        player.addMoney(prizeMoney);
+        player.addRaceResult(position, prizeMoney);
+
         currentRace = null;
         currentRoute = null;
         counter.stopRace();
+
+        gameManager.onRaceCompleted();
     }
 
     public int getCompletedRacesCount() {
@@ -114,7 +112,7 @@ public class RaceService {
      * @param position final race position (1 = first place)
      * @return prize money amount
      */
-    private double calculatePrizeMoney(int position) {
+    double calculatePrizeMoney(int position) {
         if (position <= 0) {
             return 0; //invalid or DNF
         }

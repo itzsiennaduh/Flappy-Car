@@ -4,6 +4,7 @@ import seng201.team124.models.raceLogic.Difficulty;
 import seng201.team124.models.vehicleUtility.TuningParts;
 import seng201.team124.models.vehicleUtility.Vehicle;
 import seng201.team124.services.GameManager;
+import seng201.team124.models.raceLogic.RaceEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +18,9 @@ public class Player {
     private final List<Vehicle> vehicles; //list of vehicles owned by the player
     private final List<TuningParts> tuningParts; //list of tuning parts owned by the player (not yet installed)
     private Vehicle currentVehicle; //the vehicle the player is currently driving
+    private int racesCompleted;
+    private double totalWinnings;
+    private double totalPlacings;
 
     /**
      * constructor for the player with their set name and initial money based on difficulty
@@ -226,4 +230,39 @@ public class Player {
             return e.getMessage();
         }
     }
+
+    public void addRaceResult(int position, double winnings) {
+        racesCompleted++;
+        totalWinnings += winnings;
+        totalPlacings += position;
+    }
+
+    public int getRacesCompleted() {
+        return racesCompleted;
+    }
+
+    public double getTotalWinnings() {
+        return totalWinnings;
+    }
+
+    public double getAveragePlacing() {
+        if (racesCompleted > 0) {
+            return totalPlacings / racesCompleted;
+        } else {
+            return 0;
+        }
+    }
+
+    public boolean hasCompletedSeason() {
+        return racesCompleted >= GameManager.getInstance().getSeasonLength();
+    }
+
+    public boolean isBrokeAndUnrepairable() {
+        if (vehicles.isEmpty()) return true;
+        double repairCost = RaceEvent.getRepairCost();
+        return money < repairCost;
+    }
+
+
+
 }

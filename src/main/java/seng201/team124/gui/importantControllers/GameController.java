@@ -19,8 +19,14 @@ import javafx.scene.transform.Affine;
 import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import seng201.team124.factories.VehicleFactory;
 import seng201.team124.gui.bots.Bots;
 import seng201.team124.gui.bots.Raycast;
+import seng201.team124.gui.endingMenus.*;
+import seng201.team124.gui.startingMenus.HUDController;
+import seng201.team124.models.Player;
+import seng201.team124.models.raceLogic.RaceEvent;
+import seng201.team124.models.vehicleUtility.Vehicle;
 import seng201.team124.gui.endingMenus.DNFController;
 import seng201.team124.gui.endingMenus.RaceCompleteController;
 import seng201.team124.gui.startingMenus.HUDController;
@@ -34,6 +40,7 @@ import java.net.URL;
 import java.util.*;
 
 public class GameController {
+    private static GameController instance;
     private final Set<KeyCode> pressedKeys = new HashSet<>();
     private PerspectiveCamera camera;
     private Group car;
@@ -67,6 +74,14 @@ public class GameController {
     private static final int MIN_DELAY = 10;   // seconds
     private static final int MAX_DELAY = 20;
     private MeshView personEvent;
+
+    public GameController() {
+        instance = this;
+    }
+
+    public static GameController getInstance() {
+        return instance;
+    }
 
     public Group setupGameRootNode() throws Exception {
 
@@ -475,7 +490,9 @@ public class GameController {
                 playerPlacement++;
             }
         }
+        GameManager.getInstance().completeRace(playerPlacement);
 
+        GameManager.getInstance().checkGameEndConditions();
         counterService.stopRace();
         showRaceCompleteScreen();
     }
@@ -621,6 +638,29 @@ public class GameController {
                 stage.setFullScreen(true);
             } else {
                 System.err.println("Cannot find scene to show DNF screen");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void showGameEndScreen(String username, int seasonLength, int racesCompleted, double averagePlacing, double totalWinnings, boolean gameWon) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(gameWon ? "/fxml/GameWon.fxml" : "/fxml/GameOver.fxml"));
+            Parent root = loader.load();
+            GameEndController controller = loader.getController();
+            controller.initializeData(username, seasonLength, racesCompleted, averagePlacing, totalWinnings, gameWon);
+
+            if (gameScene != null) {
+                gameScene.setRoot(root);
+                Stage stage = (Stage) gameScene.getWindow();
+                stage.setFullScreen(true);
+            } else {
+                Stage stage = new Stage();
+                stage.setTitle(gameWon ? "You Won" : "Game Over");
+                stage.setScene(new Scene(root));
+                stage.show();
+                stage.setFullScreen(true);
             }
         } catch (IOException e) {
             e.printStackTrace();

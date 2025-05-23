@@ -25,6 +25,8 @@ import seng201.team124.services.GameManager;
 import java.io.IOException;
 import java.util.List;
 
+import static seng201.team124.services.GameManager.getInstance;
+
 public class MainMenu {
 
     @FXML
@@ -48,23 +50,23 @@ public class MainMenu {
 
     @FXML
     private void initialize() {
-        races = GameManager.getInstance().getAvailableRaces();
+        races = getInstance().getAvailableRaces();
         chooseRace.setItems(FXCollections.observableArrayList(races.stream().map(Race::getName).toList()));
 
         chooseRace.getSelectionModel().selectedIndexProperty().addListener((obs, oldI, newI) -> {
             if (newI.intValue() >= 0) {
                 selectedRace = races.get(newI.intValue());
-                GameManager.getInstance().setSelectedRace(selectedRace);
+                getInstance().setSelectedRace(selectedRace);
                 descriptionLabel.setText(selectedRace.getRoute().getDescription());
             }
         });
 
-        moneyLabel.setText("$" + GameManager.getInstance().getPlayer().getMoney());
-        seasonLength.setText("Races left:" + GameManager.getInstance().getSeasonLength());
+        moneyLabel.setText("$" + getInstance().getPlayer().getMoney());
+        seasonLength.setText("Races left:" + getInstance().getSeasonLength());
 
         // default to first
         chooseRace.getSelectionModel().select(0);
-        GameManager.getInstance().setSelectedRace(selectedRace);
+        getInstance().setSelectedRace(selectedRace);
         descriptionLabel.setText(selectedRace.getRoute().getDescription());
 
     }
@@ -105,6 +107,7 @@ public class MainMenu {
 
         // 2) Run background load task
         GameController gameCtrl = new GameController();
+        GameManager.getInstance().setGameController(gameCtrl);
         Task<Group> loadTask = new GameLoadTask(gameCtrl);
 
         // Bind progress UI

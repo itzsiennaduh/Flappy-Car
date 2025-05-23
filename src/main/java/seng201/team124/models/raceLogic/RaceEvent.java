@@ -111,6 +111,14 @@ public enum RaceEvent {
 
     }
 
+    public static double getRepairCost() {
+        return -500;
+    }
+
+    public double getTimeCostBreakdown() {
+        return -1;
+    }
+
 
 
 }

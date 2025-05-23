@@ -13,8 +13,7 @@ import java.io.IOException;
  * Controller for main.fxml, handling navigation and loading screen.
  */
 public class MainController {
-    @FXML private Button defaultButton;
-    @FXML private Button Gamebutton;
+    @FXML private Button startGameButton;
 
     /**
      * Exit the application.

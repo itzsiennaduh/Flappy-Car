@@ -1,7 +1,9 @@
 package seng201.team124.services;
 
+import javafx.application.Platform;
 import seng201.team124.factories.RaceFactory;
 import seng201.team124.factories.VehicleFactory;
+import seng201.team124.gui.importantControllers.GameController;
 import seng201.team124.models.Player;
 import seng201.team124.models.raceLogic.Difficulty;
 import seng201.team124.models.raceLogic.Race;
@@ -20,6 +22,7 @@ import java.util.List;
  */
 public class GameManager {
     private static GameManager instance;
+    private GameController gameController;
 
     private Player player;
     private Difficulty difficulty;
@@ -40,6 +43,10 @@ public class GameManager {
 
     private Race selectedRace;
 
+
+    public void setGameController(GameController gameController) {
+        this.gameController = gameController;
+    }
 
     /**
      * constructor for singleton class
@@ -113,7 +120,7 @@ public class GameManager {
      * initialises a new game with default values if not already initialised
      */
     public void initializeWithDefaults() {
-        initializeGame("Default Player", Difficulty.MEDIUM, 10);
+        initializeGame("Default Player", Difficulty.MEDIUM, 20000);
         Vehicle defaultVehicle = VehicleFactory.createRedVehicle();
         player.getVehicles().add(defaultVehicle);
         player.setCurrentVehicle(defaultVehicle);
@@ -269,12 +276,8 @@ public class GameManager {
         getShopService().restockShop();
     }
 
-    /**
-     * gets number of races completed so far
-     * @return count of completed races
-     */
-    public int getRacesCompleted() {
-        return getRaceService().getCompletedRacesCount();
+    public void onRaceCompleted() {
+        checkGameEndConditions();
     }
 
     /**
@@ -282,7 +285,7 @@ public class GameManager {
      * @return true if season complete, false otherwise
      */
     public boolean isSeasonComplete() {
-        return getRacesCompleted() >= getSeasonLength();
+        return getRaceService().getCompletedRacesCount() >= getSeasonLength();
     }
 
     /**
@@ -290,7 +293,7 @@ public class GameManager {
      * @return count of remaining races
      */
     public int getRemainingRaces() {
-        return getSeasonLength() - getRacesCompleted();
+        return getSeasonLength() - getRaceService().getCompletedRacesCount();
     }
 
     /**
@@ -318,6 +321,30 @@ public class GameManager {
      */
     public Vehicle getCurrentVehicle() {
         return player.getCurrentVehicle();
+    }
+
+    public void checkGameEndConditions() {
+        boolean gameWon = player.hasCompletedSeason();
+        boolean gameLost = player.isBrokeAndUnrepairable();
+
+        if (gameWon || gameLost) {
+            Platform.runLater(() -> {
+                if (gameController != null) {
+                    gameController.showGameEndScreen(
+                            player.getName(),
+                            getSeasonLength(),
+                            player.getRacesCompleted(),
+                            player.getAveragePlacing(),
+                            player.getTotalWinnings(),
+                            gameWon
+                    );
+                }
+            });
+        }
+    }
+
+    public boolean playerCanContinue() {
+        return !getPlayer().isBrokeAndUnrepairable() || isRaceInProgress() || !isSeasonComplete();
     }
 
 
