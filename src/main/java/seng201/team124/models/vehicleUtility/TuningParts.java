@@ -12,7 +12,7 @@ public class TuningParts implements Purchasable{
     public enum Type {
         ENGINE,
         NITRO,
-        WHEEL
+        BODY, WHEEL
     }
 
     private final String name;
@@ -145,17 +145,19 @@ public class TuningParts implements Purchasable{
      */
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(name).append(" - ").append(description);
-        sb.append("\nCost: ").append(cost);
-
-        sb.append("\nEffects:");
-        if (speedModifier != 0) sb.append("\n  Speed: ").append(formatModifier(speedModifier));
-        if (handlingModifier != 0) sb.append("\n  Handling: ").append(formatModifier(handlingModifier));
-        if (reliabilityModifier != 0) sb.append("\n  Reliability: ").append(formatModifier(reliabilityModifier));
-        if (fuelEconomyModifier != 0) sb.append("\n  Fuel Economy: ").append(formatModifier(fuelEconomyModifier));
-
-        return sb.toString();
+        return String.format("""
+        %s - %s
+        Cost: %.2f
+        Effects:
+          Speed: %s
+          Handling: %s
+          Reliability: %s
+          Fuel Economy: %s""",
+                name, description, cost,
+                formatModifier(speedModifier),
+                formatModifier(handlingModifier),
+                formatModifier(reliabilityModifier),
+                formatModifier(fuelEconomyModifier));
     }
 
     /**

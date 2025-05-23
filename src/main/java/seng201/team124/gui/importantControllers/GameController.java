@@ -19,25 +19,22 @@ import javafx.scene.transform.Affine;
 import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import seng201.team124.factories.VehicleFactory;
 import seng201.team124.gui.bots.Bots;
 import seng201.team124.gui.bots.Raycast;
 import seng201.team124.gui.endingMenus.*;
 import seng201.team124.gui.startingMenus.HUDController;
-import seng201.team124.models.Player;
 import seng201.team124.models.raceLogic.RaceEvent;
 import seng201.team124.models.vehicleUtility.Vehicle;
 import seng201.team124.gui.endingMenus.DNFController;
 import seng201.team124.gui.endingMenus.RaceCompleteController;
-import seng201.team124.gui.startingMenus.HUDController;
-import seng201.team124.models.raceLogic.RaceEvent;
-import seng201.team124.models.vehicleUtility.Vehicle;
 import seng201.team124.services.CounterService;
 import seng201.team124.services.GameManager;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
+
+import static seng201.team124.models.vehicleUtility.ModelLoader.getGroup;
 
 public class GameController {
     private static GameController instance;
@@ -57,7 +54,7 @@ public class GameController {
     private final Raycast finishRay = new Raycast();
     private final Raycast safeRay = new Raycast();
     private final Raycast death = new Raycast();
-    private final Raycast gasstation = new Raycast();
+    private final Raycast gasStation = new Raycast();
     private final Raycast personEventRay = new Raycast();
     private final List<Bots> bots = new ArrayList<>();
     private final CounterService counterService = new CounterService();
@@ -112,8 +109,8 @@ public class GameController {
         // Load track & checkpoints
 
 
-        String raceTarckURL = GameManager.getInstance().getSelectedRace().getRaceURL();
-        Group modelGroup = loadModel(getClass().getResource(raceTarckURL));
+        String raceTrackURL = GameManager.getInstance().getSelectedRace().getRaceURL();
+        Group modelGroup = loadModel(getClass().getResource(raceTrackURL));
         MeshView racetrack = null;
         MeshView racetrack2 = null;
         MeshView finishMesh = null;
@@ -121,7 +118,7 @@ public class GameController {
         MeshView safe = null;
         MeshView Tree = null;
         MeshView GasStation = null;
-        MeshView gasstation2 = null;
+        MeshView gasStation2 = null;
         MeshView floor = null;
         List<MeshView> checkpointMeshes = new ArrayList<>();
         PhongMaterial checkpointMat = new PhongMaterial(Color.LIMEGREEN);
@@ -151,7 +148,7 @@ public class GameController {
                         Tree = mesh;
                         break;
                     case "GasStation2":
-                        gasstation2 = mesh;
+                        gasStation2 = mesh;
                         break;
                     case "GasStation1":
                         GasStation = mesh;
@@ -176,8 +173,8 @@ public class GameController {
         if (finishMesh != null) finishRay.MeshRaycaster(finishMesh);
         if (safe != null) safeRay.MeshRaycaster(safe);
         if (wall != null) death.MeshRaycaster(wall);
-        if (gasstation2 != null) gasstation.MeshRaycaster(gasstation2);
-        if (GasStation != null) gasstation.MeshRaycaster(GasStation);
+        if (gasStation2 != null) gasStation.MeshRaycaster(gasStation2);
+        if (GasStation != null) gasStation.MeshRaycaster(GasStation);
         if (personEvent != null) personEventRay.MeshRaycaster(personEvent);
 
         // Compute waypoints in background without Platform.runLater
@@ -224,6 +221,7 @@ public class GameController {
 
                 if (last > 0) {
                     double dt = (now - last) / 1e9;
+
                     update(dt);
                     updateCameraFollow();
 
@@ -245,7 +243,7 @@ public class GameController {
 
                     if (counterService.isRaceInProgress()) {
                         counterService.incrementRaceTime(dt);
-                        hudController.updateTime(counterService.getFormattedElapsedTime());
+                        hudController.updateTime(counterService.getElapsedSeconds());
 
                         if (counterService.hasRaceTimeExpired() && !raceFinished && counterService.getTotalRaceHours() > 0) {
                             handleDNF("Time limit exceeded! You did not finish within the race duration.");
@@ -326,22 +324,7 @@ public class GameController {
     }
 
     private Group loadModel(URL url) {
-        Group modelroot = new Group();
-        ObjModelImporter importer = new ObjModelImporter();
-        try {
-            importer.read(url);
-            for (MeshView view : importer.getImport()) {
-                view.setCullFace(CullFace.BACK);
-                modelroot.getChildren().add(view);
-            }
-        } catch (ImportException e) {
-            // if the only problem is a missing material, log and continue
-            System.err.println("Warning: OBJ referenced missing material: " + e.getMessage());
-            // optionally try a second pass without materials, or assign a default PhongMaterial here
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return modelroot;
+        return getGroup(url);
     }
 
     public void handleKeyPressed(KeyEvent event) { pressedKeys.add(event.getCode()); }
@@ -358,7 +341,7 @@ public class GameController {
 
         double rotateSpeed = 50,
                 smoothing = 0.15,
-                acceleration = currentVehicle.getAccleration();
+                acceleration = currentVehicle.getAcceleration();
         double decel = 80,
                 maxVel = currentVehicle.getSpeed(),
                 friction = 40;
@@ -454,7 +437,7 @@ public class GameController {
         }
 
         // Handle refueling at gas station
-        if (gasstation.isRayHitting(carPos, down) && velocity == 0) {
+        if (gasStation.isRayHitting(carPos, down) && velocity == 0) {
             GameManager.getInstance().getCurrentVehicle().refuel();
         }
 
@@ -466,10 +449,7 @@ public class GameController {
         carCollisionBox.setTranslateZ(car.getTranslateZ());
 
         if (hudController != null) {
-            //long currentTime = System.currentTimeMillis();
-            //String formattedTime = CounterService.getFormattedElapsedTime(currentTime);
-            //hudController.setElapsedTime(CounterService.getElapsedHours());
-            //hudController.updateTime(formattedTime);
+            hudController.updateTime(counterService.getElapsedSeconds());
 
             hudController.updateFuel(GameManager.getInstance().getCurrentVehicle().getFuelLevel());
             hudController.setMoney(GameManager.getInstance().getPlayer().getMoney());
@@ -579,7 +559,7 @@ public class GameController {
                     choice -> {
                         if (choice == 1) System.out.println("Choose 1");
                         else            System.out.println("Choose 2");
-                        hudController.updateTime(counterService.getFormattedElapsedTime());
+                        hudController.updateTime(counterService.getElapsedSeconds());
                         hudController.setMoney(GameManager.getInstance().getPlayer().getMoney());
                     }
             );

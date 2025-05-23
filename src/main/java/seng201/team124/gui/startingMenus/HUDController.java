@@ -9,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import seng201.team124.models.raceLogic.Race;
 import seng201.team124.services.CounterService;
 import seng201.team124.services.GameManager;
 
@@ -19,16 +20,29 @@ import java.util.function.Consumer;
 
 public class HUDController {
     @FXML private ProgressBar fuelProgress;
+    @FXML private ProgressBar timeProgress;
     @FXML private Label timerNum, moneyLabel;
     @FXML private GridPane breakDown, innerPane;
     @FXML private Button payBtn, retireBtn;
+
+    //private Race currentRace;
+    //private final double timeLimitSeconds = currentRace.getHours();
 
     public void updateFuel(double percent) {
         fuelProgress.setProgress(percent/100.0);
     }
 
-    public void updateTime(String time) {
-        timerNum.setText(time);
+    public void updateTime(double totalSeconds) {
+        Platform.runLater(() -> {
+            int hours = (int)(totalSeconds / 3600);
+            int minutes = (int)((totalSeconds % 3600) / 60);
+            int seconds = (int)(totalSeconds % 60);
+            timerNum.setText(String.format("%02d:%02d:%02d", hours, minutes, seconds));
+
+            //if (timeProgress != null && timeLimitSeconds > 0) {
+              //  timeProgress.setProgress(Math.min(1.0, totalSeconds / timeLimitSeconds));
+            //}
+        });
     }
 
     public void setMoney(double money) {
@@ -100,5 +114,6 @@ public class HUDController {
         payBtn   .setOnAction(null);
         retireBtn.setOnAction(null);
     }
+
 }
 

@@ -188,31 +188,6 @@ public class RaceService {
         return random.nextDouble() < adjustedChance;
     }
 
-    /**
-     * process race progress and check for random events
-     */
-    public void processRaceProgress() {
-        if (shouldRandomEventOccur(player.getDifficulty())) {
-            RaceEvent event = RaceEvent.getRandomEvent();
-            EventResult result = new EventResult(event);
-            handleRandomEvent();
-        }
-
-        Vehicle vehicle = player.getCurrentVehicle();
-        double distanceCovered = vehicle.getEffectiveSpeed() * 0.1;
-        double fuelConsumed = distanceCovered / vehicle.getEffectiveFuelEconomy();
-
-        try {
-            vehicle.consumeFuel(fuelConsumed);
-        } catch (IllegalStateException e) {
-            //ran out of fuel
-            completeRace(0);
-        }
-    }
-
-    public double getAveragePlacing() {
-        return raceResults.stream().mapToInt(Integer::intValue).average().orElse(0);
-    }
 
 
 

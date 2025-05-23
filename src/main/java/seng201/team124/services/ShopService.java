@@ -82,10 +82,6 @@ public class ShopService {
         shop.addParts(availableParts);
     }
 
-    public Shop getShop() {
-        return this.shop;
-    }
-
     /**
      * sells a vehicle back to the shop
      * @param vehicle vehicle to sell

@@ -2,7 +2,7 @@ package seng201.team124.models.vehicleUtility;
 
 /**
  * represents any item that can be purchased or sold in the game.
- * implemented by vehicle and tuningparts classes.
+ * implemented by vehicle and tuning parts classes.
  */
 public interface Purchasable {
     /**
