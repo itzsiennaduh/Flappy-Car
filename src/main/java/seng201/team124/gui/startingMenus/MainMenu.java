@@ -99,7 +99,7 @@ public class MainMenu {
         Stage stage = (Stage) currentScene.getWindow();
 
         // 1) Display loading screen
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/loadingScreen.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/LoadingScreen.fxml"));
         Parent loadingRoot = loader.load();
         LoadingScreenController loadCtrl = loader.getController();
         currentScene.setRoot(loadingRoot);
