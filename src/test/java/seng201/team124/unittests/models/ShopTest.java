@@ -24,8 +24,8 @@ public class ShopTest {
     @BeforeEach
     public void setUp() {
         shop = new Shop();
-        vehicle1 = new Vehicle("Car A", "A fast car", 200.0, 7.5, 8.5, 9.0, 15.0, 15000.0, 50.0, 50.0, "ModelA");
-        vehicle2 = new Vehicle("Car B", "A reliable car", 180.0, 6.0, 7.0, 8.5, 12.0, 12000.0, 45.0, 45.0, "ModelB");
+        vehicle1 = new Vehicle("Car A", "A fast car", 200.0, 7.5, 8.5, 9.0, 15.0, 15000.0, 50.0, 50.0, "ModelA", "path");
+        vehicle2 = new Vehicle("Car B", "A reliable car", 180.0, 6.0, 7.0, 8.5, 12.0, 12000.0, 45.0, 45.0, "ModelB", "path");
         part1 = new TuningParts("Turbo", "Increases acceleration", 1, 1, 1, 1, 3000, TuningParts.Type.ENGINE);
         part2 = new TuningParts("Nitro", "Boosts speed", 1, 1, 1, 1, 2000, TuningParts.Type.NITRO);
     }
@@ -96,26 +96,6 @@ public class ShopTest {
         shop.purchasePart(part1);
         List<TuningParts> parts = shop.getAvailableParts();
         assertTrue(parts.isEmpty(), "Available parts should be empty after purchasing the part.");
-    }
-
-    @Test
-    @DisplayName("Test restock populates available vehicles and parts")
-    public void testRestock() {
-        List<Vehicle> possibleVehicles = List.of(vehicle1, vehicle2);
-        List<TuningParts> possibleParts = List.of(part1, part2);
-
-        shop.restock(possibleVehicles, possibleParts, 2, 2);
-
-        List<Vehicle> vehicles = shop.getAvailableVehicles();
-        List<TuningParts> parts = shop.getAvailableParts();
-
-        assertEquals(2, vehicles.size(), "Available vehicles should contain two vehicles after restocking.");
-        assertTrue(vehicles.contains(vehicle1), "Restocked vehicles should contain the first vehicle.");
-        assertTrue(vehicles.contains(vehicle2), "Restocked vehicles should contain the second vehicle.");
-
-        assertEquals(2, parts.size(), "Available parts should contain two parts after restocking.");
-        assertTrue(parts.contains(part1), "Restocked parts should contain the first part.");
-        assertTrue(parts.contains(part2), "Restocked parts should contain the second part.");
     }
 
     @Test

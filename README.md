@@ -45,7 +45,7 @@ IntelliJ has built-in support for Gradle. To import your project:
 **Note:** *If you run into dependency issues when running the app or the Gradle pop up doesn't appear then open the Gradle sidebar and click the Refresh icon.*
 
 ## Run Project 
-1. Open a command line interface inside the project directory and run `./gradlew run` to run the app.
+1. Open a command line interface inside the project directory and run `./gradlew clean run` to run the app.
 2. The app should then open a new window, this may not be displayed over IntelliJ but can be easily selected from the taskbar
 
 ## Build and Run Jar
