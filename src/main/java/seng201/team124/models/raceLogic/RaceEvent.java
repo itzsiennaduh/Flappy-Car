@@ -104,6 +104,9 @@ public enum RaceEvent {
         RaceEvent[] weightedEvents = {BREAKDOWN, BREAKDOWN, BREAKDOWN, BREAKDOWN, BREAKDOWN, // 5/8
                 STRANDED_TRAVELLER, STRANDED_TRAVELLER, // 2/8
                 SEVERE_WEATHER // 1/8
+//        RaceEvent[] weightedEvents = {SEVERE_WEATHER, SEVERE_WEATHER, SEVERE_WEATHER, SEVERE_WEATHER, SEVERE_WEATHER, // 5/8
+//                SEVERE_WEATHER, SEVERE_WEATHER, // 2/8
+//                SEVERE_WEATHER // 1/8
         };
 
         int index = random.nextInt(weightedEvents.length);

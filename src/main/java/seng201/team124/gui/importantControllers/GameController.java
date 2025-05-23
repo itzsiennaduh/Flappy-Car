@@ -71,8 +71,8 @@ public class GameController {
 
     private PauseTransition oneShotEventTimer;
     private final Random rng = new Random();
-    private static final int MIN_DELAY = 10;   // seconds
-    private static final int MAX_DELAY = 20;
+    private static final int MIN_DELAY = 0;   // seconds
+    private static final int MAX_DELAY = 10;
     private MeshView personEvent;
 
     public GameController() {
@@ -530,12 +530,10 @@ public class GameController {
 //            hudController.showEvent(event.getDescription());
             System.out.println(event.getDescription());
         }
-        // apply auto effects
-        GameManager.getInstance().getPlayer().addMoney(event.getMoneyChange());
 
         if (event == RaceEvent.STRANDED_TRAVELLER && personEvent != null) {
             personEvent.setVisible(true);
-        } else if (event.isPleaseChoose() && hudController != null) {
+        } else if (hudController != null) {
             scheduleOneTimedEvent();
         }
 
@@ -562,6 +560,12 @@ public class GameController {
         } while (event == RaceEvent.STRANDED_TRAVELLER);
 
         // show it
+
+        if (event == RaceEvent.SEVERE_WEATHER){
+
+            handleDNF("A storm advances from seemingly no where. You are forced to ditch the vehicle and take shelter. You must retire from the race.");
+        }
+
         if (hudController != null) {
 //            hudController.showEvent(event.getDescription());
             System.out.println();
@@ -602,7 +606,7 @@ public class GameController {
             DNFController controller = loader.getController();
             controller.setReason(reason);
 
-            if (gameScene != null) {
+            if (gameScene != null || RaceEvent.SEVERE_WEATHER.equals(RaceEvent.getRandomEvent())) {
                 gameScene.setRoot(root);
                 Stage stage = (Stage) gameScene.getWindow();
                 stage.setFullScreen(true);
