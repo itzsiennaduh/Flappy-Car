@@ -6,14 +6,8 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" spacing="10" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng201.team124.gui.startingMenus.ChooseName"
-      style="
-        -fx-background-image: url('/fxml/Images/mainmenu.png');
-        -fx-background-size: cover;
-        -fx-background-position: center center;
-        -fx-background-repeat: no-repeat;
-      ">
-    <Label text="Enter your character name">
+<VBox alignment="CENTER" spacing="10" style="         -fx-background-image: url('/fxml/Images/mainmenu.png');         -fx-background-size: cover;         -fx-background-position: center center;         -fx-background-repeat: no-repeat;       " xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng201.team124.gui.startingMenus.ChooseName">
+    <Label text="Enter your character name" textFill="WHITE">
       <font>
          <Font name="Century Schoolbook" size="14.0" />
       </font></Label>

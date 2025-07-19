@@ -14,17 +14,17 @@
         -fx-background-repeat: no-repeat;
       ">
    <children>
-      <Label fx:id="difficultyLabel" text="Select Difficulty">
+      <Label fx:id="difficultyLabel" text="Select Difficulty" textFill="WHITE">
          <font>
             <Font name="Century Schoolbook" size="12.0" />
          </font></Label>
       <Slider fx:id="difficultySlider" blockIncrement="1" majorTickUnit="1.0" max="3" maxWidth="200" min="1" minorTickCount="0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="2.0" />
 
-      <Label fx:id="seasonLengthLabel" text="Season Length">
+      <Label fx:id="seasonLengthLabel" text="Season Length" textFill="WHITE">
          <font>
             <Font name="Century Schoolbook" size="12.0" />
          </font></Label>
-      <Slider fx:id="seasonLengthSlider" blockIncrement="1" majorTickUnit="1.0" max="15" maxWidth="200" min="5" minorTickCount="0" prefHeight="49.0" prefWidth="194.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="10.0" />
+      <Slider fx:id="seasonLengthSlider" blockIncrement="1" majorTickUnit="1.0" max="15" maxWidth="200" min="5" minorTickCount="0" prefHeight="49.0" prefWidth="194.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="10.0"  />
 
       <Label fx:id="errorMessageLabel" />
       <Button fx:id="continueButton" alignment="CENTER" contentDisplay="CENTER" onAction="#handleContinue" text="Continue">
