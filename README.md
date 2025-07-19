@@ -1,20 +1,8 @@
-# SENG201 Template Project Overview
-Welcome to the template project for SENG201 which you will transform into your own.
-This README file includes some useful information to help you get started.
-However, we expect that this README becomes your own.
-
-## Notes
-Remember you are required to commit your code to the **main** branch of your repository before the deadline.
-
-This project contains default naming of `team124` throughout.
-If you are interested you can update this to reflect your team number, however it is **not required**.
-This can be done by renaming any instance of `team124` with `team<x>` (where x is your number).
-IntelliJ can help with this using `ctrl+shift+f` to find all instances of a string, and `ctrl+shift+r` to replace them, though make sure to change the package names as well.
+## This project was originally for a course at the University of Canterbury, but I am continuing to develop it even after submission. 
 
 ## Authors
-- SENG201 Teaching team
-- Siegfried Weigler-Harding
 - Sienna Robinson
+- Siegfried Weigler-Harding
 
 ## Prerequisites
 - JDK >= 21 [click here to get the latest stable OpenJDK release (as of writing this README)](https://jdk.java.net/21/)
@@ -22,18 +10,9 @@ IntelliJ can help with this using `ctrl+shift+f` to find all instances of a stri
 
 
 ## What's Included
-This project comes with some basic examples of the following (including dependencies in the build.gradle file):
+This project utilises:
 - JavaFX
 - Junit 5
-
-We have also included a basic setup of the Gradle project and Tasks required for the course including:
-- Required dependencies for the functionality above
-- Test Coverage with JaCoCo
-- Build plugins:
-    - JavaFX Gradle plugin for working with (and packaging) JavaFX applications easily
-
-You are expected to understand the content provided and build your application on top of it. If there is anything you
-would like more information about please reach out to the tutors.
 
 ## Importing Project (Using IntelliJ)
 IntelliJ has built-in support for Gradle. To import your project:
