@@ -2,16 +2,26 @@
 .idea/
 *.iml
 *.iws
+out/
 
-# Mac
+# Mac and OS
 .DS_Store
+Thumbs.db
+desktop.ini
 
-# Logs
+# Logs and Backup
 logs/
 *.log
+*.swp
+*.swo
+*~
 
 # Build artefacts
 build/
 
 # Gradle
 .gradle/
+!gradle/wrapper/gradle-wrapper.jar
+
+# Java
+*.class
